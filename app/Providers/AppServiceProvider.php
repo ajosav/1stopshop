@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Repositories\OTP\OTPInterface;
-use App\Repositories\OTP\SendOTPViaMail;
+use Illuminate\Support\Facades\Schema;
 use App\Repositories\OTP\SendOTPViaSMS;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\OTP\SendOTPViaMail;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 }
