@@ -30,7 +30,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('callback/{provider}', [AuthController::class, 'handleSocialCallback']);
         Route::get('resend_code', [AuthController::class, 'resendCode'])->name('resend');
         Route::post('verify_account', [AuthController::class, 'verifyAccount'])->name('verify');
+        Route::post('/forgot_password', [AuthController::class, 'forgotPassword'])->name('password.request');
     });
+    Route::get('/reset-password/{token}', function ($token) {
+        return response()->json('Please wait...');
+        return view('auth.reset-password', ['token' => $token]);
+    })->middleware('guest')->name('password.reset');
 
     Route::get('home', function () {
         // User::create(['...']);

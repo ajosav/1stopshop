@@ -8,7 +8,7 @@ class DataHelper {
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => isset($data['password']) ? bcrypt($data['password']) : null,
+            'password' => isset($data['password']) ? $data['password'] : null,
             'user_type' => isset($data['user_type']) ? $data['user_type'] : 'regular',
             'encodedKey' => generateEncodedKey()
         ];

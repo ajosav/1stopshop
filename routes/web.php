@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return app('hash')->needsRehash('money');
-    return random_int(100000, 999999);
     return view('welcome');
 });
 

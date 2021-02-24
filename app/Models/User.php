@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -93,7 +93,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function setPasswordAttribute($input) {
         if($input) {
-            app('hash')->needsRehash($input) ? Hash::make($input) : $input;
+            $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
         }
     }
 
@@ -121,5 +121,9 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $has_user_profile;
+    }
+
+    public function sendPasswordResetNotification($token) {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

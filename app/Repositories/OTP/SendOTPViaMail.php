@@ -13,4 +13,8 @@ class SendOTPViaMail implements OTPInterface {
         $user = auth('api')->user();
         return $user->notify(new SendActivationCode);
     }
+
+    public function sendToUser($user) {
+        return $user->notify(new SendActivationCode);
+    }
 }

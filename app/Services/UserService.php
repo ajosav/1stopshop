@@ -6,12 +6,14 @@ use Exception;
 use App\Models\User;
 use App\Helpers\DataHelper;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Repositories\OTP\OTPInterface;
 use Illuminate\Database\QueryException;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
+use App\Jobs\SendActivationCodeJob;
 
 class UserService {
     
@@ -30,6 +32,8 @@ class UserService {
 
             // create company for user
             $company = $this->createUserCompany($user, $request);
+
+            SendActivationCodeJob::dispatch($user)->delay(now()->addSecond());
 
             $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user), 'profile' => ProfileDataTransferObject::create($profile), 'company' => CompanyDataTransferObject::create($company)]);
             
