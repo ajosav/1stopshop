@@ -40,7 +40,7 @@ class AuthController extends Controller
 
     public function createUser(CreateUserRequest $request, UserService $user)
     {
-        return $user->createUser($request->validated());
+        return $user->createUser($request->validated(), new OTPInterface);
     }
 
     public function authenticatedUser() {
