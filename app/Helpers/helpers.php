@@ -17,7 +17,7 @@ function getAuthenticatedUser()
     try {
         JWTAuth::parseToken()->authenticate();
         if (! $user = auth('api')->user()) {
-                return response()->errorResponse('User not found', 404);
+                return response()->errorResponse('User not found', [], 404);
         }
 
     } catch (TokenExpiredException $e) {
