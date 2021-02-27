@@ -16,7 +16,7 @@ class ProfileDataTransferObject extends DataTransferObject {
     public ?string $specialization;
     public ?string $experience_years;
     public ?string $service_area;   
-    public ?Boolean $isVerified;   
+    public $isVerified;   
     
 
     public static function create($data) : self{
@@ -31,7 +31,7 @@ class ProfileDataTransferObject extends DataTransferObject {
             'specialization' => $data['specialization'],
             'experience_years' => $data['experience_years'],
             'service_area' => $data['service_area'],
-            'isVerified' => $data['isVerified'],
+            'isVerified' => $data['isVerified'] == 0 ? 'no' : 'yes',
         ]);
     }
 }

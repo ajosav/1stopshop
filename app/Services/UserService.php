@@ -5,15 +5,19 @@ namespace App\Services;
 use Exception;
 use App\Models\User;
 use App\Helpers\DataHelper;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Jobs\SendActivationCodeJob;
+use Illuminate\Support\Facades\Hash;
 use App\Repositories\OTP\OTPInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Password;
 use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Auth\Events\PasswordReset;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
-use App\Jobs\SendActivationCodeJob;
 
 class UserService {
     
@@ -36,7 +40,7 @@ class UserService {
             $activation_code->sendToUser($user);
             // SendActivationCodeJob::dispatch($user)->delay(now()->addSecond());
 
-            $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user), 'profile' => ProfileDataTransferObject::create($profile), 'company' => CompanyDataTransferObject::create($company)]);
+            $response = array_merge(respondWithToken($token), $user->getFullUserDetail());
             
             return response()->success('User Successfully Created', $response);
         } catch (QueryException $e) {
@@ -80,10 +84,38 @@ class UserService {
             $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
             return response()->success('User successfully authenticated', $response);
          } catch(ClientException $e) {
-            return response()->errorResponse('Link Expired', ['provider' => 'provider link has expired, please regenerate']);
+            return response()->errorResponse('Authentication Failed', ['provider' => $e->getMessage()]);
          } catch(Exception $e) {
             return response()->errorResponse('Error generating user token', ['account' => $e->getMessage()]);
          }
+    }
+
+    public function resetPassword($request) {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->save();
+    
+                $user->setRememberToken(Str::random(60));
+    
+                event(new PasswordReset($user));
+            }
+        );
+    
+        return $status == Password::PASSWORD_RESET
+                    ? response()->success(__($status))
+                    : response()->errorResponse(__($status));
+    }
+
+    public function sendPasswordResetLink($request) {
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+                    ? response()->success(__($status))
+                    : response()->errorResponse(__($status));
     }
     
 }

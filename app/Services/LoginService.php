@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
@@ -44,7 +45,9 @@ class LoginService {
         
 
         RateLimiter::clear($this->throttleKey());
-        return response()->success('User Successfully Authenticated', respondWithToken($token));
+        $user = auth('api')->user();
+        $token_response = array_merge(respondWithToken($token), $user->getFullUserDetail());
+        return response()->success('User Successfully Authenticated', $token_response);
     }
 
     /**

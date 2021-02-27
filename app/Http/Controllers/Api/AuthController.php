@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
-use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use App\Repositories\OTP\OTPInterface;
-use Illuminate\Database\QueryException;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Support\Facades\Password;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\OtpValidationRequest;
 use App\Http\Requests\Auth\CreateUserRequest;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-    public $activation_code;
-    public function __construct(OTPInterface $activation_code)
+    public $activation_code, $userService;
+    public function __construct(OTPInterface $activation_code, UserService $userService)
     {
-        $this->middleware(['auth.jwt'])->only('resendCode', 'verifyAccount');
+        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount');
         $this->activation_code = $activation_code;
+        $this->userService = $userService;
     }
 
     public function authenticate(LoginRequest $request)
@@ -40,17 +28,17 @@ class AuthController extends Controller
         return $request->login();
     }
 
-    public function createUser(CreateUserRequest $request, UserService $user)
+    public function createUser(CreateUserRequest $request)
     {
-        return $user->createUser($request->validated(), $this->activation_code);
+        return $this->userService->createUser($request->validated(), $this->activation_code);
     }
 
     public function authenticatedUser() {
         return getAuthenticatedUser();
     }
 
-    public function getAuthLink(UserService $userService, $provider) {
-        return $userService->generateSocialLink($provider);
+    public function getAuthLink($provider) {
+        return $this->userService->generateSocialLink($provider);
     }
 
     public function handleSocialCallback(UserService $userService, $provider) {
@@ -64,8 +52,10 @@ class AuthController extends Controller
         }
         if($user->isSeller()->verified_at == null || $user->isSeller()->isVerified != 1) {
             $this->activation_code->send();
-            return response()->success("Activation code sent to user's mobile");
+            return response()->success("Activation code sent to user's email");
         }
+
+        return response()->success("User account already activated");
     }
 
     public function verifyAccount(OtpValidationRequest $request) {
@@ -74,13 +64,18 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request) {
         $request->validate(['email' => 'required|email']);
-        
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        return $this->userService->sendPasswordResetLink($request);
+    }
 
-        return $status === Password::RESET_LINK_SENT
-                    ? response()->success(__($status))
-                    : response()->errorResponse(__($status));
+
+    public function resetPassword(Request $request) {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+            
+        return $this->userService->resetPassword($request);
+        
     }
 }

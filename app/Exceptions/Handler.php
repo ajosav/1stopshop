@@ -100,7 +100,7 @@ class Handler extends ExceptionHandler
         }
 
         return $request->expectsJson()
-                    ? response()->errorResponse($e->getMessage(), $e->errors(), $e->status)
+                    ? response()->errorResponse("One or more fields are invalid", $e->errors(), $e->status)
                     : $this->invalid($request, $e);
     }
 

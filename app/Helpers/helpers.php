@@ -33,7 +33,8 @@ function getAuthenticatedUser()
         return response()->errorResponse('token_absent', ["token" => $e->getMessage()]);
 
     }
-    return response()->success('User data retreived', $user);
+    
+    return response()->success('User data retreived', $user->getFullUserDetail());
 }
 
 function sanitizePhoneNumber($phoneNumber, $national = true, $trim = true)

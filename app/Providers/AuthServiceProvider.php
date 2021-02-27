@@ -27,9 +27,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('isSeller', function($user) {
-            return true;
+        Gate::define('isSeller', function(User $user) {
             return !$user->userProfile ? Response::deny('Only a business account is authorized to perform this action') : Response::allow();
+        });
+
+        Gate::define('isMechanic', function($user) {
+            return $user->user_type == 'mechanic';
+        });
+
+        Gate::define('isPartDealer', function(User $user) {
+            return $user->user_type == 'mechanic';
         });
     }
 }

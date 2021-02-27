@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\ResetPasswordNotification;
+use App\DataTransferObjects\UserDataTransferObject;
+use App\DataTransferObjects\CompanyDataTransferObject;
+use App\DataTransferObjects\ProfileDataTransferObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -113,17 +118,32 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function isSeller() {
-        $user = auth('api')->user();
-        $has_user_profile = $user->userProfile;
-
-        if(!$has_user_profile) {
+        $user = $this->userProfile;
+        if(!$user) {
             return false;
         }
 
-        return $has_user_profile;
+        return $user;
+    }
+
+    public function getFullUserDetail() {
+        if(!$this->userProfile) {
+            return [
+                'user_info' => UserDataTransferObject::create($this)
+            ];
+        }
+        return [
+            'user_info' => UserDataTransferObject::create($this), 
+            'profile' => ProfileDataTransferObject::create($this->userProfile), 
+            'company' => CompanyDataTransferObject::create($this->company)
+        ];
     }
 
     public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function createNewToken() {
+        return rand(100000, 999999);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Shop\ShopController;
 use App\Models\User;
 
 /*
@@ -25,22 +26,23 @@ Route::group(['prefix' => 'v1'], function () {
     Route::name('users.')->prefix('users')->group(function () {
         Route::post('create', [AuthController::class, 'createUser'])->name('create');
         Route::post('login', [AuthController::class, 'authenticate'])->name('login');
-        Route::get('current_user', [AuthController::class, 'authenticatedUser'])->name('current');
+        Route::get('current-user', [AuthController::class, 'authenticatedUser'])->name('current');
         Route::get('{provider}/generate_link', [AuthController::class, 'getAuthLink']);
         Route::get('callback/{provider}', [AuthController::class, 'handleSocialCallback']);
-        Route::get('resend_code', [AuthController::class, 'resendCode'])->name('resend');
-        Route::post('verify_account', [AuthController::class, 'verifyAccount'])->name('verify');
-        Route::post('/forgot_password', [AuthController::class, 'forgotPassword'])->name('password.request');
+        Route::post('verify-account', [AuthController::class, 'verifyAccount'])->name('verify');
+        Route::get('resend-code', [AuthController::class, 'resendCode'])->name('resend');
+        Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');
+        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     });
-    Route::get('/reset-password/{token}', function ($token) {
-        return response()->json('Please wait...');
-        return view('auth.reset-password', ['token' => $token]);
-    })->middleware('guest')->name('password.reset');
 
-    Route::get('home', function () {
-        // User::create(['...']);
-        return auth('api')->user()->otp->expires_at->lt(now());
-        return auth('api')->user()->gererateOTP();
+    Route::name('shop.')->prefix('shop')->group(function () {
+        Route::post('create', [ShopController::class, 'createShop'])->name('create');
     });
    
+});
+
+Route::get('get-details', function() {
+    $user = User::find(3);
+
+    return $user->getFullUserDetail();
 });
