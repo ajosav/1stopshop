@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
+use Stevebauman\Location\Facades\Location;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,9 @@ Route::get('/', function () {
 
 
 Route::post('/register', [AdminController::class, 'index']);
+
+Route::get('get-my-location', function() {
+    $location = Location::get();
+    // dd($Location);
+    return view('location', compact('location'));
+});

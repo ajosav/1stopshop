@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-class DataHelper {
+class AuthDataHelper {
     public static function userCreateData($data) {
         return [
             'first_name' => $data['first_name'],

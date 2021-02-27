@@ -20,6 +20,7 @@
         "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.5",
         "spatie/data-transfer-object": "^2.8",
+        "stevebauman/location": "^6.1",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
