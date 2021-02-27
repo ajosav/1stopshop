@@ -67,7 +67,7 @@ class CreateUserRequest extends FormRequest
     protected function formatRequestInputs()
     {
         if ($this->filled('phone_number')) {
-            $this->merge(['phone_number' => sanitizePhoneNumber($this->input('phone_number'), false)]);
+            $this->merge(['dest_user_info' => sanitizePhoneNumber($this->input('phone_number'), false)]);
         }
     }
 

@@ -33,7 +33,8 @@ class UserService {
             // create company for user
             $company = $this->createUserCompany($user, $request);
 
-            SendActivationCodeJob::dispatch($user)->delay(now()->addSecond());
+            return $request->activateUserAccount();
+            // SendActivationCodeJob::dispatch($user)->delay(now()->addSecond());
 
             $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user), 'profile' => ProfileDataTransferObject::create($profile), 'company' => CompanyDataTransferObject::create($company)]);
             
