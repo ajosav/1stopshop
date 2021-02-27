@@ -32,7 +32,7 @@ class CreateUserRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            'user_type' => 'sometimes|required'
+            'user_type' => 'sometimes|required|in:regular,mechanic,part_dealer'
         ];
 
         if ($this->getSellerUserType()) {
@@ -81,5 +81,9 @@ class CreateUserRequest extends FormRequest
 
     protected function getSellerUserType() {
         return $this->filled('user_type') && ($this->input('user_type') == 'mechanic' || $this->input('user_type') == 'part_dealer');
+    }
+
+    protected function checkUserType() {
+
     }
 }

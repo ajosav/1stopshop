@@ -25,9 +25,11 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    public $activation_code;
+    public function __construct(OTPInterface $activation_code)
     {
         $this->middleware(['auth.jwt'])->only('resendCode', 'verifyAccount');
+        $this->activation_code = $activation_code;
     }
 
     public function authenticate(LoginRequest $request)
@@ -40,7 +42,7 @@ class AuthController extends Controller
 
     public function createUser(CreateUserRequest $request, UserService $user)
     {
-        return $user->createUser($request->validated(), new OTPInterface);
+        return $user->createUser($request->validated(), $this->activation_code);
     }
 
     public function authenticatedUser() {
@@ -55,13 +57,13 @@ class AuthController extends Controller
         return $userService->loginViaSocial($provider);
     }
 
-    public function resendCode(OTPInterface $activation_code) {
+    public function resendCode() {
         $user = auth('api')->user();
         if(!$user->isSeller()) {
             return response()->errorResponse("User account cannot be activated");
         }
         if($user->isSeller()->verified_at == null || $user->isSeller()->isVerified != 1) {
-            $activation_code->send();
+            $this->activation_code->send();
             return response()->success("Activation code sent to user's mobile");
         }
     }
