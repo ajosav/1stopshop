@@ -14,8 +14,8 @@ class ProfileDataTransferObject extends DataTransferObject {
     public ?string $identity_number;
     public ?string $professional_skill;
     public ?string $specialization;
-    public ?string $experience_years;
-    public ?string $service_area;   
+    public $experience_years;
+    public $service_area;   
     public $isVerified;   
     
 

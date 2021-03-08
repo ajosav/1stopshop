@@ -12,6 +12,7 @@ use App\Notifications\ResetPasswordNotification;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
+use App\Filters\Shop\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -71,7 +72,9 @@ class User extends Authenticatable implements JWTSubject
     public function otp() {
         return $this->hasOne(Otp::class);
     }
-
+    public function adService() {
+        return $this->hasMany(AdService::class);
+    }
     public function getRouteKeyName()
     {
         return 'encodedKey';
@@ -118,12 +121,10 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function isSeller() {
-        $user = $this->userProfile;
-        if(!$user) {
+        if($this->user_type === 'regular') {
             return false;
         }
-
-        return $user;
+        return true;
     }
 
     public function getFullUserDetail() {
@@ -139,8 +140,28 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function getUserOnly() {
+        return [
+            'user_info' => UserDataTransferObject::create($this)
+        ];
+    }
+
     public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+
+    public static function getAllMechanics() {
+        return app(Pipeline::class)
+                ->send(self::query())
+                ->through([
+                    UserType::class,
+                    Order::class
+                ])
+                ->thenReturn()
+
+                ->with('user')
+                ->get();
     }
 
     public function createNewToken() {

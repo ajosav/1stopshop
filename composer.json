@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "binary-cats/laravel-sku": "^0.4.0",
         "crazybooot/base64-validation": "^1.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -20,6 +21,8 @@
         "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.5",
         "spatie/data-transfer-object": "^2.8",
+        "spatie/laravel-json-api-paginate": "^1.10",
+        "spatie/laravel-searchable": "^1.9",
         "stevebauman/location": "^6.1",
         "tymon/jwt-auth": "^1.0"
     },

@@ -24,16 +24,23 @@ class JWTAuthMiddleware
 
         $user = auth('api')->user();
         $check_seller = $user->isSeller();
-        if(!$check_seller) {
-            return $next($request);
-        }
-        
-        if($request->routeIs('users.resend') || $request->routeIs('users.verify')) {
-            return $next($request);
-        }
 
-        if($check_seller->verified_at == null || $check_seller->isVerified != 1) {
-            return response()->errorResponse("Business account has not been verified", ["account" => "Please verify user phone number to continue"], 403);
+        if($check_seller) {
+        
+            if(!$user->userProfile) {
+                if($request->routeIs('profile.index')) {
+                    return $next($request);
+                }
+                return response()->errorResponse("User profile has not been setup", ["account" => "Please setup user profile"], 403);
+            } else {
+                if($request->routeIs('users.resend') || $request->routeIs('users.verify')) {
+                    return $next($request);
+                }
+
+                if($user->userProfile->verified_at == null || $user->userProfile->isVerified != 1) {
+                    return response()->errorResponse("Business account has not been verified", ["account" => "Please verify user email to continue"], 403);
+                }
+            }
         }
 
         return $next($request);

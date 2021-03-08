@@ -13,7 +13,7 @@ class CompanyDataTransferObject extends DataTransferObject {
     public ?string $region;
     public ?string $country;
     public ?string $company_mission;
-    public ?string $company_photo;
+    public ?string $shop_photo;
 
     public static function create($data) : self{
         return new self([
@@ -25,7 +25,7 @@ class CompanyDataTransferObject extends DataTransferObject {
             'region'=> $data['region'],
             'country'=> $data['country'],
             'company_mission'=> $data['company_mission'],
-            'company_photo'=> $data['company_photo']
+            'shop_photo'=> $data['shop_photo']
             
         ]);
     }

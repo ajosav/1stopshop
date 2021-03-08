@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
             }
             if($exception instanceof ModelNotFoundException) {
                 $modelName = strtolower(class_basename($exception->getModel()));
-                return response()->errorResponse("Unable to find any {$modelName} with the specified identificator", [], 404);
+                return response()->errorResponse("Unable to find any {$modelName} with the specified ID", [], 404);
             }
             if($exception instanceof AuthenticationException) {
                 return $this->unauthenticated($request, $exception);

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use libphonenumber\PhoneNumberUtil;
 use Intervention\Image\Facades\Image;
@@ -67,8 +68,7 @@ function respondWithToken($token) {
 }
 
 function generateEncodedKey() {
-    $hash = time() . bin2hex(openssl_random_pseudo_bytes(10)). random_bytes(10);
-    return  md5($hash);
+    return hash_hmac('md5', time(). openssl_random_pseudo_bytes(10), config('app.key'));
 }
 
 function photoType($photo) {
@@ -93,7 +93,7 @@ function photoType($photo) {
     return @is_file($photo) ? "file" : false; 
 }
 
-function uploadImage($photo) {
+function uploadImage($dir, $photo) {
     $photo_type = photoType($photo);
 
     if(!$photo_type) {
@@ -112,18 +112,29 @@ function uploadImage($photo) {
         }
 
         $image = \Image::make($photo)->stream();
-        Storage::put('images/shop/' . $name, $image);
+        Storage::put($dir . $name, $image);
         // ->save(storage_path('images/shop/').$name);
-        return 'images/shop/' . $name; 
+        return $dir . $name; 
         
     } 
     
     if($photo_type == "file") {
         $imageName = time(). rand(1,10) . '.' . $photo->getClientOriginalExtension();
         $newImage = \Image::make($photo->getRealPath());
-        Storage::put('images/shop/' . $imageName, $newImage->stream());
-        return 'images/shop/' . $imageName;
+        Storage::put($dir . $imageName, $newImage->stream());
+        return $dir . $imageName;
     }
 
     return null;
+}
+
+function cleanAmount($string) {
+    $string = str_replace(' ', '', $string); // Replaces all spaces with hyphens.
+    return preg_replace('/[^0-9\.]+/', '', $string);
+}
+
+function isValidAmount($amount) {
+    $string = str_replace(',', '', $amount);
+    
+    return preg_match('/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/', $string); 
 }

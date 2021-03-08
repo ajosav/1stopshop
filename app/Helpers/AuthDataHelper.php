@@ -14,7 +14,7 @@ class AuthDataHelper {
         ];
     }
 
-    public static function createUserWithSocialData($data, $provider) {
+    public static function createUserWithSocialData($data, $provider, $user_type) {
         $name = explode(' ', $data->getName());
         return [
             'first_name' => $name[1],
@@ -22,12 +22,13 @@ class AuthDataHelper {
             'email' => $data->getEmail(),
             'provider' => $provider,
             'provider_id' => $data->getId(),
-            'user_type' => 'regular',
+            'user_type' => $user_type,
             'encodedKey' => generateEncodedKey()
         ];
     }
 
     public static function userCreateProfile($data) {
+        $photo = isset($data['profile_photo']) ? uploadImage('images/profile/', $data['profile_photo']) : null;
         return [
             'encodedKey' => generateEncodedKey(),
             'phone_number' => isset($data['phone_number']) ? $data['phone_number'] : null,
@@ -37,12 +38,13 @@ class AuthDataHelper {
             'professional_skill' => isset($data['professional_skill']) ? $data['professional_skill'] : null,
             'specialization' => isset($data['specialization']) ? $data['specialization'] : null,
             'experience_years' => isset($data['experience_years']) ? $data['experience_years'] : null,
-            'service_area' => isset($data['service_area']) ? json_encode($data['service_area']) : null
+            'service_area' => isset($data['service_area']) ? json_encode($data['service_area']) : null,
+            'profile_photo' => $photo,
         ];
     }
 
     public static function userCreateCompany($data) {
-        $photo = isset($data['shop_photo']) ? uploadImage($data['shop_photo']) : null;
+        $photo = isset($data['shop_photo']) ? uploadImage('images/shop/', $data['shop_photo']) : null;
         return [
             'office_no' => isset($data['office_number']) ? $data['office_number'] : null,
             'encodedKey' => generateEncodedKey(),
@@ -52,7 +54,8 @@ class AuthDataHelper {
             'region' => isset($data['region']) ? $data['region'] : null,
             'country' => isset($data['country']) ? $data['country'] : null,
             'company_mission' => isset($data['company_mission']) ? $data['company_mission'] : null,
-            'company_photo' => $photo,
+            'shop_photo' => $photo
         ];
     }
+
 }

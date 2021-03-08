@@ -23,7 +23,7 @@ class OtpValidationRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user->isSeller();
+        return Gate::allows('isMechanic', $this->user->encodedKey) ||  Gate::allows('isPartDealer', $this->user->encodedKey);
     }
 
     /**

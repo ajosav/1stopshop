@@ -22,7 +22,7 @@ class CreateLogApiCallsTable extends Migration
             $table->string('method', 20)->nullable();
             $table->string('controller_action', 100)->nullable();
             $table->string('middleware')->nullable();
-            $table->text('payload')->nullable();
+            $table->longText('payload')->nullable();
             $table->string('duration')->nullable();
             $table->longText('response')->nullable();
             $table->timestamps();

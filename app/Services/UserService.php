@@ -55,6 +55,25 @@ class UserService {
         }
     }
 
+    public function createUserAccount($request) {
+        try {
+            $create_user = DB::transaction(function() use ($request) {
+                $data = AuthDataHelper::userCreateData($request);
+                $user = User::create($data);
+                $token = JWTAuth::fromUser($user);
+
+                $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
+                return response()->success('User Successfully Created', $response);
+            });
+
+            return response()->success('User Successfully Created', $create_user);
+        } catch (QueryException $e) {
+            return response()->errorResponse("Error creating user data");
+        } catch(Exception $e) {
+            return response()->errorResponse("User registration failed", ["user_registration" => $e->getMessage()]);
+        }
+    }
+
     public function createUserProfile($user, $request) {
         $profile_data = AuthDataHelper::userCreateProfile($request);
         return $user->userProfile()->create($profile_data);
@@ -65,13 +84,17 @@ class UserService {
         return $user->company()->create($company_data);
     }
 
-    public function generateSocialLink($provider) {
+    public function generateSocialLink($provider, $user_type) {
         $providers = config('socialauth.providers');
         if(!in_array($provider, $providers)) {
             return response()->errorResponse("Social provider not supported");
         }
         try {
-            $redirect_url = (string) Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+            $redirect_url = (string) Socialite::driver($provider)
+                            ->stateless()
+                            ->with(['state' => $user_type])
+                            ->redirect()
+                            ->getTargetUrl();
             return response()->success("Authentication link successfully generated", ['href' => $redirect_url, 'provider' => $provider]);
         } catch(Exception $e) {
             return response()->errorResponse("Error generating authentication link", ['provider' => 'Could not generate redirect link for provider']);
@@ -85,7 +108,13 @@ class UserService {
                 return response()->errorResponse("Could not retrieve user email", ["provider" => "{$provider} didn't send user's email, please ensure email is enable"]);
             }
 
-            $user_data = AuthDataHelper::createUserWithSocialData($user_provider, $provider);
+            if(request()->has('state')) {
+                $user_type = request('state');
+            } else {
+                $user_type = 'regular';
+            }
+
+            $user_data = AuthDataHelper::createUserWithSocialData($user_provider, $provider, $user_type);
             $user = User::firstOrCreate(['email' => $user_provider->getEmail()], $user_data);
             $token = JWTAuth::fromUser($user);
             $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
@@ -125,4 +154,16 @@ class UserService {
                     : response()->errorResponse(__($status));
     }
     
+    public function getVerifiedUsers() {
+        return User::where('user_type', '<>', 'regular')
+            ->whereHas('userProfile', function($query) {
+                $query->where('isVerified', 1)
+                    ->whereNotNull('verified_at');
+            });
+    }
+
+
+    public function getAllUsers() {
+        return User::all();
+    }
 }

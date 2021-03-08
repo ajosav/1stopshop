@@ -24,7 +24,7 @@ class CreateCompaniesTable extends Migration
             $table->string('region')->nullable();
             $table->string('country')->nullable();
             $table->text('company_mission')->nullable();
-            $table->longText('company_photo')->nullable();
+            $table->longText('shop_photo')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

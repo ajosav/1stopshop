@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Repositories\OTP\SendOTPViaSMS;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\OTP\SendOTPViaMail;
+use App\Services\AdProductService\AdProductActionService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(OTPInterface::class, function() {
             return new SendOTPViaMail;
             // return new SendOTPViaSMS;
+        });
+
+        $this->app->bind('ad-service', function() {
+            return new AdProductActionService;
         });
     }
 
