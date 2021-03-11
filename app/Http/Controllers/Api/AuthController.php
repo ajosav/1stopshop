@@ -19,7 +19,7 @@ class AuthController extends Controller
     public $activation_code, $userService, $profileService;
     public function __construct(OTPInterface $activation_code, UserService $userService, CreateProfileService $createProfileService)
     {
-        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount');
+        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount', 'logout');
         $this->activation_code = $activation_code;
         $this->userService = $userService;
         $this->profileService = $createProfileService;
@@ -82,5 +82,13 @@ class AuthController extends Controller
             
         return $this->userService->resetPassword($request);
         
+    }
+
+    public function logout() {
+        if(auth('api')->check()) {
+            auth('api')->logout();
+            return response()->success('Session ended! Log out was successful');
+        };
+       return response()->errorResponse('You are not logged in', [], 401);
     }
 }

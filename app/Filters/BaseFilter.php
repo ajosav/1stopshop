@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\Shop;
+namespace App\Filters;
 
 use Closure;
 use Illuminate\Support\Str;

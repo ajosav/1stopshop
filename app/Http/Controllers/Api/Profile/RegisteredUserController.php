@@ -19,7 +19,6 @@ class RegisteredUserController extends Controller
   
     public function __construct(GeneralShopService $shopService, UserService $userService)
     {
-        $this->middleware('auth.jwt');
         $this->shopService = $shopService;
         $this->userService = $userService;
     }

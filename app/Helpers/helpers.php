@@ -23,15 +23,15 @@ function getAuthenticatedUser()
 
     } catch (TokenExpiredException $e) {
 
-        return response()->errorResponse('token_expired', ["token" => $e->getMessage()]);
+        return response()->errorResponse('token_expired', ["token" => $e->getMessage()], 401);
 
     } catch (TokenInvalidException $e) {
 
-        return response()->errorResponse('token_invalid', ["token" => $e->getMessage()]);
+        return response()->errorResponse('token_invalid', ["token" => $e->getMessage()], 401);
 
     } catch (JWTException $e) {
 
-        return response()->errorResponse('token_absent', ["token" => $e->getMessage()]);
+        return response()->errorResponse('token_absent', ["token" => $e->getMessage()], 401);
 
     }
     

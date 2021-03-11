@@ -32,7 +32,7 @@ class CreateUserRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            'user_type' => 'sometimes|required|in:regular,mechanic,part_dealer'
+            'user_type' => 'nullable|required|in:regular,mechanic,part_dealer'
         ];
 
         if ($this->getSellerUserType()) {

@@ -16,7 +16,7 @@ class PartDealerController extends Controller
 
     public function __construct(PartDealerService $part_dealer)
     {
-        $this->middleware('auth.jwt');
+        $this->middleware('auth.jwt')->except('index', 'show');
         $this->part_dealer = $part_dealer;
     }
     /**

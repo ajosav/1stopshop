@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use BinaryCats\Sku\HasSku;
+use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 use Intervention\Image\Facades\Image;
 use BinaryCats\Sku\Concerns\SkuOptions;
@@ -12,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\ImageException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Spatie\Searchable\Searchable;
 
 class AdService extends Model implements Searchable
 {

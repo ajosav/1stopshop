@@ -17,7 +17,7 @@ class MechanicController extends Controller
     
     public function __construct(MechanicService $mechanicService)
     {
-        $this->middleware('auth.jwt');
+        $this->middleware('auth.jwt')->except('index', 'shows');
         $this->mechanicService = $mechanicService;
     }
 

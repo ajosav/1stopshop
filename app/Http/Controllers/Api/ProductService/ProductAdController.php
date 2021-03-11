@@ -21,12 +21,9 @@ class ProductAdController extends Controller
 {
     use GetRequestType;
 
-    public $user;
-
     public function __construct()
     {
-        $this->middleware('auth.jwt');
-        $this->user = auth('api')->user();
+        $this->middleware('auth.jwt')->only('store');
     }
 
     /**
@@ -36,9 +33,20 @@ class ProductAdController extends Controller
      */
     public function index()
     {
-        $ads = ProductAdServiceFacade::viewAllAds();
+        // $searchResults = (new Search())
+        //     ->registerModel(AdService::class, function(ModelSearchAspect $modelSearchAspect) {
+        //         $modelSearchAspect
+        //         ->addSearchableAttribute('product_title') // return results for partial matches on product title
+        //         ->addExactSearchableAttribute('keyword') // only return results that exactly match the keyword
+        //         ;
+        // })->perform('durolast');
+
+        // return $searchResults;
+        // $ads = ProductAdServiceFacade::viewAllAds();
+        // return ProductAdServiceFacade::filterProduct()->toSql();
+        $ads = ProductAdServiceFacade::filterProduct();
         return $this->getFullProductDetails($ads)->additional([
-            'message' => 'All services retrieved successfully',
+            'message' => 'Ad services retrieved successfully',
             'status' => "success"
         ]);
     }
@@ -63,9 +71,11 @@ class ProductAdController extends Controller
      */
     public function store(CreateAdProductRequest $request)
     {
-        abort_if(! Gate::allows('isPartDealer', $this->user->encodedKey), 403, "Only Part dealers are allowed to create products");
         
-        return ProductAdServiceFacade::createProduct($this->user, $request->validated());
+        $user = auth('api')->user();
+        abort_if(! Gate::allows('isPartDealer', $user->encodedKey), 403, "Only Part dealers are allowed to create products");
+        
+        return ProductAdServiceFacade::createProduct($user, $request->validated());
     }
 
     /**
@@ -80,7 +90,7 @@ class ProductAdController extends Controller
         return $this->getSingleProduct($ad_query)->additional([
             'message' => 'Ad retrieved successfully',
             'status' => "success"
-        ]);;
+        ]);
 
     }
 
@@ -91,19 +101,14 @@ class ProductAdController extends Controller
 
         $query = request('query');
 
-        $searchResults = (new Search())
-            ->registerModel(AdService::class, function(ModelSearchAspect $modelSearchAspect) {
-                $modelSearchAspect
-                   ->addSearchableAttribute('make') // return results for partial matches on make
-                   ->addSearchableAttribute('product_title') // return results for partial matches on product title
-                   ->addExactSearchableAttribute('keyword') // only return results that exactly match the keyword
-                   ->has('user')
-                   ->with('user');
-         })
-            ->registerModel(AdProductType::class, 'name')
-            ->perform($query);
+        $searchResults = ProductAdServiceFacade::searchProduct($query);
 
         return $searchResults;
+    }
+
+
+    public function filterProduct() {
+
     }
 
    
@@ -142,9 +147,10 @@ class ProductAdController extends Controller
     }
 
     public function userProducts() {
-        abort_if(! Gate::allows('isPartDealer', $this->user->encodedKey), 403, "Only Part dealer are allowed to create products");
+        $user  = auth('api')->user();
+        abort_if(! Gate::allows('isPartDealer', $user->encodedKey), 403, "Only Part dealer are allowed to create products");
         
-        $ads = ProductAdServiceFacade::findProductByUser($this->user->encodedKey);
+        $ads = ProductAdServiceFacade::findProductByUser($user->encodedKey);
 
         return $this->getFullProductDetails($ads->with('adProductType'))->additional([
             'message' => 'All services created by user retrieved successfully',
