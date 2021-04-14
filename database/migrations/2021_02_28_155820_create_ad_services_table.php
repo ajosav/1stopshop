@@ -16,7 +16,7 @@ class CreateAdServicesTable extends Migration
         Schema::create('ad_services', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('ad_product_type_id')->nullable();
+            $table->string('ad_product_type')->nullable();
             $table->string('encodedKey');
             $table->string('product_title');
             $table->string('product_no')->unique();

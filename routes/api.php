@@ -71,8 +71,6 @@ Route::group(['prefix' => 'v1'], function () {
     // Product action happens here
     Route::name('product.')->prefix('products')->group(function () {
         Route::get('/', [ProductAdController::class, 'index']);
-        Route::get('types', [ProductAdController::class, 'allAdTypes']);
-        Route::get('find-ad-type/{ad_type}', [ProductAdController::class, 'findAdType'])->name('find_ad_type');
         Route::post('create', [ProductAdController::class, 'store']);
         Route::get('find-products-by-user/{encodedKey}', [ProductAdController::class, 'find']);
         Route::get('find/{encodedKey}', [ProductAdController::class, 'show'])->name('find');

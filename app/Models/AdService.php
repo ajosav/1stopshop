@@ -33,10 +33,6 @@ class AdService extends Model implements Searchable
         return $this->belongsTo(User::class);
     }
 
-    public function adProductType() {
-        return $this->belongsTo(AdProductType::class, 'ad_product_type_id', 'id');
-    }
-
     public function skuOptions() : SkuOptions
     {
         return SkuOptions::make()

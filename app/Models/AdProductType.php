@@ -11,10 +11,6 @@ class AdProductType extends Model implements Searchable
 {
     use HasFactory;
 
-    public function adService() {
-        return $this->hasMany(AdService::class);
-    }
-
     public function format() {
         return [
             'id' => $this->id,

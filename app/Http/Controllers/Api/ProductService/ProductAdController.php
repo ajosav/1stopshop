@@ -51,17 +51,6 @@ class ProductAdController extends Controller
         ]);
     }
 
-    
-    public function allAdTypes()
-    {
-        $product_types = AdProductType::all()->map->format();
-        return response()->success('Product types retrieved successfully', $product_types);
-    }
-    public function findAdType(AdProductType $ad_type)
-    {
-        $product_types = $ad_type->format();
-        return response()->success('Product type retrieved successfully', $product_types);
-    }
 
     /**
      * Store a newly created resource in storage.

@@ -31,7 +31,15 @@ class CreateUserRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
+            'password' => ['required',
+                            'string',
+                            'confirmed',
+                            'min:8', // must be a minimum of 8
+                            'regex:/[a-z]/',
+                            'regex:/[A-Z]/',
+                            'regex:/[0-9]/',
+                            'regex:/[@$!%*#?&]/',
+                        ],
             'user_type' => 'nullable|in:regular,mechanic,part_dealer'
         ];
 

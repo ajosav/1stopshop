@@ -36,7 +36,7 @@ class CreateAdProductRequest extends FormRequest
     {
         $data = [
             'product_title' => 'required|string|max:155',
-            'product_type' => 'required|numeric|max:100',
+            'product_type' => 'required|string|max:100',
             'keyword' => 'nullable|string|max:100',
             'condition' => 'required|string|max:50',
             'year' => 'required|numeric',

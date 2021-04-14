@@ -135,8 +135,12 @@ class User extends Authenticatable implements JWTSubject
         }
         return [
             'user_info' => UserDataTransferObject::create($this), 
-            'profile' => ProfileDataTransferObject::create($this->userProfile), 
-            'company' => CompanyDataTransferObject::create($this->company)
+            'profile' => optional($this->userProfile, function ($profile) {
+                return ProfileDataTransferObject::create($profile);
+            }), 
+            'company' =>  optional($this->company, function ($company) {
+                return  CompanyDataTransferObject::create($company);
+            }),
         ];
     }
 

@@ -46,13 +46,13 @@ class AdProductActionService {
     }
 
     public function findProductByUser($userEncodedKey) {
-        return $this->viewAllAds()->with('adProductType')->whereHas('user', function($query) use ($userEncodedKey) {
+        return $this->viewAllAds()->whereHas('user', function($query) use ($userEncodedKey) {
             $query->where('encodedKey', $userEncodedKey);
         })->with('user');
     }
 
     public function findProductByEncodedKey($productEncodedKey) {
-        return $this->viewAllAds()->with('adProductType')->where('encodedKey', $productEncodedKey);
+        return $this->viewAllAds()->where('encodedKey', $productEncodedKey);
     }
 
     public function searchProduct($query) {
@@ -65,7 +65,6 @@ class AdProductActionService {
                 ->has('user')
                 ->with('user');
         })
-        ->registerModel(AdProductType::class, 'name')
         ->perform($query);
 
         return $searchResults;
