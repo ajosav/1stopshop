@@ -23,7 +23,7 @@ class ProductAdController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth.jwt')->only('store');
+        $this->middleware('auth.jwt')->only(['store', 'userProducts']);
     }
 
     /**
@@ -141,7 +141,7 @@ class ProductAdController extends Controller
         
         $ads = ProductAdServiceFacade::findProductByUser($user->encodedKey);
 
-        return $this->getFullProductDetails($ads->with('adProductType'))->additional([
+        return $this->getFullProductDetails($ads)->additional([
             'message' => 'All services created by user retrieved successfully',
             'status' => "success"
         ]);
