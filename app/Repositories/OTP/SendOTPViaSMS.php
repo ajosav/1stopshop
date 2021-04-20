@@ -18,6 +18,6 @@ class SendOTPViaSMS implements OTPInterface {
     }
     public function send() {
         $user = auth('api')->user();
-        return $user->notify(new SendActivationCode);
+        // return $user->notify(new SendActivationCode);
     }
 }

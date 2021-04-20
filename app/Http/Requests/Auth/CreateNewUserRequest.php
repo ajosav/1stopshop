@@ -27,8 +27,23 @@ class CreateNewUserRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
-            'user_type' => 'sometimes|required|in:regular,mechanic,part_dealer'
+            'password' => ['required',
+                            'string',
+                            'confirmed',
+                            'min:8', // must be a minimum of 8
+                            'regex:/[a-z]/',
+                            'regex:/[A-Z]/',
+                            'regex:/[0-9]/',
+                            'regex:/[@$!%*#?&]/',
+            ]
+                            
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            "regex" => "Password must include both lower and upper case characters, at least one number and symbol"
         ];
     }
 }

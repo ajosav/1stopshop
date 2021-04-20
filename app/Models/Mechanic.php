@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\AddUUID;
 use Exception;
 use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Model;
@@ -11,9 +12,9 @@ use Intervention\Image\Exception\ImageException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-class UserProfile extends Model
+class Mechanic extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, AddUUID;
 
     protected $guarded = [];
 
@@ -33,7 +34,13 @@ class UserProfile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getProfilePhotoAttribute($value) {
+    public function setCompanyPhotoAttribute($input) { 
+       if($input) {
+           $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/mechanic/', $input) : null;
+       }
+    }
+
+    public function getCompanyPhotoAttribute($value) {
         if(!$value) {
             return $value;
         }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
+class CreatePartDealersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,18 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('part_dealers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('office_no')->nullable();
             $table->string('encodedKey')->unique()->index()->nullable();
-            $table->text('street_name')->nullable();
-            $table->string('city')->nullable();
+            $table->string('phone_number')->unique()->nullable();
+            $table->string('tax_identification_no')->nullable();
+            $table->string('identification_type')->nullable();
+            $table->string('identity_number')->nullable();
+            $table->text('office_address')->nullable();
             $table->string('state')->nullable();
-            $table->string('region')->nullable();
-            $table->string('country')->nullable();
-            $table->text('company_mission')->nullable();
-            $table->longText('shop_photo')->nullable();
+            $table->string('city')->nullable();
+            $table->string('company_photo')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -38,6 +38,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comapnies');
+        Schema::dropIfExists('part_dealers');
     }
 }

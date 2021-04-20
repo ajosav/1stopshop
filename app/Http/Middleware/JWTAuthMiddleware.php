@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Services\Auth\AuthenticateUser;
 
 class JWTAuthMiddleware
 {
@@ -16,31 +17,20 @@ class JWTAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $autheticate = getAuthenticatedUser();
+        $autheticate = new AuthenticateUser();
 
-        if($autheticate->getStatusCode() != 200) {
-            return $autheticate;
+        if(!$autheticate->authenticate()) {
+            return $autheticate->authFailed();
         }
 
         $user = auth('api')->user();
-        $check_seller = $user->isSeller();
 
-        if($check_seller) {
-        
-            if(!$user->userProfile) {
-                if($request->routeIs('profile.index')) {
-                    return $next($request);
-                }
-                return response()->errorResponse("User profile has not been setup", ["account" => "Please setup user profile"], 403);
-            } else {
-                if($request->routeIs('users.resend') || $request->routeIs('users.verify')) {
-                    return $next($request);
-                }
+        if($request->routeIs('users.resend') || $request->routeIs('users.verify')) {
+            return $next($request);
+        }
 
-                if($user->userProfile->verified_at == null || $user->userProfile->isVerified != 1) {
-                    return response()->errorResponse("Business account has not been verified", ["account" => "Please verify user email to continue"], 403);
-                }
-            }
+        if($user->email_verified_at == null) {
+            return response()->errorResponse("Account has not been activativated", ["account" => "Please activate user account to continue"], 403);
         }
 
         return $next($request);

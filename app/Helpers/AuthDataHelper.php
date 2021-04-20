@@ -3,18 +3,7 @@
 namespace App\Helpers;
 
 class AuthDataHelper {
-    public static function userCreateData($data) {
-        return [
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => isset($data['password']) ? $data['password'] : null,
-            'user_type' => isset($data['user_type']) ? $data['user_type'] : 'regular',
-            'encodedKey' => generateEncodedKey()
-        ];
-    }
-
-    public static function createUserWithSocialData($data, $provider, $user_type) {
+    public static function createUserWithSocialData($data, $provider) {
         $name = explode(' ', $data->getName());
         return [
             'first_name' => $name[1],
@@ -22,7 +11,6 @@ class AuthDataHelper {
             'email' => $data->getEmail(),
             'provider' => $provider,
             'provider_id' => $data->getId(),
-            'user_type' => $user_type,
             'encodedKey' => generateEncodedKey()
         ];
     }

@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Shop\ShopController;
+use App\Http\Controllers\Api\RegisteredUserController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
-use App\Http\Controllers\Api\Profile\RegisteredUserController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
 
 /*
@@ -29,7 +29,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function () {
 
-    // Users authentication a
+    // Users authentication
     Route::name('users.')->prefix('users')->group(function () {
         Route::post('create', [AuthController::class, 'createUser'])->name('create');
         Route::post('login', [AuthController::class, 'authenticate'])->name('login');
@@ -43,29 +43,23 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('logout', [AuthController::class, 'logout']);
     });
 
-
-    //  user profile endpoint goes here
-    Route::name('profile.')->prefix('profile')->group(function () {
-        Route::post('create', [ProfileController::class, 'createProfile'])->name('index');
-
-    });
-
-    // users data retrival 
-    Route::get('verified-vendors', [RegisteredUserController::class, 'getAllVerifiedVendors']);
-    Route::get('users', [RegisteredUserController::class, 'getAllUsers']);
+    // users data retrival
+    Route::get('users', [RegisteredUserController::class, 'index']);
     Route::get('find-user/{encodedKey}', [RegisteredUserController::class, 'findUser']);
     Route::get('find-users/{user_type}', [RegisteredUserController::class, 'findUserByType']);
 
     // Mechanic user type
     Route::name('mechanic.')->prefix('mechanic')->group(function () {
         Route::get('/', [MechanicController::class, 'index']);
-        Route::get('user/{encodedKey}', [MechanicController::class, 'show']);
+        Route::get('{encodedKey}', [MechanicController::class, 'show']);
+        Route::post('create', [MechanicController::class, 'store'])->name('create');
     });
 
     // Part Dealer user type goes here
     Route::name('part-dealer.')->prefix('part-dealer')->group(function () {
         Route::get('/', [PartDealerController::class, 'index']);
-        Route::get('user/{encodedKey}', [PartDealerController::class, 'show']);
+        Route::get('{encodedKey}', [PartDealerController::class, 'show']);
+        Route::post('create', [PartDealerController::class, 'store'])->name('create');
     });
 
     // Product action happens here
@@ -77,11 +71,22 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('current-user-products', [ProductAdController::class, 'userProducts']);
         Route::get('search', [ProductAdController::class, 'searchProduct']);
     });
+
+    Route::get('remove', function() {
+        $user = auth('api')->user();
+    
+        $user->revokePermissionTo('part dealer');
+        $user->partDealer()->delete();
+    
+        return "Success";
+    
+    })->middleware('auth.jwt');
    
 });
 
-Route::get('get-details', function() {
-    $user = User::find(3);
 
-    return $user->getFullUserDetail();
+
+
+Route::get('date', function() {
+    date('Y-m-d', strtotime($date));
 });

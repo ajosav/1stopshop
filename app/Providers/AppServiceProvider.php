@@ -8,6 +8,7 @@ use App\Repositories\OTP\SendOTPViaSMS;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\OTP\SendOTPViaMail;
 use App\Services\AdProductService\AdProductActionService;
+use Spatie\Permission\Models\Permission;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        
         $this->app->singleton(OTPInterface::class, function() {
             return new SendOTPViaMail;
             // return new SendOTPViaSMS;
@@ -36,5 +38,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        $permissions = config('permission.default_permissions');
+        foreach($permissions as $permission) {
+            if(!isPermissionExist($permission)) {
+                Permission::create(['name' => $permission]);
+            }
+        }
     }
 }

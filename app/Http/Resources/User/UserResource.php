@@ -19,7 +19,8 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email'=> $this->email,
-            'user_type'=> $this->user_type
+            'verified' => is_null($this->email_verified_at) ? 'no' : 'yes',
+            'permissions' => $this->getPermissionNames()
         ];
     }
 

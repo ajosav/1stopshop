@@ -71,12 +71,6 @@ class Handler extends ExceptionHandler
             if($exception instanceof NotFoundHttpException) {
                 return response()->errorResponse("The requested endpoint does not exist", [], 404);
             }
-            if($exception instanceof QueryException) {
-                $errorCode = $exception->errorInfo[1];
-                if($errorCode == 1451) {
-                    return response()->errorResponse("Cannot remove this resource permanently; It's related with othe resource", [], 409);
-                }
-            }
             if($exception instanceof HttpException) {
                 return response()->errorResponse($exception->getMessage(), [], $exception->getStatusCode());
             }

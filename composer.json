@@ -23,7 +23,6 @@
         "spatie/data-transfer-object": "^2.8",
         "spatie/laravel-json-api-paginate": "^1.10",
         "spatie/laravel-searchable": "^1.9",
-        "stevebauman/location": "^6.1",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

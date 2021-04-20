@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\Mechanic;
 
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Traits\GetRequestType;
 use App\Services\MechanicService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\CreateMechanicRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MechanicController extends Controller
@@ -53,9 +55,10 @@ class MechanicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateMechanicRequest $request)
     {
-        //
+        $user = auth('api')->user();
+        return $this->mechanicService->createNewMechanic(Arr::except($request->validated(), 'no_tax_id'), $user);
     }
 
     /**
@@ -66,7 +69,9 @@ class MechanicController extends Controller
      */
     public function show($encodedKey)
     {
-        $user  = User::where('encodedKey', $encodedKey)->where('user_type', 'mechanic');
+        $user  = User::where('encodedKey', $encodedKey)->whereHas('permissions', function($query) {
+            return $query->whereName('mechanic');
+        });
         $all_mechanics = $this->getSingleUser($user);
 
         return response()->success("User information retrieved successfully", $all_mechanics);

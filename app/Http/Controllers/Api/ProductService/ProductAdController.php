@@ -62,7 +62,7 @@ class ProductAdController extends Controller
     {
         
         $user = auth('api')->user();
-        abort_if(! Gate::allows('isPartDealer', $user->encodedKey), 403, "Only Part dealers are allowed to create products");
+        abort_if(! Gate::allows('part dealer', $user), 403, "Only Part dealers are allowed to create products");
         
         return ProductAdServiceFacade::createProduct($user, $request->validated());
     }
@@ -137,7 +137,7 @@ class ProductAdController extends Controller
 
     public function userProducts() {
         $user  = auth('api')->user();
-        abort_if(! Gate::allows('isPartDealer', $user->encodedKey), 403, "Only Part dealer are allowed to create products");
+        abort_if(! Gate::allows('part dealer', $user), 403, "Only Part dealer are allowed to create products");
         
         $ads = ProductAdServiceFacade::findProductByUser($user->encodedKey);
 

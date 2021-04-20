@@ -6,23 +6,18 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateNewUserRequest;
-use App\Http\Requests\Auth\CreateProfileRequest;
 use App\Repositories\OTP\OTPInterface;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\OtpValidationRequest;
-use App\Http\Requests\Auth\CreateUserRequest;
-use App\Services\Profile\CreateProfileService;
-use Illuminate\Support\Facades\Gate;
 
 class AuthController extends Controller
 {
     public $activation_code, $userService, $profileService;
-    public function __construct(OTPInterface $activation_code, UserService $userService, CreateProfileService $createProfileService)
+    public function __construct(OTPInterface $activation_code, UserService $userService)
     {
-        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount', 'logout');
+        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount', 'logout', 'authenticatedUser');
         $this->activation_code = $activation_code;
         $this->userService = $userService;
-        $this->profileService = $createProfileService;
     }
 
     public function authenticate(LoginRequest $request)
@@ -35,7 +30,7 @@ class AuthController extends Controller
 
     public function createUser(CreateNewUserRequest $request)
     {
-        return $this->userService->createUserAccount($request->validated());
+        return $this->userService->createUserAccount($request->validated(), $this->activation_code);
     }
 
     public function authenticatedUser() {
@@ -52,10 +47,8 @@ class AuthController extends Controller
 
     public function resendCode() {
         $user = auth('api')->user();
-        if(!Gate::allows('isMechanic', $user->encodedKey) && !Gate::allows('isPartDealer', $user->encodedKey)) {
-            return response()->errorResponse("User account cannot be activated");
-        }
-        if($user->userProfile->verified_at == null || $user->userProfile->isVerified != 1) {
+        
+        if(!$user->email_verified_at) {
             $this->activation_code->send();
             return response()->success("Activation code sent to user's email");
         }
@@ -77,7 +70,15 @@ class AuthController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => ['required',
+                            'string',
+                            'confirmed',
+                            'min:8', // must be a minimum of 8
+                            'regex:/[a-z]/',
+                            'regex:/[A-Z]/',
+                            'regex:/[0-9]/',
+                            'regex:/[@$!%*#?&]/',
+            ]
         ]);
             
         return $this->userService->resetPassword($request);

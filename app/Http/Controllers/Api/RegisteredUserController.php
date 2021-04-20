@@ -1,25 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Api\Profile;
+namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Traits\GetRequestType;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\UserResourceCollection;
-use App\Services\Shop\GeneralShopService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RegisteredUserController extends Controller
 {
     use GetRequestType;
 
-    public $shopService, $userService;
+    public $userService;
   
-    public function __construct(GeneralShopService $shopService, UserService $userService)
+    public function __construct(UserService $userService)
     {
-        $this->shopService = $shopService;
         $this->userService = $userService;
     }
     
@@ -41,16 +38,6 @@ class RegisteredUserController extends Controller
         ]);
     }
 
-    public function getAllVerifiedVendors() {
-        $all_users = $this->getUserDetail(
-            $this->userService->getVerifiedUsers()
-        );
-        return $all_users->additional([
-            'message' => 'Verifed users retrieved successfully',
-            'status' => "success"
-        ]);
-    }
-
     public function findUser($encodedKey) {
         $user  = User::where('encodedKey', $encodedKey);
         $user_detail = $this->getSingleUser($user);
@@ -59,7 +46,9 @@ class RegisteredUserController extends Controller
     }
 
     public function findUserByType($user_type) {
-        $user  = User::where('user_type', $user_type);
+        $user  = User::whereHas('permissions', function($query) use($user_type) {
+            $query->whereName($user_type);
+        });
         $all_mechanics = $this->getUserDetail($user);
         
         if(count($all_mechanics) < 1) {

@@ -23,7 +23,7 @@ class OtpValidationRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('isMechanic', $this->user->encodedKey) ||  Gate::allows('isPartDealer', $this->user->encodedKey);
+        return true;
     }
 
     /**
@@ -62,9 +62,8 @@ class OtpValidationRequest extends FormRequest
 
     public function activateUserAccount() {
         try {
-            $this->user->userProfile->isVerified = 1;
-            $this->user->userProfile->verified_at = now();
-            $this->user->userProfile->save();
+            $this->user->email_verified_at = now();
+            $this->user->save();
             return response()->success("User account successfully activated");
         } catch(QueryException $e) {
             return response()->errorResponse('Error acctivating user account', ['account' => 'user account could not be activated']);

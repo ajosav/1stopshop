@@ -178,8 +178,7 @@ return [
         
         App\Providers\MacroServiceProvider::class,
 
-        App\Providers\CustomPasswordResetServiceProvider::class,
-        Stevebauman\Location\LocationServiceProvider::class
+        App\Providers\CustomPasswordResetServiceProvider::class
     ],
 
     /*

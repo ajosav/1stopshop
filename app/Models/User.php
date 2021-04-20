@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\AddUUID;
 use App\Models\UserProfile;
+use App\Filters\Shop\UserType;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,13 +15,12 @@ use App\Notifications\ResetPasswordNotification;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
-use App\Filters\Shop\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, AddUUID, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -32,8 +34,7 @@ class User extends Authenticatable implements JWTSubject
         'encodedKey',
         'password',
         'provider',
-        'provider_id',
-        'user_type'
+        'provider_id'
     ];
 
     protected $dates = [
@@ -63,11 +64,11 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     // Define relationships
-    public function userProfile() {
-        return $this->hasOne(UserProfile::class);
+    public function partDealer() {
+        return $this->hasOne(PartDealer::class);
     }
-    public function company() {
-        return $this->hasOne(Company::class);
+    public function mechanic() {
+        return $this->hasOne(Mechanic::class);
     }
     public function otp() {
         return $this->hasOne(Otp::class);
@@ -120,13 +121,6 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
-    public function isSeller() {
-        if($this->user_type === 'regular') {
-            return false;
-        }
-        return true;
-    }
-
     public function getFullUserDetail() {
         if(!$this->userProfile) {
             return [
@@ -152,20 +146,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPasswordNotification($token));
-    }
-
-
-    public static function getAllMechanics() {
-        return app(Pipeline::class)
-                ->send(self::query())
-                ->through([
-                    UserType::class,
-                    Order::class
-                ])
-                ->thenReturn()
-
-                ->with('user')
-                ->get();
     }
 
     public function createNewToken() {

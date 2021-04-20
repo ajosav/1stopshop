@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use libphonenumber\NumberParseException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\DataTransferObjects\UserDataTransferObject;
+use App\Helpers\ResourceHelpers;
+use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
@@ -34,8 +36,7 @@ function getAuthenticatedUser()
         return response()->errorResponse('token_absent', ["token" => $e->getMessage()], 401);
 
     }
-    
-    return response()->success('User data retreived', $user->getFullUserDetail());
+    return ResourceHelpers::returnUserData($user);
 }
 
 function sanitizePhoneNumber($phoneNumber, $national = true, $trim = true)
@@ -84,10 +85,6 @@ function photoType($photo) {
         } catch(ErrorException $e) {
             return false;
         }
-       
-        // dd($image_data);
-        // if (base64_encode(base64_decode($photo, true)) === $image_data){
-        // } 
     }
    
     return @is_file($photo) ? "file" : false; 
@@ -137,4 +134,12 @@ function isValidAmount($amount) {
     $string = str_replace(',', '', $amount);
     
     return preg_match('/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/', $string); 
+}
+
+function isPermissionExist($permission_name){
+    if(Permission::whereName($permission_name)->first()) {
+        return true;
+    }
+
+    return false;
 }

@@ -20,7 +20,7 @@ trait GetRequestType {
     
     public function getSingleUser($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $new_user = $user->with('company', 'userProfile')->firstOrFail();
+            $new_user = $user->with('mechanic', 'partDealer')->firstOrFail();
             return new UserResourceCollection($new_user);
         }
         

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
+use App\Helpers\ResourceHelpers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Client\Request;
@@ -31,7 +32,7 @@ class LoginService {
         $this->ensureIsNotRateLimited();
 
         try {
-            if (! $token = auth('api')->attempt($this->credentials())) {
+            if (! auth('api')->attempt($this->credentials())) {
                 // dd($token);
                 RateLimiter::hit($this->throttleKey());
 
@@ -46,8 +47,7 @@ class LoginService {
 
         RateLimiter::clear($this->throttleKey());
         $user = auth('api')->user();
-        $token_response = array_merge(respondWithToken($token), $user->getFullUserDetail());
-        return response()->success('User Successfully Authenticated', $token_response);
+        return ResourceHelpers::returnAuthenticatedUser($user, "User Successfully Authenticated");
     }
 
     /**

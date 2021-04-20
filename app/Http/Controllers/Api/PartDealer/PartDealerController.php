@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\PartDealer;
 
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Traits\GetRequestType;
 use App\Services\PartDealerService;
 use App\Http\Controllers\Controller;
-use App\Traits\GetRequestType;
+use App\Http\Requests\Auth\CreatePartDealerRequest;
 
 class PartDealerController extends Controller
 {
@@ -37,9 +39,10 @@ class PartDealerController extends Controller
     }
 
    
-    public function store(Request $request)
+    public function store(CreatePartDealerRequest $request)
     {
-        //
+        $user = auth('api')->user();
+        return $this->part_dealer->createNewPartDealer(Arr::except($request->validated(), 'no_tax_id'), $user);
     }
 
     /**
@@ -50,12 +53,13 @@ class PartDealerController extends Controller
      */
     public function show($encodedKey)
     {
-        $user  = User::where('encodedKey', $encodedKey)->where('user_type', 'mechanic');
-        $all_part_dealer = $this->getSingleUser($user);
+        $user  = User::where('encodedKey', $encodedKey)->whereHas('permissions', function($query) {
+            return $query->whereName('part dealer');
+        });
+        $all_mechanics = $this->getSingleUser($user);
 
-        return response()->success("User information retrieved successfully", $all_part_dealer);
+        return response()->success("User information retrieved successfully", $all_mechanics);
     }
-
 
     /**
      * Update the specified resource in storage.

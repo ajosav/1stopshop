@@ -9,15 +9,13 @@ class UserDataTransferObject extends DataTransferObject {
     public string $first_name;
     public string $last_name;
     public string $email;
-    public $user_type;
 
     public static function create($data) : self{
         return new self([
             'id' => $data['encodedKey'],
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
-            'email'=> $data['email'],
-            'user_type'=> $data['user_type']
+            'email'=> $data['email']
         ]);
     }
 }

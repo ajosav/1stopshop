@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('encodedKey')->unique()->index()->nullable();
-            $table->enum('user_type', ['regular', 'mechanic', 'part_dealer'])->default('regular')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();

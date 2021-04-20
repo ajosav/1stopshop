@@ -15,73 +15,24 @@ use Laravel\Socialite\Facades\Socialite;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Events\PasswordReset;
 use App\DataTransferObjects\UserDataTransferObject;
+use App\Helpers\ResourceHelpers;
 
 class UserService {
-    
-    public function createUser($request, $activation_code) {
+
+    public function createUserAccount($request, $activation) {
         try {
-            $create_user = DB::transaction(function() use ($request, $activation_code) {
-                $data = AuthDataHelper::userCreateData($request);
-                $user = User::create($data);
-                $token = JWTAuth::fromUser($user);
-                if($data['user_type'] == 'regular') {
-                    $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
-                    return response()->success('User Successfully Created', $response);
-                }
-
-                // Create profile for user
-                if(!$profile = $this->createUserProfile($user, $request)) {
-                    throw new Exception("Error encountered while creating user profile");
-                }
-
-                // create company for user
-                if(!$company = $this->createUserCompany($user, $request)) {
-                    throw new Exception("Error encountered creating company profile");
-                }
-
-                $activation_code->sendToUser($user);
-                // SendActivationCodeJob::dispatch($user)->delay(now()->addSecond());
-
-                $response = array_merge(respondWithToken($token), $user->getFullUserDetail());
-                
-                return $response;
+            $create_user = DB::transaction(function() use ($request, $activation) {
+                $user = User::create($request);
+                $activation->sendToUser($user);
+                return $user;
             });
 
-            return response()->success('User Successfully Created', $create_user);
         } catch (QueryException $e) {
             return response()->errorResponse("Error creating user data");
         } catch(Exception $e) {
             return response()->errorResponse("User registration failed", ["user_registration" => $e->getMessage()]);
         }
-    }
-
-    public function createUserAccount($request) {
-        try {
-            $create_user = DB::transaction(function() use ($request) {
-                $data = AuthDataHelper::userCreateData($request);
-                $user = User::create($data);
-                $token = JWTAuth::fromUser($user);
-
-                $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
-                return response()->success('User Successfully Created', $response);
-            });
-
-            return response()->success('User Successfully Created', $create_user);
-        } catch (QueryException $e) {
-            return response()->errorResponse("Error creating user data");
-        } catch(Exception $e) {
-            return response()->errorResponse("User registration failed", ["user_registration" => $e->getMessage()]);
-        }
-    }
-
-    public function createUserProfile($user, $request) {
-        $profile_data = AuthDataHelper::userCreateProfile($request);
-        return $user->userProfile()->create($profile_data);
-    }
-
-    public function createUserCompany($user, $request) {
-        $company_data = AuthDataHelper::userCreateCompany($request);
-        return $user->company()->create($company_data);
+        return ResourceHelpers::returnAuthenticatedUser($create_user, "User Successfully Created");
     }
 
     public function generateSocialLink($provider, $user_type) {
@@ -108,13 +59,7 @@ class UserService {
                 return response()->errorResponse("Could not retrieve user email", ["provider" => "{$provider} didn't send user's email, please ensure email is enable"]);
             }
 
-            if(request()->has('state')) {
-                $user_type = request('state');
-            } else {
-                $user_type = 'regular';
-            }
-
-            $user_data = AuthDataHelper::createUserWithSocialData($user_provider, $provider, $user_type);
+            $user_data = AuthDataHelper::createUserWithSocialData($user_provider, $provider);
             $user = User::firstOrCreate(['email' => $user_provider->getEmail()], $user_data);
             $token = JWTAuth::fromUser($user);
             $response = array_merge(respondWithToken($token), ['user_info' => UserDataTransferObject::create($user)]);
@@ -153,17 +98,9 @@ class UserService {
                     ? response()->success(__($status))
                     : response()->errorResponse(__($status));
     }
-    
-    public function getVerifiedUsers() {
-        return User::where('user_type', '<>', 'regular')
-            ->whereHas('userProfile', function($query) {
-                $query->where('isVerified', 1)
-                    ->whereNotNull('verified_at');
-            });
-    }
 
 
     public function getAllUsers() {
-        return User::all();
+        return User::query();
     }
 }
