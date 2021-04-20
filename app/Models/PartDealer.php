@@ -37,7 +37,7 @@ class PartDealer extends Model
 
     public function setCompanyPhotoAttribute($input) { 
        if($input) {
-           $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/mechanic/', $input) : null;
+           $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/partdealer/', $input) : null;
        }
     }
 
