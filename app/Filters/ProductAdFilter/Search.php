@@ -18,7 +18,7 @@ class Search extends BaseFilter {
                             $filter->where('specialization', 'like', '%' . $search . '%')
                                 ->orWhere('service_area', 'like', '%' . $search . '%');
                         });
-            })->orWhereHas('part_dealer', function($part_dealer){
+            })->orWhereHas('partDealer', function($part_dealer){
                 $search = request($this->filterName());
                 return $part_dealer->where('city', 'like', '%' . $search . '%')
                         ->orWhere('state', 'like', '%' . $search . '%')
