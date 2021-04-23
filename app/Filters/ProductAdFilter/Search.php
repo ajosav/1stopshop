@@ -8,17 +8,21 @@ class Search extends BaseFilter {
     protected function applyFilter($builder)
     {
         return $builder->whereHas('user', function($query) {
-            $query->whereHas('company', function($company) {
+            $query->whereHas('mechanic', function($mechanic) {
                 $location = request($this->filterName());
-                $company->where('city', 'like', '%' . $location . '%')
+                return $mechanic->where('city', 'like', '%' . $location . '%')
                         ->orWhere('state', 'like', '%' . $location . '%')
-                        ->orWhere('street_name', 'like', '%' . $location . '%')
+                        ->orWhere('office_address', 'like', '%' . $location . '%')
                         ->orWhere(function($filter) {
                             $search = request($this->filterName());
-                            $filter->where('make', 'like', '%' . $search . '%')
-                                ->orWhere('product_title', 'like', '%' . $search . '%')
-                                ->orWhere('keyword', 'like', '%' . $search . '%');
+                            $filter->where('specialization', 'like', '%' . $search . '%')
+                                ->orWhere('service_area', 'like', '%' . $search . '%');
                         });
+            })->orWhereHas('part_dealer', function($part_dealer){
+                $search = request($this->filterName());
+                return $part_dealer->where('city', 'like', '%' . $search . '%')
+                        ->orWhere('state', 'like', '%' . $search . '%')
+                        ->orWhere('office_address', 'like', '%' . $search . '%');
             });
         });
     }
