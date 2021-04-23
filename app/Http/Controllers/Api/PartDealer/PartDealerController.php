@@ -54,7 +54,7 @@ class PartDealerController extends Controller
     public function show($encodedKey)
     {
         $user  = User::where('encodedKey', $encodedKey)->whereHas('permissions', function($query) {
-            return $query->whereName('part dealer');
+            return $query->whereName('part_dealer');
         });
         $all_mechanics = $this->getSingleUser($user);
 

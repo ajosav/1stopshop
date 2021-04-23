@@ -12,7 +12,7 @@ use Illuminate\Database\QueryException;
 class PartDealerService {
     public function getVerifiedPartDealers() {
         return User::whereHas('permissions', function($query) {
-                return $query->whereName('part dealer');
+                return $query->whereName('part_dealer');
             })->whereHas('partDealer');
     }
 
@@ -20,7 +20,7 @@ class PartDealerService {
         try {
             $new_dealer = DB::transaction(function () use($data, $user) {
                 if($user->partDealer()->create($data)) {
-                    $user->givePermissionTo('part dealer');
+                    $user->givePermissionTo('part_dealer');
                 }
 
                 return $user;

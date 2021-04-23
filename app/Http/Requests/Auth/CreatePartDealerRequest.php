@@ -20,7 +20,7 @@ class CreatePartDealerRequest extends FormRequest
      */
     public function authorize()
     {
-        return !$this->user->hasPermissionTo('part dealer');
+        return !$this->user->hasPermissionTo('part_dealer');
     }
 
     /**

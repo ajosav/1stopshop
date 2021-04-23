@@ -26,7 +26,7 @@ class UserResourceCollection extends JsonResource
                 'permissions' => $this->getPermissionNames()
             ],
             'mechanic' => new MechanicResource($this->mechanic),
-            'part dealer' => new PartDealercResource($this->partDealer)
+            'part_dealer' => new PartDealercResource($this->partDealer)
         ];
     }
 

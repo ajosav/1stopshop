@@ -2,7 +2,7 @@
 
 return [
     'default_permissions' => [
-        'mechanic', 'part dealer'
+        'mechanic', 'part_dealer'
     ],
 
     'models' => [
