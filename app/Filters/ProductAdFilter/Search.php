@@ -12,10 +12,10 @@ class Search extends BaseFilter {
     protected function applyFilter($builder)
     {
         return $builder->where(function($query) {
-                    return $query->where('product_title', $this->search)
-                            ->orWhere('make', $this->search)
-                            ->orWhere('model', $this->search)
-                            ->orWhere('keyword', $this->search);
+                    return $query->where('product_title', 'like', '%' . $this->search . '%')
+                            ->orWhere('make', 'like', '%' . $this->search . '%')
+                            ->orWhere('model', 'like', '%' . $this->search . '%')
+                            ->orWhere('keyword', 'like', '%' . $this->search . '%');
                 })
                 ->orWhereHas('user', function($query) {
                     $query->whereHas('mechanic', function($mechanic) {
