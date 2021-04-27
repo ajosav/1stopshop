@@ -5,12 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\Shop\ShopController;
 use App\Http\Controllers\Api\RegisteredUserController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
+use App\Models\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,15 +74,22 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('search', [ProductAdController::class, 'searchProduct']);
     });
 
-    Route::get('remove', function() {
-        $user = auth('api')->user();
+    Route::name('category.')->prefix('category')->group(function() {
+        Route::get('/', [CategoryController::class, 'fetchParentCategories']);
+        Route::post('create', [CategoryController::class, 'createCategory']);
+        Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
+        Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
+    });
+
+    // Route::get('remove', function() {
+    //     $user = auth('api')->user();
     
-        $user->revokePermissionTo('part dealer');
-        $user->partDealer()->delete();
+    //     $user->revokePermissionTo('part dealer');
+    //     $user->partDealer()->delete();
     
-        return "Success";
+    //     return "Success";
     
-    })->middleware('auth.jwt');
+    // })->middleware('auth.jwt');
    
 });
 

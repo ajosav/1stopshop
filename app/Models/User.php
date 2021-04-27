@@ -76,6 +76,9 @@ class User extends Authenticatable implements JWTSubject
     public function adService() {
         return $this->hasMany(AdService::class);
     }
+    public function category() {
+        return $this->hasMany(Category::class);
+    }
     public function getRouteKeyName()
     {
         return 'encodedKey';

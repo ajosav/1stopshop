@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\User\AuthUserResource;
 use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserResourceCollection;
@@ -27,5 +28,12 @@ class ResourceHelpers {
             'message' => $message,
             'status' => "success"
         ]); 
+    }
+
+    public static function categoriesWithSubs($category, $message) {
+        return (CategoryResource::collection($category))->additional([
+            'message' => $message,
+            'status' => "success"
+        ]);
     }
 }
