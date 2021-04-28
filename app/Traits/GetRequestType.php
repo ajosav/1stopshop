@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductResourceCollection;
+use App\Http\Resources\Product\RelatedProductResorceCollection;
 use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserResourceCollection;
 
@@ -29,7 +30,7 @@ trait GetRequestType {
 
     public function getFullProductDetails($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->jsonPaginate();
+            $retrieved_product = $product->with('user')->with('category')->jsonPaginate();
             return ProductResourceCollection::collection($retrieved_product);
         }
         
@@ -38,8 +39,16 @@ trait GetRequestType {
 
     public function getSingleProduct($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->firstOrFail();
+            $retrieved_product = $product->with('user')->with('category')->firstOrFail();
             return new ProductResourceCollection($retrieved_product);
+        }
+        
+        return new ProductResource($product->firstOrFail());
+    }
+    public function getSingleRelatedProduct($product) {
+        if(request()->has('fullDetails') && request('fullDetails') === 'true') {
+            $retrieved_product = $product->with('user')->with('category')->firstOrFail();
+            return new RelatedProductResorceCollection($retrieved_product);
         }
         
         return new ProductResource($product->firstOrFail());

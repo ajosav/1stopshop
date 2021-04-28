@@ -18,4 +18,8 @@ class Category extends Model
     public function subCategories() {
         return $this->hasMany(Category::class, 'parent_id', 'id');
     }
+
+    public function asService() {
+        return $this->hasMany(AdService::class);
+    }
 }

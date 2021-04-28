@@ -33,6 +33,10 @@ class AdService extends Model implements Searchable
         return $this->belongsTo(User::class);
     }
 
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
+
     public function skuOptions() : SkuOptions
     {
         return SkuOptions::make()
@@ -77,5 +81,19 @@ class AdService extends Model implements Searchable
         }
 
         return $photos;
+    }
+
+    public function scopeRelatedProducts($query) {
+        return $query->whereHas('category', function($category){
+            return $category->orWhereHas('subCategories');
+        })->where('id', '!=', $this->id);
+        return $query
+                ->join('categories', 'ad_services.category_id', '=', 'categories.id')
+                    ->join('categories as sub_category', 'ad_services.category_id', '=', 'sub_category.parent_id')
+                    ->where(function($query) {
+                        $query->where('ad_services.id', 'categories.id')
+                            ->orWhere('ad_services.id', 'sub_categories.id');
+                    })
+                    ->take(5);
     }
 }

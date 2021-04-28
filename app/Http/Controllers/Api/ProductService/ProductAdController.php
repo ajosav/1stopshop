@@ -3,19 +3,13 @@
 namespace App\Http\Controllers\Api\ProductService;
 
 use App\Models\AdService;
-use App\Filters\Book\Order;
 use Illuminate\Http\Request;
-use App\Models\AdProductType;
-use Spatie\Searchable\Search;
-use App\Filters\Shop\UserType;
 use App\Traits\GetRequestType;
-use Illuminate\Pipeline\Pipeline;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Facades\ProductAdServiceFacade;
-use Spatie\Searchable\ModelSearchAspect;
 use App\Http\Requests\Ad\CreateAdProductRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Category;
 
 class ProductAdController extends Controller
 {
@@ -76,7 +70,7 @@ class ProductAdController extends Controller
     public function show($encodedKey)
     {
         $ad_query = ProductAdServiceFacade::findProductByEncodedKey($encodedKey);
-        return $this->getSingleProduct($ad_query)->additional([
+        return $this->getSingleRelatedProduct($ad_query)->additional([
             'message' => 'Ad retrieved successfully',
             'status' => "success"
         ]);
@@ -98,9 +92,7 @@ class ProductAdController extends Controller
 
     public function filterProduct() {
 
-    }
-
-   
+    }   
 
     /**
      * Update the specified resource in storage.

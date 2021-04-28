@@ -34,8 +34,7 @@ class CreateMechanicRequest extends FormRequest
     {
         $data =  [
             'phone_number' => 'required|unique:mechanics',
-            'no_tax_id' => 'sometimes|nullable|in:0, 1',
-            'tax_identification_no' => 'required_unless:no_tax_id,1',
+            'tax_identification_no' => 'nullable',
             'identification_type' => 'required',
             'identity_number' => 'required',
             'professional_skill' => 'required',

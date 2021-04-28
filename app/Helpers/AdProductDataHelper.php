@@ -24,7 +24,8 @@ class AdProductDataHelper {
             "description"               =>      $data['description'],
             "price"                     =>      cleanAmount($data['price']),
             "product_photo"             =>      json_encode($product_photos),
-            "negotiable"                =>      isset($data['negotiable']) ? $data['negotiable'] : 0
+            "negotiable"                =>      isset($data['negotiable']) ? $data['negotiable'] : 0,
+            "category_id"               =>      isset($data['category_id']) ? $data['category_id'] : null,
         ];
     }
 }

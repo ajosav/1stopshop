@@ -72,6 +72,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('find/{encodedKey}', [ProductAdController::class, 'show'])->name('find');
         Route::get('current-user-products', [ProductAdController::class, 'userProducts']);
         Route::get('search', [ProductAdController::class, 'searchProduct']);
+        Route::get('find-by-category/{catgory_id}', [ProductAdController::class, 'findByCategory']);
     });
 
     Route::name('category.')->prefix('category')->group(function() {

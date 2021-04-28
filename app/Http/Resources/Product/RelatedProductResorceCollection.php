@@ -6,7 +6,7 @@ use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\User\UserResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResourceCollection extends JsonResource
+class RelatedProductResorceCollection extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -14,6 +14,7 @@ class ProductResourceCollection extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
     public function toArray($request)
     {
         return [
@@ -33,7 +34,8 @@ class ProductResourceCollection extends JsonResource
             'product_type'      =>          $this->ad_product_type,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'created_by'        =>          new UserResourceCollection($this->user),
-            'category'          =>          new CategoryResource($this->category)
+            'category'          =>          new CategoryResource($this->category),
+            'related_products'  =>          ProductResourceCollection::collection($this->relatedProducts()->get())
         ];
     }
 }
