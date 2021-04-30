@@ -14,7 +14,6 @@ class AdProductDataHelper {
         return [
             "encodedKey"                =>      generateEncodedKey(),
             "product_title"             =>      $data['product_title'],
-            "ad_product_type"           =>      $data['product_type'],
             "keyword"                   =>      isset($data['keyword']) ? $data['keyword'] : null,
             "condition"                 =>      $data['condition'],
             "year"                      =>      $data['year'],

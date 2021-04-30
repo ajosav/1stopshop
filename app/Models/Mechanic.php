@@ -39,6 +39,16 @@ class Mechanic extends Model
            $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/mechanic/', $input) : null;
        }
     }
+    public function setProfessionalSkillAttribute($input) { 
+       if($input) {
+           $this->attributes['professional_skill'] = json_encode($input);
+       }
+    }
+    public function setVehicleTypeAttribute($input) { 
+       if($input) {
+           $this->attributes['vehicle_type'] = json_encode($input);
+       }
+    }
 
     public function getCompanyPhotoAttribute($value) {
         if(!$value) {
@@ -57,7 +67,13 @@ class Mechanic extends Model
         
     }
 
-    public function getServiceAreaAttribute($value) {
+    public function getProfessionalSkillAttribute($value) {
+        if(!$value) {
+            return $value;
+        }
+        return json_decode($value, true);
+    }
+    public function getVehicleType($value) {
         if(!$value) {
             return $value;
         }

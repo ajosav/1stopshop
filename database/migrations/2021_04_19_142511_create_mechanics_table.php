@@ -21,10 +21,11 @@ class CreateMechanicsTable extends Migration
             $table->string('tax_identification_no')->nullable();
             $table->string('identification_type')->nullable();
             $table->string('identity_number')->nullable();
-            $table->string('professional_skill')->nullable();
-            $table->string('specialization')->nullable();
+            $table->longText('professional_skill')->nullable();
+            $table->longText('vehicle_type')->nullable();
+            // $table->longText('specialization')->nullable();
             $table->integer('experience_years')->nullable();
-            $table->text('service_area')->nullable();
+            // $table->text('service_area')->nullable();
             $table->text('office_address')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
