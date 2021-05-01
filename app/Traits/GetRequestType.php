@@ -12,7 +12,7 @@ use App\Http\Resources\User\UserResourceCollection;
 trait GetRequestType {
     public function getUserDetail($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_user = $user->with('company', 'userProfile')->jsonPaginate();
+            $retrieved_user = $user->with('mechanic', 'partDealer')->jsonPaginate();
             return UserResourceCollection::collection($retrieved_user);
         }
         

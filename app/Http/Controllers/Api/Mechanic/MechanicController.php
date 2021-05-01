@@ -9,6 +9,7 @@ use App\Traits\GetRequestType;
 use App\Services\MechanicService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateMechanicRequest;
+use App\Http\Resources\User\UserResourceCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MechanicController extends Controller
@@ -19,7 +20,7 @@ class MechanicController extends Controller
     
     public function __construct(MechanicService $mechanicService)
     {
-        $this->middleware('auth.jwt')->except('index', 'shows');
+        $this->middleware('auth.jwt')->except('index', 'shows', 'filterService');
         $this->mechanicService = $mechanicService;
     }
 
@@ -77,15 +78,28 @@ class MechanicController extends Controller
         return response()->success("User information retrieved successfully", $all_mechanics);
     }
 
+
+    // public function bookAppointment(Request $request, User $encodedKey) {
+    //     $request->validate([
+            
+    //     ]);
+    // }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function filterService()
     {
-        //
+        $user = $this->mechanicService->filterMechanicServices();
+
+        $all_mechanics =  $user->with('mechanic', 'partDealer')->jsonPaginate();
+        return UserResourceCollection::collection($all_mechanics)->additional([
+            'message' => 'Mechanic Details filtered successfully',
+            'status' => "success"
+        ]);;
     }
 
     /**

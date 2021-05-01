@@ -53,8 +53,10 @@ Route::group(['prefix' => 'v1'], function () {
     // Mechanic user type
     Route::name('mechanic.')->prefix('mechanic')->group(function () {
         Route::get('/', [MechanicController::class, 'index']);
-        Route::get('{encodedKey}', [MechanicController::class, 'show']);
+        Route::get('/filter-services', [MechanicController::class, 'filterService'])->name('filter');
         Route::post('create', [MechanicController::class, 'store'])->name('create');
+        Route::get('book-appointment', [MechanicController::class, 'bookAppointment']);
+        Route::get('/{encodedKey}', [MechanicController::class, 'show']);
     });
 
     // Part Dealer user type goes here
@@ -92,11 +94,4 @@ Route::group(['prefix' => 'v1'], function () {
     
     // })->middleware('auth.jwt');
    
-});
-
-
-
-
-Route::get('date', function() {
-    date('Y-m-d', strtotime($date));
 });

@@ -8,7 +8,7 @@ class Type extends BaseFilter {
     protected function applyFilter($builder)
     {
         $filter = request($this->filterName());
-        return $builder->where('ad_product_type', $filter);
-        // return $builder;
+        // return $builder->where('ad_product_type', $filter);
+        return $builder;
     }
 }
