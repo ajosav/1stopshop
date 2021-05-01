@@ -9,7 +9,7 @@ class ProfessionalSkill extends BaseFilter {
     {
         return $builder->whereHas('mechanic', function($mechanic) {
             $profession = request($this->filterName());
-            return $mechanic->where($this->filterName(), 'like', '%' . $profession . '%');
+            return $mechanic->whereNotNul($this->filterName())->where($this->filterName(), 'like', '%' . $profession . '%');
         });
     }
 }
