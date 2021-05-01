@@ -41,7 +41,7 @@ class MechanicService {
 
     public function filterMechanicServices() {
         $filter_mechanics = app(Pipeline::class)
-                        ->send(User::query())
+                        ->send(User::has('mechanic'))
                         ->through([
                             Location::class,
                             ProfessionalSkill::class,
