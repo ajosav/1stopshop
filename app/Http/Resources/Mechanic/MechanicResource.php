@@ -14,6 +14,7 @@ class MechanicResource extends JsonResource
      */
     public function toArray($request)
     {
+        
         return [
             'id'                            =>          $this->encodedKey,
             'phone_number'                  =>          $this->phone_number,
@@ -21,8 +22,8 @@ class MechanicResource extends JsonResource
             'identification_type'           =>          $this->identification_type,
             'identity_number'               =>          $this->identity_number,
             'professional_skill'            =>          $this->professional_skill,
-            // 'specialization'                =>          $this->specialization,
-            // 'service_area'                  =>          $this->service_area,
+            'shop_name'                     =>          $this->shop_name,
+            'shop_description'              =>          $this->shop_description,
             'experience_years'              =>          $this->experience_years,
             'vehicle_type'                  =>          $this->vehicle_type,
             'office_address'                =>          $this->office_address,

@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Services\UserService;
+use App\Helpers\ResourceHelpers;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\CreateNewUserRequest;
 use App\Repositories\OTP\OTPInterface;
 use App\Http\Requests\Auth\LoginRequest;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\OtpValidationRequest;
+use App\Http\Requests\Auth\CreateNewUserRequest;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class AuthController extends Controller
 {
@@ -31,6 +35,24 @@ class AuthController extends Controller
     public function createUser(CreateNewUserRequest $request)
     {
         return $this->userService->createUserAccount($request->validated(), $this->activation_code);
+    }
+
+    public function refreshToken() {
+        try {
+            if(!$token = auth('api')->refresh()) {
+                return response()->errorResponse('Unable to refresh token');
+            }
+            $user = auth('api')->user();
+            return ResourceHelpers::returnAuthenticatedUser($user, "User Token successfully refreshed");
+        } catch(TokenBlacklistedException $e) {
+            return response()->errorResponse('Token has already been refreshed and invalidated', ["token" => $e->getMessage()]);
+        } catch (TokenInvalidException $e) {
+            return response()->errorResponse('Token has already been refreshed and invalidated', ["token" => $e->getMessage()]);            
+        } catch (JWTException $e) {
+            return response()->errorResponse('Please pass a bearer token', ["token" => $e->getMessage()]);
+    
+        }
+        
     }
 
     public function authenticatedUser() {

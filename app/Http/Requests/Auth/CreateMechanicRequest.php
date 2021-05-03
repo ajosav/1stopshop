@@ -35,10 +35,11 @@ class CreateMechanicRequest extends FormRequest
         $data =  [
             'phone_number' => 'required|unique:mechanics',
             'tax_identification_no' => 'nullable',
+            'shop_name' => 'nullable|string|max:150',
             'identification_type' => 'required',
             'identity_number' => 'required',
             'professional_skill' => 'required',
-            // 'specialization' => 'required',
+            'shop_description' => 'nullable|string|max:255',
             'experience_years' => 'required|numeric',
             // 'service_area' => 'required',
             'office_address' => 'required',
