@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d506371622fbbe44fd0fd772774d88e6",
+    "content-hash": "488a31e2365a326abe7da4a785a1b2ee",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -181,6 +181,66 @@
                 }
             ],
             "time": "2021-01-20T22:51:39+00:00"
+        },
+        {
+            "name": "codebyray/laravel-review-rateable",
+            "version": "v1.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codebyray/laravel-review-rateable.git",
+                "reference": "aaea8e743255cfabb95ce89518f58d5b17ab4ba6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codebyray/laravel-review-rateable/zipball/aaea8e743255cfabb95ce89518f58d5b17ab4ba6",
+                "reference": "aaea8e743255cfabb95ce89518f58d5b17ab4ba6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.5.0|~3.6.0|^4.0",
+                "phpunit/phpunit": "^6.3|^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Codebyray\\ReviewRateable\\ReviewRateableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Codebyray\\ReviewRateable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CodebyRay",
+                    "email": "dev@codebyray.com"
+                }
+            ],
+            "description": "Review & Rating system for Laravel 7",
+            "keywords": [
+                "Ratable",
+                "Rating",
+                "Review-Rateable",
+                "laravel",
+                "reviewable"
+            ],
+            "support": {
+                "issues": "https://github.com/codebyray/laravel-review-rateable/issues",
+                "source": "https://github.com/codebyray/laravel-review-rateable/tree/v1.3.3"
+            },
+            "time": "2021-04-11T05:05:38+00:00"
         },
         {
             "name": "crazybooot/base64-validation",
@@ -3082,6 +3142,84 @@
                 }
             ],
             "time": "2020-11-27T08:21:48+00:00"
+        },
+        {
+            "name": "spatie/laravel-permission",
+            "version": "4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-permission.git",
+                "reference": "29c05324c170c0be108ccb86dd29f6a719c0a617"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/29c05324c170c0be108ccb86dd29f6a719c0a617",
+                "reference": "29c05324c170c0be108ccb86dd29f6a719c0a617",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "^6.0|^7.0|^8.0",
+                "illuminate/container": "^6.0|^7.0|^8.0",
+                "illuminate/contracts": "^6.0|^7.0|^8.0",
+                "illuminate/database": "^6.0|^7.0|^8.0",
+                "php": "^7.2.5|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0",
+                "predis/predis": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Permission\\PermissionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Permission\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Permission handling for Laravel 6.0 and up",
+            "homepage": "https://github.com/spatie/laravel-permission",
+            "keywords": [
+                "acl",
+                "laravel",
+                "permission",
+                "permissions",
+                "rbac",
+                "roles",
+                "security",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-permission/issues",
+                "source": "https://github.com/spatie/laravel-permission/tree/4.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-22T18:38:29+00:00"
         },
         {
             "name": "spatie/laravel-searchable",

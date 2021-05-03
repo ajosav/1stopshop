@@ -1,16 +1,13 @@
 <?php
 
-use Illuminate\Support\Str;
+use App\Helpers\ResourceHelpers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use libphonenumber\PhoneNumberUtil;
-use Intervention\Image\Facades\Image;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Support\Facades\Storage;
 use libphonenumber\NumberParseException;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\DataTransferObjects\UserDataTransferObject;
-use App\Helpers\ResourceHelpers;
 use Spatie\Permission\Models\Permission;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
@@ -36,6 +33,11 @@ function getAuthenticatedUser()
         return response()->errorResponse('token_absent', ["token" => $e->getMessage()], 401);
 
     }
+
+    if(request()->has('fullDetails') && request('fullDetails') === 'true') {
+        return ResourceHelpers::fullUserWithRoles($user, "User data successfully retrieved");
+    }
+
     return ResourceHelpers::returnUserData($user);
 }
 

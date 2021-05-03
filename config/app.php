@@ -167,11 +167,12 @@ return [
         */
         
         /*
-         * Application Service Providers...
-         */
+        * Application Service Providers...
+        */
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        Codebyray\ReviewRateable\ReviewRateableServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,

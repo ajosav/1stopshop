@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\AddUUID;
 use App\Models\UserProfile;
-use App\Filters\Shop\UserType;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -15,6 +14,7 @@ use App\Notifications\ResetPasswordNotification;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
+use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -83,6 +83,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return 'encodedKey';
     }
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'author');
+    }
+
+    
 
     // Define JWT auth methods
     public function getJWTIdentifier()

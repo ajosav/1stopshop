@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\RegisteredUserController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
+use App\Http\Controllers\Api\Review\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/', [PartDealerController::class, 'index']);
         Route::get('{encodedKey}', [PartDealerController::class, 'show']);
         Route::post('create', [PartDealerController::class, 'store'])->name('create');
+    });
+
+    Route::name('review.')->prefix('review')->group(function () {
+        Route::post('rate-mechanic/{mechanic}', [ReviewController::class, 'rateMechanic']);
+        Route::get('reviews/{mechanic}', [ReviewController::class, 'mechanicReviews']);
+        Route::get('user-review/{mechanic}', [ReviewController::class, 'userReview']);
+        // Route::get('rate-mehanic/{mechanic}', [ReviewController::class, 'reviewMechanicStore']);
     });
 
     // Product action happens here
