@@ -26,7 +26,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         $user = auth('api')->user();
         return [
-            'first_name' => 'sometimes|string|max:255',
+            'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|confirmed|max:255|unique:users,email,'.$user->id,
             'password' => ['nullable',
