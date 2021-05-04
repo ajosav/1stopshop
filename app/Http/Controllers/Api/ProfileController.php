@@ -20,7 +20,9 @@ class ProfileController extends Controller
         $new_update = $request->validated();
 
         foreach($new_update as $index => $update) {
-            $this->user->$index = $update;
+            if(!is_null($update) && $update !== "") {
+                $this->user->$index = $update;
+            }
         }
 
         if(!$this->user->isDirty()) {
