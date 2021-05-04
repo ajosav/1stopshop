@@ -1,16 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\Appointment\AppointmentController;
-use App\Models\User;
-use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\Shop\ShopController;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\RegisteredUserController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
@@ -54,6 +50,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('find-user/{encodedKey}', [RegisteredUserController::class, 'findUser']);
     Route::get('find-users/{user_type}', [RegisteredUserController::class, 'findUserByType']);
     Route::post('book-appointment', [AppointmentController::class, 'book']);
+    Route::get('get-location',[HomeController::class, 'searchLocation']);
 
     // Mechanic user type
     Route::name('mechanic.')->prefix('mechanic')->group(function () {
