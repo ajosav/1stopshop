@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/', [MechanicController::class, 'index']);
         Route::get('/filter-services', [MechanicController::class, 'filterService'])->name('filter');
         Route::post('create', [MechanicController::class, 'store'])->name('create');
+        Route::patch('update', [MechanicController::class, 'update'])->name('update');
         Route::get('book-appointment', [MechanicController::class, 'bookAppointment']);
         Route::get('/{encodedKey}', [MechanicController::class, 'show']);
     });
@@ -66,6 +67,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/', [PartDealerController::class, 'index']);
         Route::get('{encodedKey}', [PartDealerController::class, 'show']);
         Route::post('create', [PartDealerController::class, 'store'])->name('create');
+        Route::patch('update', [PartDealerController::class, 'update'])->name('update');
     });
 
     Route::name('review.')->prefix('review')->group(function () {

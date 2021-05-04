@@ -22,6 +22,9 @@ class CreateMechanicRequest extends FormRequest
      */
     public function authorize()
     {
+        if(request()->routeIs('mechanic.update')) {
+            return $this->user->hasPermissionTo('mechanic');
+        }
         return !$this->user->hasPermissionTo('mechanic');
     }
 
@@ -33,7 +36,6 @@ class CreateMechanicRequest extends FormRequest
     public function rules()
     {
         $data =  [
-            'phone_number' => 'required|unique:mechanics',
             'tax_identification_no' => 'nullable',
             'shop_name' => 'nullable|string|max:150',
             'identification_type' => 'required',
@@ -45,13 +47,19 @@ class CreateMechanicRequest extends FormRequest
             'office_address' => 'required',
             'state' => 'required|string',
             'city' => 'required|string|max:100',
-            'working_hours' => 'required|string',
+            'working_hours' => 'required',
             'company_photo' => ['required', function ($attribute, $value, $fail) {
                 if ($this->getPhotoType() == false) {
                     $fail('The '.$attribute.' is invalid.');
                 }
             },],
         ];
+        if(request()->routeIs('mechanic.update')) {
+            $data['phone_number'] = 'required|unique:mechanics,phone_number,'.$this->user->id;
+        } else {
+            $data['phone_number'] = 'required|unique:mechanics';
+
+        }
 
         if($this->getPhotoType()) {
             $data['company_photo'] = $this->getPhotoType() == "file" ? 'image|mimes:jpeg,jpg,png,gif,webp' : 'base64image|base64mimes:jpeg,jpg,png,gif,webp';

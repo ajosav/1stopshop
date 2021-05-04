@@ -68,9 +68,10 @@ class PartDealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreatePartDealerRequest $request)
     {
-        //
+        $user = auth('api')->user();
+        return $this->part_dealer->updatePartDealer(Arr::except($request->validated(), 'no_tax_id'), $user);
     }
 
     /**

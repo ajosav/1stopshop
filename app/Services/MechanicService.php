@@ -38,6 +38,33 @@ class MechanicService {
         return ResourceHelpers::fullUserWithRoles($mechanic_user, 'Mechanic data created successfully');
 
     }
+    public function updateMechanicData($data, $user) {
+        try {
+            $mechanic = $user->mechanic;
+            foreach($data as $index => $update) {
+                if(!is_null($update) && $update !== "") {
+                    $mechanic->$index = $update;
+                }
+            }
+    
+            if(!$mechanic->isDirty()) {
+                return response()->success("Nothing Changed");
+            }
+
+            if(!$mechanic->save()) {
+                return response()->errorResponse('Error updating mechanic details');
+            }
+           
+        } catch (QueryException $e) {
+            report($e);
+            return response()->errorResponse("Error encountered while trying to update mechanic profile");
+        }
+
+        $mechanic_user = User::where('encodedKey', $user->encodedKey)->with('mechanic', 'partDealer')->first();
+
+        return ResourceHelpers::fullUserWithRoles($mechanic_user, 'Mechanic profile update successfully');
+
+    }
 
     public function filterMechanicServices() {
         $filter_mechanics = app(Pipeline::class)

@@ -11,6 +11,7 @@ class CreatePartDealerRequest extends FormRequest
 
     public function __construct()
     {
+        
         $this->user = auth('api')->user();
     }
     /**
@@ -20,6 +21,9 @@ class CreatePartDealerRequest extends FormRequest
      */
     public function authorize()
     {
+        if(request()->routeIs('part-dealer.update')) {
+            return $this->user->hasPermissionTo('part_dealer');
+        }
         return !$this->user->hasPermissionTo('part_dealer');
     }
 
@@ -31,7 +35,6 @@ class CreatePartDealerRequest extends FormRequest
     public function rules()
     {
         $data =  [
-            'phone_number' => 'required|unique:part_dealers',
             'no_tax_id' => 'sometimes|nullable|in:0, 1',
             'tax_identification_no' => 'required_unless:no_tax_id,1',
             'identification_type' => 'required',
@@ -45,6 +48,13 @@ class CreatePartDealerRequest extends FormRequest
                 }
             },],
         ];
+
+        if(request()->routeIs('part-dealer.update')) {
+            $data['phone_number'] = 'required|unique:part_dealers,phone_number,'.$this->user->id;
+        } else {
+            $data['phone_number'] = 'required|unique:part_dealers';
+
+        }
 
         if($this->getPhotoType()) {
             $data['company_photo'] = $this->getPhotoType() == "file" ? 'image|mimes:jpeg,jpg,png,gif,webp' : 'base64image|base64mimes:jpeg,jpg,png,gif,webp';

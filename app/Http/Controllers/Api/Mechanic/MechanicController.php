@@ -9,6 +9,7 @@ use App\Traits\GetRequestType;
 use App\Services\MechanicService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateMechanicRequest;
+use App\Http\Requests\Auth\UpdateMechanicDetails;
 use App\Http\Resources\User\UserResourceCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -109,9 +110,10 @@ class MechanicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateMechanicRequest $request)
     {
-        //
+        $user = auth('api')->user();
+        return $this->mechanicService->updateMechanicData(Arr::except($request->validated(), 'no_tax_id'), $user);
     }
 
     /**

@@ -34,4 +34,31 @@ class PartDealerService {
 
         return ResourceHelpers::fullUserWithRoles($part_dealer, 'Mechanic data created successfully');
     }
+
+    public function updatePartDealer($data, $user) {
+        try {
+            $part_dealer = $user->partDealer;
+
+            foreach($data as $index => $update) {
+                if(!is_null($update) && $update !== "") {
+                    $part_dealer->$index = $update;
+                }
+            }
+
+            if(!$part_dealer->isDirty()) {
+                return response()->success("Nothing Changed");
+            }
+
+            if(!$part_dealer->save()) {
+                return response()->errorResponse('Error updating Part Dealer profile');
+            }
+        } catch (QueryException $e) {
+            report($e);
+            return response()->errorResponse("Error encountered while trying to update part dealer");
+        }
+
+        $updated_part_dealer = User::where('encodedKey', $user->encodedKey)->with('partDealer', 'mechanic')->first();
+
+        return ResourceHelpers::fullUserWithRoles($updated_part_dealer, 'Part Dealer profile data updated successfully');
+    }
 }
