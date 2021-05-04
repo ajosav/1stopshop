@@ -27,9 +27,9 @@ class ProfileUpdateRequest extends FormRequest
         $user = auth('api')->user();
         return [
             'first_name' => 'sometimes|string|max:255',
-            'last_name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|confirmed|max:255|unique:users,email,'.$user->id,
-            'password' => ['sometimes',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|confirmed|max:255|unique:users,email,'.$user->id,
+            'password' => ['nullable',
                             'string',
                             'confirmed',
                             'min:8', // must be a minimum of 8
