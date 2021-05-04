@@ -40,6 +40,27 @@ class AdProductActionService {
             return response()->errorResponse("Product creation failed", ["Product Creation" => $e->getMessage()]);
         }
     }
+    public function updateProduct($product, $request) {
+        try {
+            $update_product = DB::transaction(function() use ($product, $request) {
+
+                $data = AdProductDataHelper::updateProductData($request);
+                return  $product->update($data);
+            });
+
+            if(!$update_product) {
+                return response()->errorResponse("Error updating Ad service");
+            }
+            $new_product = AdService::where('encodedKey', $product->encodedKey)->first(); 
+            return response()->success('product updated successfully', $new_product);
+        } catch (QueryException $e) {
+            report($e);
+            return response()->errorResponse("Error updating product");
+        } catch(Exception $e) {
+            report($e);
+            return response()->errorResponse("Failed to update product", ["Product Creation" => $e->getMessage()]);
+        }
+    }
 
     public function viewAllAds() {
         return AdService::query();

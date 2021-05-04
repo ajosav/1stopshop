@@ -29,6 +29,11 @@ class AdService extends Model implements Searchable
         'created_at' => 'datetime',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'encodedKey';
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

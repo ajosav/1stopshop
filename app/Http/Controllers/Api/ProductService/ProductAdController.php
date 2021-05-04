@@ -101,9 +101,16 @@ class ProductAdController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateAdProductRequest $request, AdService $ad)
     {
-        //
+        $user = auth('api')->user();
+        abort_if(! Gate::allows('part_dealer', $user), 403, "Only Part dealers are allowed to update products");
+
+        if($ad->user->encodedKey !== $user->encodedKey) {
+            return response()->errorResponse('Permisson denied! You did not create this ad', [], 403);
+        }
+        
+        return ProductAdServiceFacade::updateProduct($ad, $request->validated());
     }
 
     /**

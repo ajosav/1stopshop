@@ -81,6 +81,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::name('product.')->prefix('products')->group(function () {
         Route::get('/', [ProductAdController::class, 'index']);
         Route::post('create', [ProductAdController::class, 'store']);
+        Route::patch('update/{ad}', [ProductAdController::class, 'update']);
         Route::get('find-products-by-user/{encodedKey}', [ProductAdController::class, 'find']);
         Route::get('find/{encodedKey}', [ProductAdController::class, 'show'])->name('find');
         Route::get('current-user-products', [ProductAdController::class, 'userProducts']);
