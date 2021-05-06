@@ -5,14 +5,15 @@ namespace App\Models;
 use Exception;
 use App\Traits\AddUUID;
 use Intervention\Image\Facades\Image;
+use App\Models\Appointment\WorkingHour;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Intervention\Image\Exception\ImageException;
 use Codebyray\ReviewRateable\Contracts\ReviewRateable;
-use Codebyray\ReviewRateable\Traits\ReviewRateable as ReviewRateableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Codebyray\ReviewRateable\Traits\ReviewRateable as ReviewRateableTrait;
 
 class Mechanic extends Model implements ReviewRateable
 {
@@ -36,6 +37,10 @@ class Mechanic extends Model implements ReviewRateable
         return $this->belongsTo(User::class);
     }
 
+    public function workingHours() {
+        return $this->hasMany(WorkingHour::class, 'user_id', 'encodedKey');
+    }
+
     public function setCompanyPhotoAttribute($input) { 
        if($input) {
            $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/mechanic/', $input) : null;
@@ -53,7 +58,7 @@ class Mechanic extends Model implements ReviewRateable
     }
     public function setWorkingHoursAttribute($input) { 
        if($input) {
-           $this->attributes['vehicle_type'] = json_encode($input);
+           $this->attributes['working_hours'] = json_encode($input);
        }
     }
 

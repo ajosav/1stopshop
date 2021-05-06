@@ -112,3 +112,9 @@ Route::group(['prefix' => 'v1'], function () {
     // })->middleware('auth.jwt');
    
 });
+
+
+Route::get('/', function () {
+    $data = json_decode('{"Sunday":{"from":{"hour":"2","meridian":"AM"},"to":{"hour":"3","meridian":"PM"}}}', true);
+    return $data;
+});

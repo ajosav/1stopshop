@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use App\Filters\MechanicFilter\Location;
 use App\Filters\MechanicFilter\VehicleType;
 use App\Filters\MechanicFilter\ProfessionalSkill;
+use App\Filters\MechanicFilter\WorkingHours;
 
 class MechanicService {
     public function getVerifiedMechanics() {
@@ -72,7 +73,8 @@ class MechanicService {
                         ->through([
                             Location::class,
                             ProfessionalSkill::class,
-                            VehicleType::class
+                            VehicleType::class,
+                            WorkingHours::class
                         ])
                         ->thenReturn();
 

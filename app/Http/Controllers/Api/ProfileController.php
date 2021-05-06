@@ -20,7 +20,7 @@ class ProfileController extends Controller
         $new_update = $request->validated();
 
         foreach($new_update as $index => $update) {
-            if(!is_null($update) && $update !== "") {
+            if(!is_null($update) && $update !== "" && $index !== "current_password") {
                 $this->user->$index = $update;
             }
         }

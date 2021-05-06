@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Mechanic;
+use App\Observers\MechanicObserver;
 use App\Repositories\OTP\OTPInterface;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\OTP\SendOTPViaSMS;
@@ -44,5 +46,7 @@ class AppServiceProvider extends ServiceProvider
                 Permission::create(['name' => $permission]);
             }
         }
+
+        Mechanic::observe(MechanicObserver::class);
     }
 }

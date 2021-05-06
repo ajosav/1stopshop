@@ -43,7 +43,7 @@ class CreateMechanicRequest extends FormRequest
             'professional_skill' => 'required',
             'shop_description' => 'nullable|string|max:255',
             'experience_years' => 'required|numeric',
-            // 'service_area' => 'required',
+            'vehicle_type' => 'required',
             'office_address' => 'required',
             'state' => 'required|string',
             'city' => 'required|string|max:100',

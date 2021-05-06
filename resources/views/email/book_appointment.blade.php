@@ -5,7 +5,7 @@ Good day, I am {{$sender->first_name}} {{$sender->last_name}}. I reviewed your s
 
 <br>
 
-I would love to make use of your service; I will be coming to your office on {{$appointment['date']}} {{$appointment['time']}}
+I would love to make use of your service; I will be coming to your office on {{$appointment['date']}} {{$appointment['time']}} {{$appointment['meridian']}}
 
 @if(array_key_exists('description', $appointment))
 <br>
