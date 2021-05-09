@@ -4,6 +4,7 @@ namespace App\Services\AdProductService;
 
 use Exception;
 use App\Models\AdService;
+use App\Models\ProductView;
 use App\Models\AdProductType;
 use Spatie\Searchable\Search;
 use Illuminate\Pipeline\Pipeline;
@@ -73,7 +74,13 @@ class AdProductActionService {
     }
 
     public function findProductByEncodedKey($productEncodedKey) {
-        return $this->viewAllAds()->where('encodedKey', $productEncodedKey);
+        $product = $this->viewAllAds()->where('encodedKey', $productEncodedKey);
+
+        if($product->first()) {
+            $this->incrementProductView($productEncodedKey);
+        }
+
+        return $product;
     }
 
     public function searchProduct($query) {
@@ -107,6 +114,11 @@ class AdProductActionService {
                         // ->jsonPaginate();
 
         return $filter_products;
+    }
+
+
+    public function incrementProductView($productKey) {
+        return ProductView::firstOrCreate(['request_ip' => request()->ip()], ['ad_id' => $productKey]);
     }
 
 

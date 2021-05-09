@@ -33,7 +33,8 @@ class ProductResourceCollection extends JsonResource
             'product_type'      =>          $this->ad_product_type,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'created_by'        =>          new UserResourceCollection($this->user),
-            'category'          =>          new CategoryResource($this->category)
+            'category'          =>          new CategoryResource($this->category),
+            'views'             =>          $this->productViews->count()
         ];
     }
 }

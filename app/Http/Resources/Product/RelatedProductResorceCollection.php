@@ -35,7 +35,8 @@ class RelatedProductResorceCollection extends JsonResource
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'created_by'        =>          new UserResourceCollection($this->user),
             'category'          =>          new CategoryResource($this->category),
-            'related_products'  =>          ProductResourceCollection::collection($this->relatedProducts()->get())
+            'related_products'  =>          ProductResourceCollection::collection($this->relatedProducts()->get()),
+            'views'             =>          $this->productViews->count()
         ];
     }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
 use App\Http\Controllers\Api\Review\ReviewController;
+use App\Models\AdService;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +59,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/filter-services', [MechanicController::class, 'filterService'])->name('filter');
         Route::post('create', [MechanicController::class, 'store'])->name('create');
         Route::patch('update', [MechanicController::class, 'update'])->name('update');
-        Route::get('book-appointment', [MechanicController::class, 'bookAppointment']);
+        Route::get('my-appointments', [AppointmentController::class, 'myAppointment']);
+        Route::patch('update-appointment/{id}', [AppointmentController::class, 'update']);
         Route::get('/{encodedKey}', [MechanicController::class, 'show']);
     });
 
@@ -100,21 +102,5 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
     });
-
-    // Route::get('remove', function() {
-    //     $user = auth('api')->user();
-    
-    //     $user->revokePermissionTo('part dealer');
-    //     $user->partDealer()->delete();
-    
-    //     return "Success";
-    
-    // })->middleware('auth.jwt');
    
-});
-
-
-Route::get('/', function () {
-    $data = json_decode('{"Sunday":{"from":{"hour":"2","meridian":"AM"},"to":{"hour":"3","meridian":"PM"}}}', true);
-    return $data;
 });

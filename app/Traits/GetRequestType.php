@@ -30,20 +30,20 @@ trait GetRequestType {
 
     public function getFullProductDetails($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->with('category')->jsonPaginate();
+            $retrieved_product = $product->with('user')->with('category')->with('productViews')->jsonPaginate();
             return ProductResourceCollection::collection($retrieved_product);
         }
         
-        return ProductResource::collection($product->jsonPaginate());
+        return ProductResource::collection($product->with('productViews')->jsonPaginate());
     }
 
     public function getSingleProduct($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->with('category')->firstOrFail();
+            $retrieved_product = $product->with('user')->with('category')->with('productViews')->firstOrFail();
             return new ProductResourceCollection($retrieved_product);
         }
         
-        return new ProductResource($product->firstOrFail());
+        return new ProductResource($product->with('productViews')->firstOrFail());
     }
     public function getSingleRelatedProduct($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
@@ -51,6 +51,6 @@ trait GetRequestType {
             return new RelatedProductResorceCollection($retrieved_product);
         }
         
-        return new ProductResource($product->firstOrFail());
+        return new ProductResource($product->with('productViews')->firstOrFail());
     }
 }

@@ -13,7 +13,7 @@ class Appointment extends Model
 
 
     public function mechanic() {
-        return $this->belongsTo(User::class, 'mechanic_id', 'encodedKey');
+        return $this->belongsTo(Mechanic::class, 'mechanic_id', 'encodedKey');
     }
 
     public function visitor() {

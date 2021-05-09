@@ -30,6 +30,7 @@ class ProductResource extends JsonResource
             'product_no'        =>          $this->product_no,
             'product_type'      =>          $this->ad_product_type,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
+            'views'             =>          $this->productViews->count()
         ];
     }
 }

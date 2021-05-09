@@ -37,6 +37,10 @@ class Mechanic extends Model implements ReviewRateable
         return $this->belongsTo(User::class);
     }
 
+    public function appointment() {
+        return $this->hasMany(Appointment::class, 'mechanic_id', 'encodedKey');
+    }
+
     public function workingHours() {
         return $this->hasMany(WorkingHour::class, 'user_id', 'encodedKey');
     }

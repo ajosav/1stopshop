@@ -7,6 +7,8 @@ use App\Models\Appointment;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Appointment\WorkingHour;
 use App\Mail\Appointment\BookAppointmentMail;
+use Illuminate\Contracts\Encryption\DecryptException;
+use App\Http\Resources\Appintment\AppointmentResource;
 
 class AppointmentService {
     public function createAppointment($request) {
@@ -59,5 +61,25 @@ class AppointmentService {
 
 
 
+    }
+
+    public function updateAppointment($validated, $id) {    
+        $user = auth('api')->user();
+        $appointment = Appointment::whereId($id)->where('mechanic_id', $user->mechanic->encodedKey)->firstOrFail();
+
+        $action = $validated['status'] == 'accept' ? "Accepted" : "Rejected";
+
+        if($action == $appointment->status) {
+            return response()->success("You have already {$action} this appointment");
+        }
+
+        $appointment->update(['status' => $action]);
+
+        $updated_app = Appointment::find($id);
+
+        return (new AppointmentResource($updated_app))->additional([
+            'status' => 'success',
+            'message' => 'Appointment successfully updated'
+        ]);
     }
 }

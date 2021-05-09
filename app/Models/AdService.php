@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use BinaryCats\Sku\HasSku;
+use App\Models\ProductView;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 use Intervention\Image\Facades\Image;
@@ -36,6 +37,10 @@ class AdService extends Model implements Searchable
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function productViews() {
+        return $this->hasMany(ProductView::class, 'ad_id', 'encodedKey');
     }
 
     public function category() {

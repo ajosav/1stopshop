@@ -87,9 +87,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Rating::class, 'author');
     }
-    public function appointment() {
-        return $this->hasMany(Appointment::class, 'mechanic_id', 'encodedKey');
-    }
     public function userAppointment() {
         return $this->hasMany(Appointment::class, 'visitor_id', 'encodedKey');
     }
