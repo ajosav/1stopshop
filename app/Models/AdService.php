@@ -96,7 +96,7 @@ class AdService extends Model implements Searchable
     public function scopeRelatedProducts($query) {
         return $query->whereHas('category', function($category){
             return $category->orWhereHas('subCategories');
-        })->where('id', '!=', $this->id);
+        })->where('id', '!=', $this->id)->take(5);
         return $query
                 ->join('categories', 'ad_services.category_id', '=', 'categories.id')
                     ->join('categories as sub_category', 'ad_services.category_id', '=', 'sub_category.parent_id')
