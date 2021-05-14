@@ -23,7 +23,6 @@ class CreateAdProductRequest extends FormRequest
      */
     public function authorize()
     {
-
         return Gate::allows('mechanic', $this->user) ||  Gate::allows('part_dealer', $this->user);
     }
 

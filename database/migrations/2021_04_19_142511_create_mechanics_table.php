@@ -33,6 +33,7 @@ class CreateMechanicsTable extends Migration
             $table->string('company_photo')->nullable();
             $table->text('shop_description')->nullable();
             $table->text('working_hours')->nullable();
+            $table->text('work_hours_data')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -11,6 +11,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\OtpValidationRequest;
 use App\Http\Requests\Auth\CreateNewUserRequest;
+use App\Http\Requests\Auth\Social\CreateUserRequest;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
@@ -35,6 +36,11 @@ class AuthController extends Controller
     public function createUser(CreateNewUserRequest $request)
     {
         return $this->userService->createUserAccount($request->validated(), $this->activation_code);
+    }
+
+    public function createUserWithSocial(CreateUserRequest $request) {
+        $data = $request->validated() + ['email_verified_at' => date('Y-m-d H:i:s')];
+        return $this->userService->createUserWith($data);
     }
 
     public function refreshToken() {

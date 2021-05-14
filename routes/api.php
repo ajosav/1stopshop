@@ -37,8 +37,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('login', [AuthController::class, 'authenticate'])->name('login');
         Route::get('refresh-token', [AuthController::class, 'refreshToken'])->name('refresh');
         Route::get('current-user', [AuthController::class, 'authenticatedUser'])->name('current');
-        Route::get('{provider}/{user_type}/generate_link', [AuthController::class, 'getAuthLink']);
         Route::get('callback/{provider}', [AuthController::class, 'handleSocialCallback']);
+        Route::post('create-with-social', [AuthController::class, 'createUserWithSocial']);
         Route::post('verify-account', [AuthController::class, 'verifyAccount'])->name('verify');
         Route::get('resend-code', [AuthController::class, 'resendCode'])->name('resend');
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');

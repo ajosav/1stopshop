@@ -34,7 +34,8 @@ class User extends Authenticatable implements JWTSubject
         'encodedKey',
         'password',
         'provider',
-        'provider_id'
+        'provider_id',
+        'email_verified_at'
     ];
 
     protected $dates = [

@@ -35,6 +35,23 @@ class UserService {
         return ResourceHelpers::returnAuthenticatedUser($create_user, "User Successfully Created");
     }
 
+    public function createUserWith($data) {
+        try {
+            $create_user = DB::transaction(function() use ($data) {
+                $user = User::firstOrCreate(['email' => $data['email']],
+                    $data
+                );
+
+                return $user;
+            });
+        } catch (QueryException $e) {
+            return response()->errorResponse("Error authenticating user");
+        } catch(Exception $e) {
+            return response()->errorResponse("User authentication failed", ["user_registration" => $e->getMessage()]);
+        }
+        return ResourceHelpers::returnAuthenticatedUser($create_user, "User authenticated successfully");
+    }
+
     public function generateSocialLink($provider, $user_type) {
         $providers = config('socialauth.providers');
         if(!in_array($provider, $providers)) {
