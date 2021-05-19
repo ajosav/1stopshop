@@ -28,4 +28,18 @@ class ShopDataHelper {
             'shop_photo' => $photo
         ];
     }
+
+    public static function createReviewPhotoData($data) {
+        $product_photos = [];
+        if(isset($data['review_photo'])) {
+            foreach($data['review_photo'] as $photo) {
+                $product_photos[] = uploadImage('images/reviews/', $photo);
+            }
+        }
+
+        return [
+            "review_photo"      =>      empty($data['review_photo']) ? null :json_encode($product_photos),
+            "display_name"      =>      $data['display_name']
+        ];
+    }
 }

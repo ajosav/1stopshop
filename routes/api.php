@@ -89,8 +89,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('current-user-products', [ProductAdController::class, 'userProducts']);
         Route::get('search', [ProductAdController::class, 'searchProduct']);
         Route::get('find-by-category/{catgory_id}', [ProductAdController::class, 'findByCategory']);
+        Route::delete('delete/{encodedKey}', [ProductAdController::class, 'deleteProduct']);
     });
-
     // Profile action occurs here
     Route::name('profile.')->prefix('profile')->group(function () {
         Route::patch('update', [ProfileController::class, 'profileUpdate']);
@@ -101,6 +101,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('create', [CategoryController::class, 'createCategory']);
         Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
+    });
+
+
+    Route::get('/', function () {
+        return AdService::whereNull('updated_at')->toSql();
     });
    
 });

@@ -6,6 +6,7 @@ use Exception;
 use App\Traits\AddUUID;
 use Intervention\Image\Facades\Image;
 use App\Models\Appointment\WorkingHour;
+use App\Traits\ExtendReview;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;

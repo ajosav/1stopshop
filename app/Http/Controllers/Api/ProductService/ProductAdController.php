@@ -77,6 +77,27 @@ class ProductAdController extends Controller
 
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteProduct(AdService $encodedKey)
+    {
+        return $encodedKey;
+        // find all products
+        // delete child elements
+        // unlink images
+        // delete product
+        $ad_query = ProductAdServiceFacade::findProductByEncodedKey($encodedKey);
+        return $this->getSingleRelatedProduct($ad_query)->additional([
+            'message' => 'Ad retrieved successfully',
+            'status' => "success"
+        ]);
+
+    }
+
     public function searchProduct() {
         if(!request()->has('query')) {
             return response()->errorResponse("Missing search query");

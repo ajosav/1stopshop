@@ -22,6 +22,7 @@ class CreateAdServicesTable extends Migration
             $table->string('product_no')->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('keyword')->nullable()->index();
+            $table->string('product_type')->nullable();
             $table->string('condition')->nullable();
             $table->string('year')->nullable();
             $table->string('make')->nullable();

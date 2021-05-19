@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\Review;
 
+use App\Helpers\ShopDataHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Review\RateMechanicRequest;
 use App\Http\Resources\Review\UserReviewResource;
 use App\Models\Mechanic;
 use App\Models\User;
+use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -20,6 +22,11 @@ class ReviewController extends Controller
     }
 
     public function rateMechanic(RateMechanicRequest $request, User $mechanic) {
+        $rating = Rating::first();
+
+        return $rating->reviewImage();
+
+
         $mechanic = $mechanic->mechanic;
         if(!$user_rated = $this->user->ratings()->where('reviewrateable_id', $mechanic->id)->first()) {
             $rating = $mechanic->rating([
@@ -44,6 +51,10 @@ class ReviewController extends Controller
                 'approved' => true, // This is optional and defaults to false
             ], $this->user);
         }
+
+        $data = ShopDataHelper::createReviewPhotoData($request->validated());
+
+        $rating->reviewImage()->create($data);
 
         return (new UserReviewResource($rating))->additional([
             'message' => 'Your ratings has been submitted successfully',
