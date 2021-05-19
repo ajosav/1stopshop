@@ -48,7 +48,9 @@ class CreateMechanicRequest extends FormRequest
             'state' => 'required|string',
             'city' => 'required|string|max:100',
             'working_hours' => 'required',
-            'work_hours_data' => 'nullable',
+            'working_hours_data' => 'nullable',
+            'professional_skill_data' => 'nullable',
+            'vehicle_type_data' => 'nullable',
             'company_photo' => ['required', function ($attribute, $value, $fail) {
                 if ($this->getPhotoType() == false) {
                     $fail('The '.$attribute.' is invalid.');

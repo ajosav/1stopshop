@@ -30,7 +30,7 @@ class ProductResourceCollection extends JsonResource
             'price'             =>          $this->price,
             'negotiable'        =>          $this->negotiable,
             'product_no'        =>          $this->product_no,
-            'product_type'      =>          $this->ad_product_type,
+            'product_type'      =>          $this->product_type,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'created_by'        =>          new UserResourceCollection($this->user),
             'category'          =>          new CategoryResource($this->category),

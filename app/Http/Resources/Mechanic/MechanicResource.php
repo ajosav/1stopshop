@@ -31,7 +31,9 @@ class MechanicResource extends JsonResource
             'city'                          =>          $this->city,
             'company_photo'                 =>          $this->company_photo,
             'working_hours'                 =>          $this->working_hours,
-            'work_hours_data'            =>          $this->work_hours_data,
+            'working_hours_data'            =>          $this->working_hours_data,
+            'professional_skill_data'       =>          $this->professional_skill_data,
+            'vehicle_type_data'             =>          $this->vehicle_type_data,
             'customer_reviews'              =>          $this->customerReviews(),
         ];
     }
