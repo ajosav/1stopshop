@@ -25,6 +25,7 @@ class AdProductDataHelper {
             "product_photo"             =>      json_encode($product_photos),
             "negotiable"                =>      isset($data['negotiable']) ? $data['negotiable'] : 0,
             "category_id"               =>      isset($data['category_id']) ? $data['category_id'] : null,
+            "product_type"              =>      $data['product_type']
         ];
     }
     public static function updateProductData($data) {
@@ -45,6 +46,7 @@ class AdProductDataHelper {
             "product_photo"             =>      json_encode($product_photos),
             "negotiable"                =>      isset($data['negotiable']) ? $data['negotiable'] : 0,
             "category_id"               =>      isset($data['category_id']) ? $data['category_id'] : null,
+            "product_type"              =>      $data['product_type']
         ];
     }
 }
