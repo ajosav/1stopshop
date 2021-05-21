@@ -44,7 +44,7 @@ class AdService extends Model implements Searchable
     }
 
     public function category() {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_name', 'name');
     }
 
     public function skuOptions() : SkuOptions

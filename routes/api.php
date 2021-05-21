@@ -88,8 +88,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('find/{encodedKey}', [ProductAdController::class, 'show'])->name('find');
         Route::get('current-user-products', [ProductAdController::class, 'userProducts']);
         Route::get('search', [ProductAdController::class, 'searchProduct']);
-        Route::get('find-by-category/{catgory_id}', [ProductAdController::class, 'findByCategory']);
         Route::delete('delete/{encodedKey}', [ProductAdController::class, 'deleteProduct']);
+        Route::patch('deactivate/{adservice}', [ProductAdController::class, 'deactivateProduct']);
+        Route::patch('activate/{adservice}', [ProductAdController::class, 'activateProduct']);
     });
     // Profile action occurs here
     Route::name('profile.')->prefix('profile')->group(function () {

@@ -29,6 +29,7 @@ class ProductResource extends JsonResource
             'negotiable'        =>          $this->negotiable,
             'product_no'        =>          $this->product_no,
             'product_type'      =>          $this->product_type,
+            'status'            =>          $this->status,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'views'             =>          $this->productViews->count()
         ];

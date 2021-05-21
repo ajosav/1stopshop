@@ -31,9 +31,11 @@ class ProductResourceCollection extends JsonResource
             'negotiable'        =>          $this->negotiable,
             'product_no'        =>          $this->product_no,
             'product_type'      =>          $this->product_type,
+            'status'            =>          $this->status,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
             'created_by'        =>          new UserResourceCollection($this->user),
-            'category'          =>          new CategoryResource($this->category),
+            'category'          =>          $this->category_name,
+            'sub_category'      =>          $this->sub_category_name,
             'views'             =>          $this->productViews->count()
         ];
     }

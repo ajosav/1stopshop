@@ -47,7 +47,8 @@ class CreateAdProductRequest extends FormRequest
             'price' => ['required', new ValidateValidAmount],
             'negotiable' => 'nullable|in:0, 1',
             'product_photo' => 'required|array',
-            'category_id' => 'required|numeric',
+            'category_name' => 'required|string',
+            'sub_category_name' => 'nullable|string'
         ];
 
         foreach($this->input('product_photo') as $index => $photo) {

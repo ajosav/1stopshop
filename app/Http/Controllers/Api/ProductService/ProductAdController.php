@@ -17,7 +17,7 @@ class ProductAdController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth.jwt')->only(['store', 'userProducts']);
+        $this->middleware('auth.jwt')->except(['index', 'show', 'searchProduct', 'find']);
     }
 
     /**
@@ -86,7 +86,7 @@ class ProductAdController extends Controller
     public function deleteProduct(AdService $encodedKey)
     {
         return $encodedKey;
-        // find all products
+        // find product
         // delete child elements
         // unlink images
         // delete product
@@ -96,6 +96,14 @@ class ProductAdController extends Controller
             'status' => "success"
         ]);
 
+    }
+
+    public function deactivateProduct(AdService $adservice) {
+        return ProductAdServiceFacade::deactivateProduct($adservice, 'inactive');
+    }
+
+    public function activateProduct(AdService $adservice) {
+        return ProductAdServiceFacade::deactivateProduct($adservice, 'active');
     }
 
     public function searchProduct() {
@@ -167,15 +175,4 @@ class ProductAdController extends Controller
         ]);
 
     }
-
-    // $ad_services = app(Pipeline::class)
-    //     ->send(AdService::query())
-    //     ->through([
-    //         Order::class,
-    //         UserType::class
-    //     ])
-    //     ->thenReturn()
-    //     ->get();
-
-    //     return response()->success('Found services within your search');
 }

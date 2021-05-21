@@ -16,7 +16,12 @@ class CreateProductViewsTable extends Migration
         Schema::create('product_views', function (Blueprint $table) {
             $table->id();
             $table->string('ad_id');
-            $table->string('request_ip')->unique();
+            $table->string('request_ip')->index();
+            $table->string('platform')->nullable();
+            $table->string('browser')->nullable();
+            $table->string('desktop_view')->nullable();
+            $table->string('mobile_view')->nullable();
+            $table->string('browser_version')->nullable();
             $table->timestamps();
         });
     }

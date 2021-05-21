@@ -5,6 +5,7 @@ namespace App\Services\AdProductService;
 use Exception;
 use App\Models\AdService;
 use App\Models\ProductView;
+use Jenssegers\Agent\Agent;
 use App\Models\AdProductType;
 use Spatie\Searchable\Search;
 use Illuminate\Pipeline\Pipeline;
@@ -100,7 +101,7 @@ class AdProductActionService {
 
     public function filterProduct() {
         $filter_products = app(Pipeline::class)
-                        ->send(AdService::query())
+                        ->send(AdService::where('status', 'active'))
                         ->through([
                             Condition::class,
                             Make::class,
@@ -118,7 +119,41 @@ class AdProductActionService {
 
 
     public function incrementProductView($productKey) {
-        return ProductView::firstOrCreate(['request_ip' => request()->ip()], ['ad_id' => $productKey]);
+        $agent = new Agent();
+        if($agent->isRobot()) {
+            return false;
+        }
+        return ProductView::create([
+            'ad_id' => $productKey,
+            'platform' => $agent->platform(),
+            'browser' => $agent->browser(),
+            'desktop_view' => $agent->isDesktop(),
+            'browser_version' => $agent->version($agent->platform()),
+            'request_ip' => request()->ip()
+        ]);
+    }
+
+    public function deactivateProduct($adservice, $status) {
+        $user = auth('api')->user();
+        
+        if($adservice->user->encodedKey != $user->encodedKey) {
+            return response()->errorResponse('Permission Denied!', [], 403);
+        }
+        
+        return response()->json(['triggered_status' => $status, 'current_status' => $adservice->status]);
+        $adservice->status = $status;
+
+
+        if(!$adservice->isDirty()) {
+            return response()->errorResponse("Product is already {$status}");
+        }
+        $message = $status == 'active' ? 'activate' : 'deactivate';
+        
+        if(!$adservice->save()) {
+            return response()->errorResponse("Failed to {$message} product");
+        }
+
+        return response()->success("Product successfully {$message}d", $adservice);
     }
 
 

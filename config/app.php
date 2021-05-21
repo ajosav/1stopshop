@@ -178,7 +178,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         
         App\Providers\MacroServiceProvider::class,
-
         App\Providers\CustomPasswordResetServiceProvider::class
     ],
 
@@ -195,6 +194,7 @@ return [
 
     'aliases' => [
 
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
