@@ -23,7 +23,7 @@ class PartDealercResource extends JsonResource
             'office_address'                =>          $this->office_address,
             'state'                         =>          $this->state,
             'city'                          =>          $this->city,
-            'company_photo'                 =>          $this->company_photo,
+            'company_photo'                 =>          encodePhoto($this->company_photo),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -19,6 +20,7 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email'=> $this->email,
+            'profile_image' =>  asset(Storage::url($this->profile_image)),
             'verified' => is_null($this->email_verified_at) ? 'no' : 'yes',
             'permissions' => $this->getPermissionNames()
         ];

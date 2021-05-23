@@ -44,6 +44,11 @@ class MechanicService {
             $mechanic = $user->mechanic;
             foreach($data as $index => $update) {
                 if(!is_null($update) && $update !== "") {
+                    if($index == 'company_photo') {
+                        if(file_exists(storage_path("app/" . $mechanic->company_photo))) {
+                            @unlink(storage_path("app/" . $mechanic->company_photo));
+                        }
+                    }
                     $mechanic->$index = $update;
                 }
             }

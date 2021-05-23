@@ -120,14 +120,15 @@ class AdProductActionService {
 
     public function incrementProductView($productKey) {
         $agent = new Agent();
-        if($agent->isRobot()) {
-            return false;
-        }
+        // if($agent->isRobot()) {
+        //     return false;
+        // }
         return ProductView::create([
             'ad_id' => $productKey,
             'platform' => $agent->platform(),
             'browser' => $agent->browser(),
             'desktop_view' => $agent->isDesktop(),
+            'mobile_view' => $agent->isMobile() || $agent->isTablet() ?? true,
             'browser_version' => $agent->version($agent->platform()),
             'request_ip' => request()->ip()
         ]);
@@ -140,9 +141,7 @@ class AdProductActionService {
             return response()->errorResponse('Permission Denied!', [], 403);
         }
         
-        return response()->json(['triggered_status' => $status, 'current_status' => $adservice->status]);
         $adservice->status = $status;
-
 
         if(!$adservice->isDirty()) {
             return response()->errorResponse("Product is already {$status}");
@@ -154,6 +153,31 @@ class AdProductActionService {
         }
 
         return response()->success("Product successfully {$message}d", $adservice);
+    }
+
+
+    public function deleteProduct($adservice) {
+        $user = auth('api')->user();
+        
+        if($adservice->user->encodedKey != $user->encodedKey) {
+            return response()->errorResponse('Permission Denied!', [], 403);
+        }
+
+        $product_photo = json_decode($adservice->product_photo);
+    
+        foreach($product_photo as $photo){
+            if(file_exists(storage_path("app/" . $photo))) {
+                @unlink(storage_path("app/" . $photo));
+            }
+        }
+        
+        $adservice->productViews()->delete();
+
+        if(!$adservice->delete()) {
+            return response()->errorResponse("Product deleted successfully");
+        }
+
+        return response()->success("Product deleted successfully");
     }
 
 

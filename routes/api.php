@@ -92,9 +92,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::patch('deactivate/{adservice}', [ProductAdController::class, 'deactivateProduct']);
         Route::patch('activate/{adservice}', [ProductAdController::class, 'activateProduct']);
     });
+
+    
     // Profile action occurs here
     Route::name('profile.')->prefix('profile')->group(function () {
         Route::patch('update', [ProfileController::class, 'profileUpdate']);
+        Route::post('upload-profile-image', [ProfileController::class, 'uploadProfile'])->name('profile.image');
     });
 
     Route::name('category.')->prefix('category')->group(function() {

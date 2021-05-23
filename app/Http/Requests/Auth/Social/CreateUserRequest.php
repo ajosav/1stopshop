@@ -28,7 +28,8 @@ class CreateUserRequest extends FormRequest
             'provider' => 'required',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255'
+            'email' => 'required|string|email|max:255',
+            'profile_image' => 'nullable|string'
         ];
     }
 }

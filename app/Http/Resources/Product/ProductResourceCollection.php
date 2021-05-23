@@ -25,7 +25,7 @@ class ProductResourceCollection extends JsonResource
             'make'              =>          $this->make,
             'model'             =>          $this->model,
             'warranty'          =>          $this->warranty,
-            'product_photo'     =>          $this->product_photo,
+            'product_photo'     =>          getPhotoEncodedPhoto($this->product_photo),
             'description'       =>          $this->description,
             'price'             =>          $this->price,
             'negotiable'        =>          $this->negotiable,

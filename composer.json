@@ -20,7 +20,6 @@
         "intervention/image": "^2.5",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^8.12",
-        "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.5",
         "spatie/data-transfer-object": "^2.8",
         "spatie/laravel-json-api-paginate": "^1.10",

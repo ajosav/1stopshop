@@ -69,41 +69,13 @@ class AdService extends Model implements Searchable
         );
     }
 
-    public function getProductPhotoAttribute($value) {
-        if(!$value) {
-            return $value;
-        }
-
-        $photos = [];        
-
-        $product_photo = json_decode($value);
-        foreach($product_photo as $photo){
-            try {
-                $image = Storage::get($photo);
-                $photos[] = Image::make($image)->encode('data-url'); 
-             } catch(ImageException $e) {
-                 return null;
-             } catch(Exception $e) {
-                 return null;
-             } catch(FileNotFoundException $e) {
-                 return null;
-             }
-        }
-
-        return $photos;
-    }
-
     public function scopeRelatedProducts($query) {
-        return $query->whereHas('category', function($category){
-            return $category->orWhereHas('subCategories');
+        return $query->where(function($category) {
+            return $category->where('sub_category_name', $this->sub_category_name)
+                    ->orWhere('category_name', $this->category_name);
         })->where('id', '!=', $this->id)->take(5);
-        return $query
-                ->join('categories', 'ad_services.category_id', '=', 'categories.id')
-                    ->join('categories as sub_category', 'ad_services.category_id', '=', 'sub_category.parent_id')
-                    ->where(function($query) {
-                        $query->where('ad_services.id', 'categories.id')
-                            ->orWhere('ad_services.id', 'sub_categories.id');
-                    })
-                    ->take(5);
+        // return $query->whereHas('category', function($category){
+        //     return $category->orWhereHas('subCategories');
+        // })->where('id', '!=', $this->id)->take(5);
     }
 }

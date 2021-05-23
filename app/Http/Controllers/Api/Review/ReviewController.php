@@ -22,9 +22,9 @@ class ReviewController extends Controller
     }
 
     public function rateMechanic(RateMechanicRequest $request, User $mechanic) {
-        $rating = Rating::first();
+        // $rating = Rating::first();
 
-        return $rating->reviewImage();
+        // return $rating->reviewImage();
 
 
         $mechanic = $mechanic->mechanic;

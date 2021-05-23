@@ -47,7 +47,7 @@ trait GetRequestType {
     }
     public function getSingleRelatedProduct($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->with('category')->firstOrFail();
+            $retrieved_product = $product->with(['user', 'category', 'productViews'])->firstOrFail();
             return new RelatedProductResorceCollection($retrieved_product);
         }
         

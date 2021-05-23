@@ -4,17 +4,19 @@ namespace App\Models;
 
 use App\Traits\AddUUID;
 use App\Models\UserProfile;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\ResetPasswordNotification;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\DataTransferObjects\CompanyDataTransferObject;
 use App\DataTransferObjects\ProfileDataTransferObject;
-use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -31,6 +33,7 @@ class User extends Authenticatable implements JWTSubject
         'first_name',
         'last_name',
         'email',
+        'profile_image',
         'encodedKey',
         'password',
         'provider',

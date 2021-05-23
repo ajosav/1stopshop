@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Mechanic\MechanicResource;
 use App\Http\Resources\PartDealer\PartDealercResource;
@@ -23,7 +24,8 @@ class UserResourceCollection extends JsonResource
                 'last_name' => $this->last_name,
                 'email'=> $this->email,
                 'verified' => is_null($this->email_verified_at) ? 'no' : 'yes',
-                'permissions' => $this->getPermissionNames()
+                'permissions' => $this->getPermissionNames(),
+                'profile_image' =>  asset(Storage::url($this->profile_image)),
             ],
             'mechanic' => new MechanicResource($this->mechanic),
             'part_dealer' => new PartDealercResource($this->partDealer)

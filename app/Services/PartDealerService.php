@@ -41,6 +41,11 @@ class PartDealerService {
 
             foreach($data as $index => $update) {
                 if(!is_null($update) && $update !== "") {
+                    if($index == 'company_photo') {
+                        if(file_exists(storage_path("app/" . $part_dealer->company_photo))) {
+                            @unlink(storage_path("app/" . $part_dealer->company_photo));
+                        }
+                    }
                     $part_dealer->$index = $update;
                 }
             }

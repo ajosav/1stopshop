@@ -29,7 +29,7 @@ class MechanicResource extends JsonResource
             'office_address'                =>          $this->office_address,
             'state'                         =>          $this->state,
             'city'                          =>          $this->city,
-            'company_photo'                 =>          $this->company_photo,
+            'company_photo'                 =>          encodePhoto($this->company_photo),
             'working_hours'                 =>          $this->working_hours,
             'working_hours_data'            =>          $this->working_hours_data,
             'professional_skill_data'       =>          $this->professional_skill_data,

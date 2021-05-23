@@ -3,13 +3,16 @@
 use App\Helpers\ResourceHelpers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use libphonenumber\PhoneNumberUtil;
+use Intervention\Image\Facades\Image;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Support\Facades\Storage;
 use libphonenumber\NumberParseException;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Intervention\Image\Exception\ImageException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 
 function getAuthenticatedUser()
@@ -144,4 +147,44 @@ function isPermissionExist($permission_name){
     }
 
     return false;
+}
+
+function getPhotoEncodedPhoto($value) {
+    if(!$value) {
+        return $value;
+    }
+
+    $photos = [];        
+
+    $product_photo = json_decode($value);
+    foreach($product_photo as $photo){
+        try {
+            $image = Storage::get($photo);
+            $photos[] = Image::make($image)->encode('data-url'); 
+         } catch(ImageException $e) {
+             return null;
+         } catch(Exception $e) {
+             return null;
+         } catch(FileNotFoundException $e) {
+             return null;
+         }
+    }
+
+    return $photos;
+}
+
+function encodePhoto($value) {
+    if(!$value) {
+        return $value;
+    }
+    try {
+       $image = Storage::get($value);
+        return (string) Image::make($image)->encode('data-url'); 
+    } catch(ImageException $e) {
+        return null;
+    } catch(Exception $e) {
+        return null;
+    } catch(FileNotFoundException $e) {
+        return null;
+    }
 }

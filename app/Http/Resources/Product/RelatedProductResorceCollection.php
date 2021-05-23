@@ -17,6 +17,7 @@ class RelatedProductResorceCollection extends JsonResource
 
     public function toArray($request)
     {
+        $total_views = $this->productViews;
         return [
             'id'                =>          $this->encodedKey,
             'product_title'     =>          $this->product_title,
@@ -26,7 +27,7 @@ class RelatedProductResorceCollection extends JsonResource
             'make'              =>          $this->make,
             'model'             =>          $this->model,
             'warranty'          =>          $this->warranty,
-            'product_photo'     =>          $this->product_photo,
+            'product_photo'     =>          getPhotoEncodedPhoto($this->product_photo),
             'description'       =>          $this->description,
             'price'             =>          $this->price,
             'negotiable'        =>          $this->negotiable,
@@ -38,7 +39,9 @@ class RelatedProductResorceCollection extends JsonResource
             'category'          =>          $this->category_name,
             'sub_category'      =>          $this->sub_category_name,
             'related_products'  =>          ProductResourceCollection::collection($this->relatedProducts()->get()),
-            'views'             =>          $this->productViews->count()
+            'views'             =>          $total_views->groupBy('request_ip')->count(),
+            'mobile_views'      =>          $total_views->where('mobile_view', 1)->groupBy('request_ip')->count(),
+            'desktop_views'     =>          $total_views->where('desktop_view', 1)->groupBy('request_ip')->count(),
         ];
     }
 }

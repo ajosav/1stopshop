@@ -85,6 +85,7 @@ class ProductAdController extends Controller
      */
     public function deleteProduct(AdService $encodedKey)
     {
+        return ProductAdServiceFacade::deleteProduct($encodedKey);
         return $encodedKey;
         // find product
         // delete child elements

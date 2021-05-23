@@ -8,9 +8,9 @@ use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserResourceCollection;
 
 class ResourceHelpers {
-    public static function returnUserData($user) : UserResource {
+    public static function returnUserData($user, $message = 'User data successfully retrieved') : UserResource {
         return (new UserResource($user))->additional([
-            'message' => 'User data successfully retrieved',
+            'message' => $message,
             'status' => "success"
         ]);
     }
