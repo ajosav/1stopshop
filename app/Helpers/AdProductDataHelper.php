@@ -24,9 +24,9 @@ class AdProductDataHelper {
             "price"                     =>      cleanAmount($data['price']),
             "product_photo"             =>      json_encode($product_photos),
             "negotiable"                =>      isset($data['negotiable']) ? $data['negotiable'] : 0,
-            "category_id"               =>      isset($data['category_id']) ? $data['category_id'] : null,
+            "category_name"             =>      isset($data['category_name']) ? $data['category_name'] : null,
             "product_type"              =>      $data['product_type'],
-            "sub_category_id"           =>      $data['sub_category_id']
+            "sub_category_name"         =>      isset($data['sub_category_name']) ? $data['sub_category_name'] : null,
         ];
     }
     public static function updateProductData($data) {

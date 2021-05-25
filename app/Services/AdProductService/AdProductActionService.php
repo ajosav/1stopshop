@@ -111,7 +111,8 @@ class AdProductActionService {
                             DBSearch::class,
                             Location::class
                         ])
-                        ->thenReturn();
+                        ->thenReturn()
+                        ->where('status', 'active');
                         // ->jsonPaginate();
 
         return $filter_products;
