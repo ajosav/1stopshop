@@ -100,7 +100,7 @@ class AdProductActionService {
     }
 
     public function filterProduct() {
-        return AdService::where('status', 'active');
+        // return AdService::where('status', 'active');
         $filter_products = app(Pipeline::class)
                         ->send(AdService::where('status', 'active'))
                         ->through([
