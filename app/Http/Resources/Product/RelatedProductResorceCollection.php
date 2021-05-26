@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources\Product;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\User\UserResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class RelatedProductResorceCollection extends JsonResource
 {
@@ -28,7 +27,7 @@ class RelatedProductResorceCollection extends JsonResource
             'make'              =>          $this->make,
             'model'             =>          $this->model,
             'warranty'          =>          $this->warranty,
-            'product_photo'     =>          asset(Storage::url($this->product_photo)),
+            'product_photo'     =>          $this->product_photo,
             'description'       =>          $this->description,
             'price'             =>          $this->price,
             'negotiable'        =>          $this->negotiable,
