@@ -30,11 +30,11 @@ trait GetRequestType {
 
     public function getFullProductDetails($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user')->with('category')->with('productViews')->paginate(50);
+            $retrieved_product = $product->with('user')->with('category')->with('productViews')->get();
             return ProductResourceCollection::collection($retrieved_product);
         }
         
-        return ProductResource::collection($product->with('productViews')->paginate(50));
+        return ProductResource::collection($product->with('productViews')->get());
     }
 
     public function getSingleProduct($product) {
