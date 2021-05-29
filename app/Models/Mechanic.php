@@ -18,7 +18,7 @@ use Codebyray\ReviewRateable\Traits\ReviewRateable as ReviewRateableTrait;
 
 class Mechanic extends Model implements ReviewRateable
 {
-    use HasFactory, SoftDeletes, AddUUID, ReviewRateableTrait;
+    use HasFactory, SoftDeletes, AddUUID, ReviewRateableTrait, ExtendReview;
 
     protected $guarded = [];
 

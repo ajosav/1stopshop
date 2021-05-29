@@ -35,7 +35,7 @@ class RateMechanicRequest extends FormRequest
             'review_photo'              =>          'nullable|array'
         ];
 
-        if($this->filled('review_photo')) {
+        if($this->filled('review_photo') && is_array($this->input('review_photo'))) {
            foreach($this->input('review_photo') as $index => $photo) {
                 if(photoType($photo)) {
                     $data['review_photo'.$index] = photoType($photo) == "file" ? 'image|mimes:jpeg,jpg,png,gif,webp' : 'base64image|base64mimes:jpeg,jpg,png,gif,webp';
@@ -51,7 +51,7 @@ class RateMechanicRequest extends FormRequest
     public function withValidator(Validator $validator)
     {
         $validator->after(function ($validator) {
-            if($this->filled('review_photo')) {
+            if($this->filled('review_photo')  && is_array($this->input('review_photo'))) {
                 $review_photo = $this->input('review_photo');
                 foreach($review_photo as $photo) {
                     if(photoType($photo) == false ) {

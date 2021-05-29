@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 trait ExtendReview {
-    public function reviewImage()
+    public function reviewext()
     {
         return $this->morphOne(Rating::class, 'imageable');
     }

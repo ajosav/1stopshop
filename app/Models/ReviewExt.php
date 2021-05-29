@@ -26,28 +26,4 @@ class ReviewExt extends Model
         return $this->morphTo();
     }
 
-
-    public function getReviewPhotoAttribute($value) {
-        if(!$value) {
-            return $value;
-        }
-
-        $photos = [];        
-
-        $review_photo = json_decode($value);
-        foreach($review_photo as $photo){
-            try {
-                $image = Storage::get($photo);
-                $photos[] = Image::make($image)->encode('data-url'); 
-             } catch(ImageException $e) {
-                 return null;
-             } catch(Exception $e) {
-                 return null;
-             } catch(FileNotFoundException $e) {
-                 return null;
-             }
-        }
-
-        return $photos;
-    }
 }

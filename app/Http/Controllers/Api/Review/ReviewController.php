@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Review\RateMechanicRequest;
 use App\Http\Resources\Review\UserReviewResource;
 use App\Models\Mechanic;
+use App\Models\ReviewExt;
 use App\Models\User;
 use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Http\Request;
@@ -22,11 +23,6 @@ class ReviewController extends Controller
     }
 
     public function rateMechanic(RateMechanicRequest $request, User $mechanic) {
-        // $rating = Rating::first();
-
-        // return $rating->reviewImage();
-
-
         $mechanic = $mechanic->mechanic;
         if(!$user_rated = $this->user->ratings()->where('reviewrateable_id', $mechanic->id)->first()) {
             $rating = $mechanic->rating([
@@ -54,8 +50,21 @@ class ReviewController extends Controller
 
         $data = ShopDataHelper::createReviewPhotoData($request->validated());
 
-        $rating->reviewImage()->create($data);
-
+        $review_photos = [];
+        if($request->review_photo) {
+            foreach($request->review_photo as $photo) {
+                $review_photos[] = uploadImage('images/reviews/', $photo);
+            }
+        }
+        ReviewExt::updateOrCreate([
+            'imageable_id' => $rating->id,
+        ],
+        [
+            'display_name' => $request->display_name,
+            'review_photo' => json_encode($review_photos),
+            'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
+        ]);
+        
         return (new UserReviewResource($rating))->additional([
             'message' => 'Your ratings has been submitted successfully',
             'status' => 'success'
@@ -83,13 +92,6 @@ class ReviewController extends Controller
 
         return (new UserReviewResource($user_rated))->additional([
             'message' => 'Rating retrieved successfully',
-            'status' => 'success'
-        ]);
-
-        $ratings = $mechanic->getAllRatings($mechanic->id, 'desc');
-        
-        return (UserReviewResource::collection($ratings))->additional([
-            'message' => 'Mechanic reviews retrieved successfully',
             'status' => 'success'
         ]);
     } 
