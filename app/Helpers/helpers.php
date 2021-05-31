@@ -188,3 +188,39 @@ function encodePhoto($value) {
         return null;
     }
 }
+
+function addWorkingHours($working_hours, $mechanic) {
+    foreach($working_hours as $day => $value) {
+        $from_meridian = $value['from']['meridian'];
+        $from_hour = $value['from']['hour'];
+        $to_meridian = $value['to']['meridian'];
+        $to_hour = $value['to']['hour'];
+
+        if($value['from']['meridian'] == "PM") {
+            if($value['from']['hour'] != 12) {
+                $from_hour = (int) $value['from']['hour'] + 12;
+            }
+        }
+        if($value['to']['meridian'] == "PM") {
+            if($value['to']['hour'] != 12) {
+                $to_hour = (int) $value['to']['hour'] + 12;
+            }
+        }
+
+        if($value['to']['meridian'] == "AM" && $value['to']['hour'] == 12){
+            $to_hour = 00;
+        }
+        if($value['from']['meridian'] == "AM" && $value['from']['hour'] == 12){
+            $from_hour = 00;
+        }
+        
+        $mechanic->workingHours()->create([
+            "day" => $day,
+            "from_hour" => $from_hour,
+            "from_meridian" => $from_meridian,
+            "to_hour" => $to_hour,
+            "to_meridian" => $to_meridian
+        ]);
+        
+    }
+}

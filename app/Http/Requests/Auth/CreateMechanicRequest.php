@@ -58,7 +58,7 @@ class CreateMechanicRequest extends FormRequest
             },],
         ];
         if(request()->routeIs('mechanic.update')) {
-            $data['phone_number'] = 'required|unique:mechanics,phone_number,'.$this->user->id;
+            $data['phone_number'] = 'required|unique:mechanics,phone_number,'.optional($this->user->mechanic)->id;
         } else {
             $data['phone_number'] = 'required|unique:mechanics';
 

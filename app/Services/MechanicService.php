@@ -64,6 +64,9 @@ class MechanicService {
         } catch (QueryException $e) {
             report($e);
             return response()->errorResponse("Error encountered while trying to update mechanic profile");
+        } catch (Exception $e) {
+            report($e);
+            return response()->errorResponse("Error encountered while trying to update mechanic profile; Comfirm Mechanic profile exist");   
         }
 
         $mechanic_user = User::where('encodedKey', $user->encodedKey)->with('mechanic', 'partDealer')->first();
