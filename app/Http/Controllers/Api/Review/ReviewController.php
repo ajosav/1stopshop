@@ -62,6 +62,7 @@ class ReviewController extends Controller
         [
             'display_name' => $request->display_name,
             'review_photo' => json_encode($review_photos),
+            'owner_photo' => $this->user->profile_image,
             'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
         ]);
         

@@ -43,6 +43,10 @@ class AdService extends Model implements Searchable
         return $this->hasMany(ProductView::class, 'ad_id', 'encodedKey');
     }
 
+    public function userViewContact() {
+        return $this->hasMany(RecordViewContact::class, 'product_id', 'encodedKey');
+    }
+
     public function category() {
         return $this->belongsTo(Category::class, 'category_name', 'name');
     }

@@ -39,7 +39,8 @@ class UserReviewResource extends JsonResource
             "written_review" => $this->body,
             "date_created" => $this->created_at->format('Y-m-d H:i:s a'),
             "display_name" => $review->display_name,
-            "review_photo" =>  $photos
+            "display_photo" => asset(Storage::url($review->owner_photo)),
+            "review_photo" =>  $photos,
         ];
     }
 }

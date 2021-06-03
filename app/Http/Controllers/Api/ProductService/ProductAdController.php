@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Facades\ProductAdServiceFacade;
 use App\Http\Requests\Ad\CreateAdProductRequest;
 use App\Models\Category;
+use App\Models\RecordViewContact;
 
 class ProductAdController extends Controller
 {
@@ -17,7 +18,7 @@ class ProductAdController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth.jwt')->except(['index', 'show', 'searchProduct', 'find']);
+        $this->middleware('auth.jwt')->except(['index', 'show', 'searchProduct', 'find', 'viewContact']);
     }
 
     /**
@@ -86,17 +87,6 @@ class ProductAdController extends Controller
     public function deleteProduct(AdService $encodedKey)
     {
         return ProductAdServiceFacade::deleteProduct($encodedKey);
-        return $encodedKey;
-        // find product
-        // delete child elements
-        // unlink images
-        // delete product
-        $ad_query = ProductAdServiceFacade::findProductByEncodedKey($encodedKey);
-        return $this->getSingleRelatedProduct($ad_query)->additional([
-            'message' => 'Ad retrieved successfully',
-            'status' => "success"
-        ]);
-
     }
 
     public function deactivateProduct(AdService $adservice) {
@@ -120,8 +110,22 @@ class ProductAdController extends Controller
     }
 
 
-    public function filterProduct() {
+    public function viewContact(Request $request) {
+        $validate_input = $request->validate([
+            'product_id' => 'required',
+            'owner_id'  => 'required'
+        ]);
 
+        RecordViewContact::firstOrCreate([
+            "user_ip" => $request->ip(),
+        ],[
+            "product_id" => $validate_input['product_id'],
+            "owner_id" => $validate_input['owner_id'],
+            "user_id" => optional(auth('api')->user())->encodedKey
+        ]);
+
+        return response()->success(true);
+        
     }   
 
     /**

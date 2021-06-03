@@ -46,6 +46,10 @@ class Mechanic extends Model implements ReviewRateable
         return $this->hasMany(WorkingHour::class, 'user_id', 'encodedKey');
     }
 
+    public function viewedByContact() {
+        return $this->hasMany(RecordViewContact::class, 'owner_id', 'encodedKey');
+    }
+
     public function setCompanyPhotoAttribute($input) { 
        if($input) {
            $this->attributes['company_photo'] = !is_null($input) ? uploadImage('images/mechanic/', $input) : null;

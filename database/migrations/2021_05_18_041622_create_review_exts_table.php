@@ -16,6 +16,7 @@ class CreateReviewExtsTable extends Migration
         Schema::create('review_exts', function (Blueprint $table) {
             $table->id();
             $table->string('display_name')->nullable();
+            $table->string('owner_photo')->nullable();
             $table->text('review_photo')->nullable();
             $table->unsignedBigInteger('imageable_id')->nullable();   
             $table->string('imageable_type')->nullable();   

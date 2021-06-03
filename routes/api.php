@@ -90,6 +90,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::delete('delete/{encodedKey}', [ProductAdController::class, 'deleteProduct']);
         Route::patch('deactivate/{adservice}', [ProductAdController::class, 'deactivateProduct']);
         Route::patch('activate/{adservice}', [ProductAdController::class, 'activateProduct']);
+        Route::post('view-contact', [ProductAdController::class, 'viewContact']);
     });
 
     

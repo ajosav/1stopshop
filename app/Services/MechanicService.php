@@ -12,6 +12,7 @@ use App\Filters\MechanicFilter\Location;
 use App\Filters\MechanicFilter\VehicleType;
 use App\Filters\MechanicFilter\ProfessionalSkill;
 use App\Filters\MechanicFilter\WorkingHours;
+use App\Http\MechanicFilter\YearOfExperience;
 
 class MechanicService {
     public function getVerifiedMechanics() {
@@ -82,7 +83,8 @@ class MechanicService {
                             Location::class,
                             ProfessionalSkill::class,
                             VehicleType::class,
-                            WorkingHours::class
+                            WorkingHours::class,
+                            YearOfExperience::class
                         ])
                         ->thenReturn();
 

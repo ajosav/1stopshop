@@ -16,6 +16,7 @@ class ProductResourceCollection extends JsonResource
      */
     public function toArray($request)
     {
+        $total_views = $this->productViews;
         return [
             'id'                =>          $this->encodedKey,
             'product_title'     =>          $this->product_title,
@@ -36,7 +37,10 @@ class ProductResourceCollection extends JsonResource
             'created_by'        =>          new UserResourceCollection($this->user),
             'category'          =>          $this->category_name,
             'sub_category'      =>          $this->sub_category_name,
-            'views'             =>          $this->productViews->count()
+            'views'             =>          $total_views->groupBy('request_ip')->count(),
+            'mobile_views'      =>          $total_views->where('mobile_view', 1)->groupBy('request_ip')->count(),
+            'desktop_views'     =>          $total_views->where('desktop_view', 1)->groupBy('request_ip')->count(),
+            'viewed_contact'    =>          $this->userViewContact->count()
         ];
     }
 }
