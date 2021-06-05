@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\MechanicFilter;
+namespace App\Filters\MechanicFilter;
 
 use App\Filters\BaseFilter;
 
