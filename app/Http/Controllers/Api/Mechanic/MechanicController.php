@@ -100,7 +100,7 @@ class MechanicController extends Controller
         return UserResourceCollection::collection($all_mechanics)->additional([
             'message' => 'Mechanic Details filtered successfully',
             'status' => "success"
-        ]);;
+        ]);
     }
 
     /**
@@ -114,6 +114,23 @@ class MechanicController extends Controller
     {
         $user = auth('api')->user();
         return $this->mechanicService->updateMechanicData(Arr::except($request->validated(), 'no_tax_id'), $user);
+    }
+
+    public function editSchedule(Request $request) {
+        // dd("Hello");
+        $schedule = $request->validate([
+            "schedule"                              =>  "required|array",  
+            "schedule.*"                            =>  "required|array",  
+            "schedule.*.*"              =>  "required|array",  
+            "schedule.*.*.hour"       =>  "required|numeric|min:1|max:12",
+            "schedule.*.*.meridian"   =>  "required|in:AM,PM",
+            "schedule.*.*.isActive"     =>  "required|in:true,false"
+        ]);
+        return $this->mechanicService->editMechanicSchedule($schedule);
+
+
+
+
     }
 
     /**

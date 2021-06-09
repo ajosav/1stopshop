@@ -21,6 +21,7 @@ class CreateWorkingHoursTable extends Migration
             $table->string('from_meridian')->nullable();
             $table->string('to_hour')->nullable();
             $table->string('to_meridian')->nullable();
+            $table->text('schedule')->nullable();
             $table->timestamps();
         });
     }

@@ -32,6 +32,7 @@ class MechanicResource extends JsonResource
             'company_photo'                 =>          encodePhoto($this->company_photo),
             'working_hours'                 =>          $this->working_hours,
             'working_hours_data'            =>          $this->working_hours_data,
+            'schedule'                      =>          $this->
             'professional_skill_data'       =>          $this->professional_skill_data,
             'vehicle_type_data'             =>          $this->vehicle_type_data,
             'customer_reviews'              =>          $this->customerReviews(),

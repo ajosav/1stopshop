@@ -13,6 +13,7 @@ use App\Filters\MechanicFilter\VehicleType;
 use App\Filters\MechanicFilter\ProfessionalSkill;
 use App\Filters\MechanicFilter\WorkingHours;
 use App\Filters\MechanicFilter\YearOfExperience;
+use App\Http\Resources\WorkHours\WorkHoursResource;
 
 class MechanicService {
     public function getVerifiedMechanics() {
@@ -90,4 +91,72 @@ class MechanicService {
 
         return $filter_mechanics;
     }
+
+    public function editMechanicSchedule($schedules) {
+        $user = auth('api')->user();
+
+        $working_hour = $user->mechanic->workingHours();
+        
+        foreach($schedules as $schedule) {
+            $this->modelSchedule($schedule, $working_hour);
+        }
+
+        return WorkHoursResource::collection($user->mechanic->workingHours()->get())->additional([
+            'message' => 'Schedule successfully updated for mechanic',
+            'status' => "success"
+        ]);
+
+
+
+    }
+
+    public function modelSchedule($schedule, $working_hour) {
+        foreach($schedule as $day => $time) {
+            $work_hours_range = range(1, 24);
+            $existing_schedule = $working_hour->where('day', $day)->first();
+            
+            // if($existing_schedule) {
+            //     $mechanic_shedule = json_decode($existing_schedule->schedule);
+            //     $work_hours_range = array_intersect($mechanic_shedule, $work_hours_range);
+            // }
+            // else {
+            //     dd($existing_schedule);
+            // }
+
+            if($existing_schedule) {
+                $mechanic_shedule = json_decode($existing_schedule->schedule);
+                $work_hours_range = array_intersect($mechanic_shedule, $work_hours_range);
+            }
+            foreach($time as $plan) {
+                if($plan['meridian'] == 'PM') {
+                    if($plan['hour'] != 12) {
+                        $plan['hour'] = (int) $plan['hour'] + 12;
+                    }
+                }
+                if($plan['meridian'] == "AM" && $plan['hour'] == 12){
+                    $plan['hour'] = 24;
+                }
+
+                if (($key = array_search($plan['hour'], $work_hours_range)) !== false && $plan['isActive'] === 'false' ) {
+                    // found hour in collection but mechainic isn't available
+                    unset($work_hours_range[$key]);
+                } elseif(($key = array_search($plan['hour'], $work_hours_range)) !== false && $plan['isActive'] === 'true') {
+                    // found hour in collection and mechanic is available
+                    continue;
+                } elseif(($key = array_search($plan['hour'], $work_hours_range)) === false && $plan['isActive'] === 'true') {
+                    // cannot find hour and mechanic is available
+                    array_push($work_hours_range, (int) $plan['hour']);
+                } else {
+                    // cannot find hour and mechanic isn't available
+                    continue;
+                }
+            }
+           
+            $working_hour->where('day', $day)->update([
+                'schedule' => json_encode(array_values($work_hours_range))
+            ]);
+        }
+    }
+
+
 }

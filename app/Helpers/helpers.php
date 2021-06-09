@@ -213,13 +213,16 @@ function addWorkingHours($working_hours, $mechanic) {
         if($value['from']['meridian'] == "AM" && $value['from']['hour'] == 12){
             $from_hour = 00;
         }
+
+        $default_schedule = range($from_hour, $to_hour);
         
         $mechanic->workingHours()->create([
-            "day" => $day,
+            "day" => ucfirst($day),
             "from_hour" => $from_hour,
             "from_meridian" => $from_meridian,
             "to_hour" => $to_hour,
-            "to_meridian" => $to_meridian
+            "to_meridian" => $to_meridian,
+            "schedule" => json_encode(array_values($default_schedule))
         ]);
         
     }
