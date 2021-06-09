@@ -95,11 +95,16 @@ class MechanicService {
     public function editMechanicSchedule($schedules) {
         $user = auth('api')->user();
 
-        $working_hour = $user->mechanic->workingHours();
         
-        foreach($schedules as $schedule) {
-            $this->modelSchedule($schedule, $working_hour);
-        }
+        DB::transaction(function () use ($user, $schedules) {
+            $mechanic = $user->mechanic;
+            $working_hour = $mechanic->update([
+                'schedule_data' => $schedules['schedule_data']
+            ]);
+
+            $this->modelSchedule($schedules['schedule'], $mechanic->workingHours());
+        });
+           
 
         return WorkHoursResource::collection($user->mechanic->workingHours()->get())->additional([
             'message' => 'Schedule successfully updated for mechanic',

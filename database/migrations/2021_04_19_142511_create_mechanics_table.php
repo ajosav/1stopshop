@@ -34,7 +34,7 @@ class CreateMechanicsTable extends Migration
             $table->text('shop_description')->nullable();
             $table->text('working_hours')->nullable();
             $table->text('working_hours_data')->nullable();
-            $table->text('  ')->nullable();
+            $table->text('schedule_data')->nullable();
             $table->text('vehicle_type_data')->nullable();
             $table->softDeletes();
             $table->timestamps();

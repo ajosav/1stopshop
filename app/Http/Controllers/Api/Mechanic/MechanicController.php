@@ -121,10 +121,11 @@ class MechanicController extends Controller
         $schedule = $request->validate([
             "schedule"                              =>  "required|array",  
             "schedule.*"                            =>  "required|array",  
-            "schedule.*.*"              =>  "required|array",  
-            "schedule.*.*.hour"       =>  "required|numeric|min:1|max:12",
-            "schedule.*.*.meridian"   =>  "required|in:AM,PM",
-            "schedule.*.*.isActive"     =>  "required|in:true,false"
+            "schedule.*.*"                          =>  "required|array",  
+            "schedule.*.*.hour"                     =>  "required|numeric|min:1|max:12",
+            "schedule.*.*.meridian"                 =>  "required|in:AM,PM",
+            "schedule.*.*.isActive"                 =>  "required|in:true,false",
+            "schedule_data"                         =>  "required|array"
         ]);
         return $this->mechanicService->editMechanicSchedule($schedule);
 
