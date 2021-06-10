@@ -102,7 +102,7 @@ class AdProductActionService {
     public function filterProduct() {
         // return AdService::where('status', 'active');
         $filter_products = app(Pipeline::class)
-                        ->send(AdService::where('status', 'active'))
+                        ->send(AdService::query())
                         ->through([
                             Condition::class,
                             Make::class,
@@ -112,7 +112,8 @@ class AdProductActionService {
                             DBSearch::class,
                             Location::class
                         ])
-                        ->thenReturn();
+                        ->thenReturn()
+                        ->where('status', 'active');
                         // ->jsonPaginate();
 
         return $filter_products;

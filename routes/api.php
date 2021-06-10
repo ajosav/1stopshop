@@ -60,8 +60,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::patch('update', [MechanicController::class, 'update'])->name('update');
         Route::get('my-appointments', [AppointmentController::class, 'myAppointment']);
         Route::patch('update-appointment/{id}', [AppointmentController::class, 'update']);
+        Route::patch('/edit-schedule', [MechanicController::class, 'editSchedule']);
         Route::get('/{encodedKey}', [MechanicController::class, 'show']);
-        Route::patch('edit-schedule', [MechanicController::class, 'editSchedule']);
     });
 
     // Part Dealer user type goes here
