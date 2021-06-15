@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Mechanic;
 
 use App\Models\User;
+use App\Models\Mechanic;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Traits\GetRequestType;
@@ -11,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateMechanicRequest;
 use App\Http\Requests\Auth\UpdateMechanicDetails;
 use App\Http\Resources\User\UserResourceCollection;
+use App\Http\Resources\WorkHours\WorkHoursResource;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MechanicController extends Controller
@@ -79,12 +82,18 @@ class MechanicController extends Controller
         return response()->success("User information retrieved successfully", $all_mechanics);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getWorkingHours(Mechanic $mechanic)
+    {
+        return $this->mechanicService->getMechanicSchedule($mechanic);
 
-    // public function bookAppointment(Request $request, User $encodedKey) {
-    //     $request->validate([
-            
-    //     ]);
-    // }
+        // return response()->success("Mechanic information retrieved successfully", $all_mechanics);
+    }
 
     /**
      * Show the form for editing the specified resource.

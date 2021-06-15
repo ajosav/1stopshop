@@ -45,7 +45,7 @@ class CreateAdProductRequest extends FormRequest
             'warranty' => 'required|string|max:100',
             'description' => 'required|string|max:250',
             'price' => ['required', new ValidateValidAmount],
-            'negotiable' => 'nullable|in:0, 1',
+            'negotiable' => 'nullable|in:0,1',
             'product_photo' => 'required|array',
             'category_name' => 'required|string',
             'sub_category_name' => 'nullable|string'

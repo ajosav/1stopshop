@@ -44,13 +44,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-        $permissions = config('permission.default_permissions');
-        foreach($permissions as $permission) {
-            if(!isPermissionExist($permission)) {
-                Permission::create(['name' => $permission]);
-            }
-        }
-
         Mechanic::observe(MechanicObserver::class);
     }
 }

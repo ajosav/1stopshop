@@ -3,16 +3,18 @@
 namespace App\Services;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use App\Helpers\ResourceHelpers;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use App\Filters\MechanicFilter\Location;
 use App\Filters\MechanicFilter\VehicleType;
-use App\Filters\MechanicFilter\ProfessionalSkill;
 use App\Filters\MechanicFilter\WorkingHours;
 use App\Filters\MechanicFilter\YearOfExperience;
+use App\Filters\MechanicFilter\ProfessionalSkill;
 use App\Http\Resources\WorkHours\WorkHoursResource;
 
 class MechanicService {
@@ -104,15 +106,48 @@ class MechanicService {
 
             $this->modelSchedule($schedules['schedule'], $mechanic->workingHours());
         });
-           
 
         return WorkHoursResource::collection($user->mechanic->workingHours()->get())->additional([
             'message' => 'Schedule successfully updated for mechanic',
             'status' => "success"
         ]);
 
+    }
 
+    public function getMechanicSchedule($mechanic) {
+        $mechanic_working_hours = $mechanic->workingHours()->get();
+        $appointments = $mechanic->appointment()->whereDate('date', '<', now())->select('date', 'hour')->get();
 
+        $appointments = $appointments->map(function($data){
+            $data['day'] = Carbon::parse($data['day'])->format('l');
+            return $data;
+        });
+
+        return $mechanic_working_hours->map(function($days) use($appointments) {
+            $hours = json_decode($days['schedule']);
+            // return strtolower($days['day']);
+            $booked_hours = $this->hoursBookedByDays($appointments, $days['day']);
+
+            return [
+                'day' => $days['day'],
+                'hours_available' => Arr::sort($hours),
+                "booked" => $booked_hours
+            ];
+        });
+
+        return WorkHoursResource::collection($mechanic_working_hours)->additional([
+            'message' => 'Successfully retrieved mechanic working hours',
+            'status' => 'success'
+        ]);
+    }
+
+    private function hoursBookedByDays($appointment, $day) {
+        return $appointment->where('day', $day)
+                    ->mapToGroups(function($item, $key) {
+                        return [
+                            $item['date'] => $item['hour']
+                        ];
+                    });
     }
 
     public function modelSchedule($schedule, $working_hour) {

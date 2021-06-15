@@ -2,7 +2,10 @@
 
 return [
     'default_permissions' => [
-        'mechanic', 'part_dealer'
+        'mechanic', 'part_dealer', 'admin_user'
+    ],
+    'default_roles' => [
+        'super admin', 'admin'
     ],
 
     'models' => [

@@ -34,7 +34,7 @@ class AppointmentController extends Controller
         abort_if(! Gate::allows('mechanic', $this->user), 403, "Only mechanics are allowed to view appointments");
         return AppointmentResource::collection($this->user->mechanic->appointment)->additional([
             'status' => 'success',
-            'message' => 'Mechanic Appointments retrieved successfully'
+            'message' => 'Mechanic appointments retrieved successfully'
         ]);
     }
 
@@ -49,24 +49,22 @@ class AppointmentController extends Controller
             return response()->errorResponse('Appointment ID is invalid');
         }
 
-
         abort_if(! Gate::allows('mechanic', $this->user), 403, "Only mechanics are allowed to view appointments");
         
         return $appointment->updateAppointment($validated, $id);
     }
 
-
-    public function createAppointment() {
-        $employee = \App\Employee::find($request->employee_id);
-		$working_hours = \App\WorkingHour::where('employee_id', $request->employee_id)->whereDay('date', '=', date("d", strtotime($request->date)))->whereTime('start_time', '<=', date("H:i", strtotime("".$request->starting_hour.":".$request->starting_minute.":00")))->whereTime('finish_time', '>=', date("H:i", strtotime("".$request->finish_hour.":".$request->finish_minute.":00")))->get();
-		if(!$employee->provides_service($request->service_id)) return redirect()->back()->withErrors("This employee doesn't provide your selected service")->withInput();
-        if($working_hours->isEmpty()) return redirect()->back()->withErrors("This employee isn't working at your selected time")->withInput();
-		$appointment = new Appointment;
-		$appointment->client_id = $request->client_id;
-		$appointment->employee_id = $request->employee_id;
-		$appointment->start_time = "".$request->date." ".$request->starting_hour .":".$request->starting_minute.":00";
-		$appointment->finish_time = "".$request->date." ".$request->finish_hour .":".$request->finish_minute.":00";
-		$appointment->comments = $request->comments;
-		$appointment->save();
-    }
+    // public function createAppointment() {
+    //     $employee = \App\Employee::find($request->employee_id);
+	// 	$working_hours = \App\WorkingHour::where('employee_id', $request->employee_id)->whereDay('date', '=', date("d", strtotime($request->date)))->whereTime('start_time', '<=', date("H:i", strtotime("".$request->starting_hour.":".$request->starting_minute.":00")))->whereTime('finish_time', '>=', date("H:i", strtotime("".$request->finish_hour.":".$request->finish_minute.":00")))->get();
+	// 	if(!$employee->provides_service($request->service_id)) return redirect()->back()->withErrors("This employee doesn't provide your selected service")->withInput();
+    //     if($working_hours->isEmpty()) return redirect()->back()->withErrors("This employee isn't working at your selected time")->withInput();
+	// 	$appointment = new Appointment;
+	// 	$appointment->client_id = $request->client_id;
+	// 	$appointment->employee_id = $request->employee_id;
+	// 	$appointment->start_time = "".$request->date." ".$request->starting_hour .":".$request->starting_minute.":00";
+	// 	$appointment->finish_time = "".$request->date." ".$request->finish_hour .":".$request->finish_minute.":00";
+	// 	$appointment->comments = $request->comments;
+	// 	$appointment->save();
+    // }
 }

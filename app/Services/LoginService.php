@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
@@ -32,22 +33,43 @@ class LoginService {
         $this->ensureIsNotRateLimited();
 
         try {
-            if (! auth('api')->attempt($this->credentials())) {
-                // dd($token);
-                RateLimiter::hit($this->throttleKey());
-
-                throw ValidationException::withMessages([
-                    'email' => "Either the email or password provided does not match",
-                ]);
-            }
+            $this->loginWithCredentials();
         } catch (JWTException $e) {
             return response()->errorResponse("Error Generating Token", ["errorDetails" => $e->getMessage()]);
         }
         
-
         RateLimiter::clear($this->throttleKey());
         $user = auth('api')->user();
         return ResourceHelpers::returnAuthenticatedUser($user, "User Successfully Authenticated");
+    }
+
+    public function authenticateAdmin() {
+        try {
+            $this->loginWithCredentials();
+        } catch (JWTException $e) {
+            report($e);
+            return response()->errorResponse("Error Authenticating user", ["errorDetails" => "Unable to generate user token"]);
+        }
+        
+        RateLimiter::clear($this->throttleKey());
+        $user = auth('api')->user();
+        
+        if(! $user->can('admin_user')) {
+            auth('api')->logout();
+            info("Access denied to user {$user->email}");
+            return response()->errorResponse("Error Authenticating user", ["errorDetails" => "Email or password mismatch/inavlid access"]);
+        }
+        return ResourceHelpers::returnAuthenticatedUser($user, "Admin user Successfully Authenticated");
+    }
+
+    private function loginWithCredentials() {
+        if (! auth('api')->attempt($this->credentials())) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => "Either the email or password provided does not match",
+            ]);
+        }
     }
 
     /**
@@ -90,5 +112,9 @@ class LoginService {
             return $this->request->only('email', 'password');
         }
         return $credentials;
+    }
+
+    public function authenticated() {
+
     }
 }

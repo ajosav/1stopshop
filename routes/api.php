@@ -61,6 +61,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('my-appointments', [AppointmentController::class, 'myAppointment']);
         Route::patch('update-appointment/{id}', [AppointmentController::class, 'update']);
         Route::patch('/edit-schedule', [MechanicController::class, 'editSchedule']);
+        Route::get('/get-work-schedule/{mechanic}', [MechanicController::class, 'getWorkingHours']);
         Route::get('/{encodedKey}', [MechanicController::class, 'show']);
     });
 
@@ -107,10 +108,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
     });
-
-
-    Route::get('/', function () {
-        return AdService::whereNull('updated_at')->toSql();
-    });
    
+    require __DIR__.'/admin-api.php';
 });
+
+
+
