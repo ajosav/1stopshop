@@ -120,6 +120,7 @@ class MechanicService {
 
         $appointments = $appointments->map(function($data){
             $data['day'] = Carbon::parse($data['day'])->format('l');
+			// $data['day'] = date_format(date_create($data['day']), 'l');
             return $data;
         });
 
