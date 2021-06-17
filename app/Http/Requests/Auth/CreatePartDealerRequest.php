@@ -41,6 +41,8 @@ class CreatePartDealerRequest extends FormRequest
             'office_address' => 'required',
             'state' => 'required|string',
             'city' => 'required|string|max:100',
+            'shop_name' => 'nullable|string',
+            'shop_description' => 'nullable|string',
             'company_photo' => ['required', function ($attribute, $value, $fail) {
                 if ($this->getPhotoType() == false) {
                     $fail('The '.$attribute.' is invalid.');

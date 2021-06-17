@@ -18,10 +18,12 @@ class CreatePartDealersTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('encodedKey')->unique()->index()->nullable();
             $table->string('phone_number')->unique()->nullable();
+            $table->string('shop_name')->nullable();
             $table->string('tax_identification_no')->nullable();
             $table->string('identification_type')->nullable();
             $table->string('identity_number')->nullable();
             $table->text('office_address')->nullable();
+            $table->text('shop_description')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
             $table->string('company_photo')->nullable();
