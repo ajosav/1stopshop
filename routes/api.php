@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\Api\Appointment\AppointmentController;
+// use DateTime;
+use App\Models\AdService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\Review\ReviewController;
 use App\Http\Controllers\Api\RegisteredUserController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
+use App\Http\Controllers\Api\Appointment\AppointmentController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
-use App\Http\Controllers\Api\Review\ReviewController;
-use App\Models\AdService;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +110,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('create', [CategoryController::class, 'createCategory']);
         Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
+    });
+
+    Route::get('/', function () {
+        return DateTime::createFromFormat('Y-m-d', '2021-06-27')->format('l');
     });
    
     require __DIR__.'/admin-api.php';

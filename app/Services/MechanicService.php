@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use Exception;
 use Carbon\Carbon;
 use App\Models\User;
@@ -119,7 +120,7 @@ class MechanicService {
         $appointments = $mechanic->appointment()->whereDate('date', '>', now())->select('date', 'hour')->get();
 
         $appointments = $appointments->map(function($data){
-            $data['day'] = Carbon::parse($data['day'])->format('l');
+			$data['day'] = DateTime::createFromFormat('Y-m-d', $data['date'])->format('l');
 			// $data['day'] = date_format(date_create($data['day']), 'l');
             return $data;
         });
