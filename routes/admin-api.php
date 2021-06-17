@@ -13,7 +13,6 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
 
     
     Route::middleware('auth.jwt:admin')->group(function () {
-        Route::get('registered', [AdminDashBoardController::class, 'analytics'])->name('admin');
-        
+        Route::get('registered', [AdminDashBoardController::class, 'analytics'])->name('registered');
     });
 });

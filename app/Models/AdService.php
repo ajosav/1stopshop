@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use BinaryCats\Sku\HasSku;
 use App\Models\ProductView;
+use App\Traits\ExtendReview;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 use Intervention\Image\Facades\Image;
@@ -12,12 +13,14 @@ use BinaryCats\Sku\Concerns\SkuOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\ImageException;
+use Codebyray\ReviewRateable\Contracts\ReviewRateable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Codebyray\ReviewRateable\Traits\ReviewRateable as ReviewRateableTrait;
 
-class AdService extends Model implements Searchable
+class AdService extends Model implements Searchable, ReviewRateable
 {
-    use HasFactory, HasSku;
+    use HasFactory, HasSku, ReviewRateableTrait, ExtendReview;
 
     protected $guarded = [];
 
@@ -81,5 +84,33 @@ class AdService extends Model implements Searchable
         // return $query->whereHas('category', function($category){
         //     return $category->orWhereHas('subCategories');
         // })->where('id', '!=', $this->id)->take(5);
+    }
+
+    public function starRatingPercent($max = 5)
+    {
+        $ratings = $this->ratings();
+        $quantity = $ratings->count();
+        $total = $ratings->selectRaw("SUM(rating) as total")->where('rating', $max)->pluck('total')->first();
+        // return $total;
+        return ($quantity * $max) > 0 ? $total / (($quantity * $max) / 100) : 0;
+    }
+
+    
+    public function customerReviews() {
+        return [
+            "average_overall_rating" => $this->averageRating(2),
+            "average_durability" => $this->averageCustomerServiceRating(2),
+            "average_quality" =>  $this->averageQualityRating(2),
+            "average_value_for_money" => $this->averageFriendlyRating(2),
+            "total_rating" => $this->countRating(),
+            "percentageRatings" => (object) [
+                "5" => $this->starRatingPercent(),
+                "4" => $this->starRatingPercent(4),
+                "3" => $this->starRatingPercent(3),
+                "2" => $this->starRatingPercent(2),
+                "1" => $this->starRatingPercent(1),
+            ]
+
+        ];
     }
 }

@@ -35,7 +35,8 @@ class ProductResource extends JsonResource
             'views'             =>          $total_views->groupBy('request_ip')->count(),
             'mobile_views'      =>          $total_views->where('mobile_view', 1)->groupBy('request_ip')->count(),
             'desktop_views'     =>          $total_views->where('desktop_view', 1)->groupBy('request_ip')->count(),
-            'viewed_contact'    =>          $this->userViewContact->count()
+            'viewed_contact'    =>          $this->userViewContact->count(),
+            "customer_reviews"  =>          $this->customerReviews(),
         ];
     }
 }

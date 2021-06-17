@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Api\Review;
 
+use App\Models\User;
+use App\Models\Mechanic;
+use App\Models\AdService;
+use App\Models\ReviewExt;
+use Illuminate\Http\Request;
 use App\Helpers\ShopDataHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Review\RateMechanicRequest;
-use App\Http\Resources\Review\UserReviewResource;
-use App\Models\Mechanic;
-use App\Models\ReviewExt;
-use App\Models\User;
 use Codebyray\ReviewRateable\Models\Rating;
-use Illuminate\Http\Request;
+use App\Http\Requests\Review\RateProductRequest;
+use App\Http\Requests\Review\RateMechanicRequest;
+use App\Http\Resources\Review\ProductReviewResource;
+use App\Http\Resources\Review\UserReviewResource;
 
 class ReviewController extends Controller
 {
@@ -24,7 +27,7 @@ class ReviewController extends Controller
 
     public function rateMechanic(RateMechanicRequest $request, User $mechanic) {
         $mechanic = $mechanic->mechanic;
-        if(!$user_rated = $this->user->ratings()->where('reviewrateable_id', $mechanic->id)->first()) {
+        if(!$user_rated = $this->user->ratings()->where('reviewrateable_id', $mechanic->id)->where('reviewrateable_type', 'App\Models\Mechanic')->first()) {
             $rating = $mechanic->rating([
                 'title' => $request->headline,
                 'body' => $request->written_review,
@@ -95,7 +98,67 @@ class ReviewController extends Controller
             'message' => 'Rating retrieved successfully',
             'status' => 'success'
         ]);
-    } 
+    }
+
+    public function rateProduct(RateProductRequest $request, AdService $adService){
+        if(!$user_rated = $this->user->ratings()->where('reviewrateable_id', $adService->id)->where('reviewrateable_type', 'App\Models\Adservice')->first()) {
+            $rating = $adService->rating([
+                'title' => $request->headline,
+                'body' => $request->written_review,
+                'customer_service_rating' => $request->durability,  //durability
+                'quality_rating' => $request->quality,               //quality
+                'friendly_rating' => $request->value_for_money,        //value_for_money
+                'rating' => $request->overall_rating,                   //overall rating
+                'recommend' => 'Yes',
+                'approved' => true, // This is optional and defaults to false
+            ], $this->user);
+        } else {
+            $rating = $adService->updateRating($user_rated->id, [
+                'title' => $request->headline,
+                'body' => $request->written_review,
+                'customer_service_rating' => $request->durability,      //durability
+                'quality_rating' => $request->quality,                  //quality
+                'friendly_rating' => $request->value_for_money,         //value_for_money
+                'rating' => $request->overall_rating,                   //overall rating
+                'recommend' => 'Yes',
+                'approved' => true, // This is optional and defaults to false
+            ], $this->user);
+        }
+
+        $review_photos = [];
+        if($request->review_photo) {
+            foreach($request->review_photo as $photo) {
+                $review_photos[] = uploadImage('images/reviews/product', $photo);
+            }
+        }
+
+        ReviewExt::updateOrCreate([
+            'imageable_id' => $rating->id,
+        ],
+        [
+            'display_name' => $request->display_name,
+            'review_photo' => json_encode($review_photos),
+            'owner_photo' => $this->user->profile_image,
+            'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
+        ]);
+        
+        return (new ProductReviewResource($rating))->additional([
+            'message' => 'Your ratings has been submitted successfully',
+            'status' => 'success'
+        ]);
+        // return $adService;
+    }
+    
+    public function productReviews(AdService $adService) {
+        $ratings = $adService->getAllRatings($adService->id, 'desc');
+        
+        return (ProductReviewResource::collection($ratings))->additional([
+            'message' => 'Product reviews retrieved successfully',
+            'status' => 'success'
+        ]);
+    }
+
+
 
     // public function 
 }

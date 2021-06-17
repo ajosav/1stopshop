@@ -78,6 +78,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('reviews/{mechanic}', [ReviewController::class, 'mechanicReviews']);
         Route::get('user-review/{mechanic}', [ReviewController::class, 'userReview']);
         // Route::get('rate-mehanic/{mechanic}', [ReviewController::class, 'reviewMechanicStore']);
+        Route::post('rate-product/{adService}', [ReviewController::class, 'rateProduct']);
+        Route::get('get-product-reviews/{adService}', [ReviewController::class, 'productReviews']);
     });
 
     // Product action happens here
