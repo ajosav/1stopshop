@@ -26,7 +26,7 @@ class ProductResource extends JsonResource
             'warranty'          =>          $this->warranty,
             'product_photo'     =>          getPhotoEncodedPhoto($this->product_photo),
             'description'       =>          $this->description,
-            'price'             =>          $this->price,
+            'price'             =>          number_format($this->price, 2),
             'negotiable'        =>          $this->negotiable,
             'product_no'        =>          $this->product_no,
             'product_type'      =>          $this->product_type,
