@@ -116,7 +116,7 @@ class MechanicService {
 
     public function getMechanicSchedule($mechanic) {
         $mechanic_working_hours = $mechanic->workingHours()->get();
-        $appointments = $mechanic->appointment()->whereDate('date', '<', now())->select('date', 'hour')->get();
+        $appointments = $mechanic->appointment()->whereDate('date', '>', now())->select('date', 'hour')->get();
 
         $appointments = $appointments->map(function($data){
             $data['day'] = Carbon::parse($data['day'])->format('l');
