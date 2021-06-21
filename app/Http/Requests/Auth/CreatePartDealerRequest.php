@@ -51,7 +51,7 @@ class CreatePartDealerRequest extends FormRequest
         ];
 
         if(request()->routeIs('part-dealer.update')) {
-            $data['phone_number'] = 'required|unique:part_dealers,phone_number,'.$this->user->id;
+            $data['phone_number'] = 'required|unique:part_dealers,phone_number,'.optional($this->user->partDealer)->id;
         } else {
             $data['phone_number'] = 'required|unique:part_dealers';
 

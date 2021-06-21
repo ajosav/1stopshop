@@ -20,12 +20,12 @@ function getAuthenticatedUser()
     try {
         JWTAuth::parseToken()->authenticate();
         if (! $user = auth('api')->user()) {
-                return response()->errorResponse('User not found', [], 404);
+            return response()->errorResponse('User not found', [], 404);
         }
 
     } catch (TokenExpiredException $e) {
 
-        return response()->errorResponse('token_expired', ["token" => $e->getMessage()], 401);
+        return response()->errorResponse('token_expired', ["token" => $e->getMessage()], 419);
 
     } catch (TokenInvalidException $e) {
 
