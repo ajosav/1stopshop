@@ -40,6 +40,9 @@ class AuthenticateUser {
 
     public function authFailed() {
         $error = $this->errorMessage;
+
+        $error['status'] = $error['title'] == 'Token Expired' ? '419' : null;
+        
         return response()->errorResponse($error['title'], $error['message'], isset($error['status']) ? $error['status'] : 401);
     }
 
