@@ -16,7 +16,7 @@ class AuthUserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $token = JWTAuth::fromUser($this->resource);
+        $token = JWTAuth::fromUser(auth('api')->user());
         return [
             'user_info' => [
                 'id' => $this->encodedKey,

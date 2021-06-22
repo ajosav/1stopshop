@@ -112,9 +112,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
     });
 
-    Route::get('/', function () {
-        return DateTime::createFromFormat('Y-m-d', '2021-06-27')->format('l');
-    });
+    // Route::get('/', function () {
+    //     return DateTime::createFromFormat('Y-m-d', '2021-06-27')->format('l');
+    // });
    
     require __DIR__.'/admin-api.php';
 });
