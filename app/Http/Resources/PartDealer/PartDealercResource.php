@@ -21,6 +21,8 @@ class PartDealercResource extends JsonResource
             'identification_type'           =>          $this->identification_type,
             'identity_number'               =>          $this->identity_number,
             'office_address'                =>          $this->office_address,
+            'shop_name'                     =>          $this->shop_name,
+            'shop_description'              =>          $this->shop_description,
             'state'                         =>          $this->state,
             'city'                          =>          $this->city,
             'company_photo'                 =>          encodePhoto($this->company_photo),
