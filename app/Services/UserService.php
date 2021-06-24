@@ -31,6 +31,7 @@ class UserService {
         } catch(Exception $e) {
             return response()->errorResponse("User registration failed", ["user_registration" => $e->getMessage()]);
         }
+        auth('api')->attempt(['email' => $request['email'], 'password' => $request['password']]);
         return ResourceHelpers::returnAuthenticatedUser($create_user, "User Successfully Created");
     }
 
