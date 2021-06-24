@@ -9,6 +9,7 @@ use App\Observers\MechanicObserver;
 use App\Repositories\OTP\OTPInterface;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\OTP\SendOTPViaSMS;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\OTP\SendOTPViaMail;
 use Spatie\Permission\Models\Permission;
@@ -43,7 +44,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Model::preventLazyLoading(! app()->isProduction());
+
         Schema::defaultStringLength(191);
         Mechanic::observe(MechanicObserver::class);
+        
     }
 }
