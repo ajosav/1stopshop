@@ -26,6 +26,10 @@ class UserResourceCollection extends JsonResource
                 'verified' => is_null($this->email_verified_at) ? 'no' : 'yes',
                 'permissions' => $this->getPermissionNames(),
                 'profile_image' =>  is_null($this->profile_image) || $this->profile_image == "" ? "" : asset(Storage::url($this->profile_image)),
+                'phone_number' => $this->phone_number,
+                'address' => $this->address,
+                'state' => $this->state,
+                'city' => $this->city,
             ],
             'mechanic' => new MechanicResource($this->mechanic),
             'part_dealer' => new PartDealercResource($this->partDealer)

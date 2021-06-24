@@ -20,7 +20,7 @@ class AuthController extends Controller
     public $activation_code, $userService, $profileService;
     public function __construct(OTPInterface $activation_code, UserService $userService)
     {
-        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount', 'logout', 'authenticatedUser');
+        $this->middleware('auth.jwt')->only('resendCode', 'verifyAccount', 'logout', 'authenticatedUser', 'updateUser');
         $this->activation_code = $activation_code;
         $this->userService = $userService;
     }
