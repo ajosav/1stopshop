@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Events\PasswordReset;
 use App\DataTransferObjects\UserDataTransferObject;
 use App\Helpers\ResourceHelpers;
+use Tymon\JWTAuth\JWT;
 
 class UserService {
 
@@ -49,6 +50,7 @@ class UserService {
         } catch(Exception $e) {
             return response()->errorResponse("User authentication failed", ["user_registration" => $e->getMessage()]);
         }
+        auth('api')->login($create_user);
         return ResourceHelpers::returnAuthenticatedUser($create_user, "User authenticated successfully");
     }
 
