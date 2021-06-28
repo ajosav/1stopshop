@@ -6,10 +6,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResourceCollection;
+use App\Services\UserService;
+use App\Traits\GetRequestType;
 use Illuminate\Support\Facades\Cache;
 
 class AdminDashBoardController extends Controller
 {
+    use GetRequestType;
+
     public function analytics() {
         $total_users = User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->get();
 
@@ -44,10 +48,18 @@ class AdminDashBoardController extends Controller
             'regular_user_count' => $regular_user,
             'total_users' => $users_count
         ]);
+    }
 
+    public function getAllUsers(UserService $userService) {
+        // $user =
 
-        //                     ->leftJoin('part_dealers', 'users.id', '=', 'part_dealers.user_id')
-        //                     ->orderBy('users.created_at', 'desc')
-        //                     ->get();
+        $all_users = $this->getUserDetail(
+            $userService->getAllUsers()
+        );
+       
+        return $all_users->additional([
+            'message' => 'All registered users retrieved successfully',
+            'status' => "success"
+        ]);
     }
 }

@@ -16,5 +16,6 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::get('registered', [AdminDashBoardController::class, 'analytics'])->name('registered');
         Route::get('daily-registered-users', [AdminDashBoardController::class, 'registeredUsers'])->name('daily-registered-users');
         Route::get('count-registered-users', [AdminDashBoardController::class, 'getUsersByRoleCount'])->name('count-registered-users');
+        Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
     // });
 });
