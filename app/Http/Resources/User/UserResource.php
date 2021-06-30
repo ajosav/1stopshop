@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'state' => $this->state,
             'city' => $this->city,
             'verified' => is_null($this->email_verified_at) ? 'no' : 'yes',
+            'created_at' => $this->created_at,
             'permissions' => $this->getPermissionNames()
         ];
     }

@@ -30,6 +30,7 @@ class UserResourceCollection extends JsonResource
                 'address' => $this->address,
                 'state' => $this->state,
                 'city' => $this->city,
+                'created_at' => $this->created_at,
             ],
             'mechanic' => new MechanicResource($this->mechanic),
             'part_dealer' => new PartDealercResource($this->partDealer)
