@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\Mail\MailController;
 use App\Http\Controllers\Api\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Admin\Dashboard\AdminDashBoardController;
 
@@ -12,10 +13,11 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('admin');
 
     
-    // Route::middleware('auth.jwt:admin')->group(function () {
+    Route::middleware('auth.jwt:admin')->group(function () {
+        Route::post('send-email', MailController::class);
         Route::get('registered', [AdminDashBoardController::class, 'analytics'])->name('registered');
         Route::get('daily-registered-users', [AdminDashBoardController::class, 'registeredUsers'])->name('daily-registered-users');
         Route::get('count-registered-users', [AdminDashBoardController::class, 'getUsersByRoleCount'])->name('count-registered-users');
         Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
-    // });
+    });
 });

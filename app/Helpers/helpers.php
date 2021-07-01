@@ -226,4 +226,6 @@ function addWorkingHours($working_hours, $mechanic) {
         ]);
         
     }
+
+    
 }

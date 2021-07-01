@@ -53,4 +53,5 @@ trait GetRequestType {
         
         return new ProductResource($product->with('productViews')->firstOrFail());
     }
+    
 }

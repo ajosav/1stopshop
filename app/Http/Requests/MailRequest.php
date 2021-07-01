@@ -24,9 +24,17 @@ class MailRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject' => 'required',
-            'recipient' => 'required|array',
-            'content' => 'required'
+            'subject'       => 'required',
+            'recipient'     => 'required|array',
+            'recipient.*'   => 'required|email',
+            'cc'            => 'nullable|array',
+            'cc.*'          => 'email',
+            'bcc'           => 'nullable|array',
+            'bcc.*'         => 'email',
+            'content'       => 'required|string',
+            'attachment'    => 'nullable',
+            'category'      => 'nullable',
+            'pattern'       => 'nullable|in:all,individual'
         ];
     }
 }
