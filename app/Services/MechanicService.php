@@ -16,6 +16,7 @@ use App\Filters\MechanicFilter\VehicleType;
 use App\Filters\MechanicFilter\WorkingHours;
 use App\Filters\MechanicFilter\YearOfExperience;
 use App\Filters\MechanicFilter\ProfessionalSkill;
+use App\Http\Resources\WorkHours\OffDaysResource;
 use App\Http\Resources\WorkHours\WorkHoursResource;
 
 class MechanicService {
@@ -115,9 +116,41 @@ class MechanicService {
 
     }
 
+    public function updateOffDaySchedule($schedule) {
+        $user = auth('api')->user();
+        
+        if($schedule['meridian'] == 'PM') {
+            if($schedule['hour'] != 12) {
+                $schedule['hour'] = (int) $schedule['hour'] + 12;
+            }
+        }
+        if($schedule['meridian'] == "AM" && $schedule['hour'] == 12){
+            $schedule['hour'] = 24;
+        }
+
+        $schedule['date'] = date('Y-m-d', strtotime($schedule['date']));
+        
+        $user->mechanic->offDaySchedule()->updateOrCreate(
+            [
+                'date' => $schedule['date'],
+                'hour' => $schedule['hour']
+            ],
+            $schedule
+        );
+
+        $updated_schedule = $user->mechanic->offDaySchedule()->get();
+
+        return OffDaysResource::collection($updated_schedule)->additional([
+            'message' => 'Schedule successfully updated for mechanic',
+            'status' => "success"
+        ]);
+
+    }
+
     public function getMechanicSchedule($mechanic) {
         $mechanic_working_hours = $mechanic->workingHours()->get();
         $appointments = $mechanic->appointment()->whereDate('date', '>', now())->select('date', 'hour')->get();
+        $updated_schedule = $mechanic->offDaySchedule()->whereDate('date', '>', now())->where('isActive', 'true')->select('date', 'hour')->get();
 
         $appointments = $appointments->map(function($data){
 			$data['day'] = DateTime::createFromFormat('Y-m-d', $data['date'])->format('l');
@@ -125,10 +158,19 @@ class MechanicService {
             return $data;
         });
 
-        return $mechanic_working_hours->map(function($days) use($appointments) {
+        $custom_schedule = $updated_schedule->map(function($data){
+			$data['day'] = DateTime::createFromFormat('Y-m-d', $data['date'])->format('l');
+			// $data['day'] = date_format(date_create($data['day']), 'l');
+            return $data;
+        });
+
+        return $mechanic_working_hours->map(function($days) use($appointments, $custom_schedule) {
             $hours = json_decode($days['schedule']);
             // return strtolower($days['day']);
-            $booked_hours = $this->hoursBookedByDays($appointments, $days['day']);
+            $appointment_hours = $this->hoursBookedByDays($appointments, $days['day']);
+            $scheduled_hours = $this->hoursBookedByDays($custom_schedule, $days['day']);
+
+            $booked_hours = array_merge($appointment_hours, $scheduled_hours);
 
             return [
                 'day' => $days['day'],

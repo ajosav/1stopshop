@@ -27,10 +27,6 @@ use App\Http\Controllers\Api\ProductService\ProductAdController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group(['prefix' => 'v1'], function () {
 
     // Users authentication
@@ -62,6 +58,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::patch('update', [MechanicController::class, 'update'])->name('update');
         Route::get('my-appointments', [AppointmentController::class, 'myAppointment']);
         Route::patch('update-appointment/{id}', [AppointmentController::class, 'update']);
+        Route::patch('update-off-days', [MechanicController::class, 'updateOffDaySchedule']);
         Route::patch('/edit-schedule', [MechanicController::class, 'editSchedule']);
         Route::get('/get-work-schedule/{mechanic}', [MechanicController::class, 'getWorkingHours']);
         Route::get('/{encodedKey}', [MechanicController::class, 'show']);

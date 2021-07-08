@@ -12,11 +12,11 @@ use App\Http\Resources\User\UserResourceCollection;
 trait GetRequestType {
     public function getUserDetail($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_user = $user->with('mechanic', 'partDealer')->jsonPaginate();
+            $retrieved_user = $user->with('mechanic', 'partDealer')->paginate();
             return UserResourceCollection::collection($retrieved_user);
         }
         
-        return UserResource::collection($user->jsonPaginate());
+        return UserResource::collection($user->paginate(50));
     }
     
     public function getSingleUser($user) {
@@ -30,11 +30,11 @@ trait GetRequestType {
 
     public function getFullProductDetails($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user', 'category', 'userViewContact', 'productViews')->jsonPaginate();
+            $retrieved_product = $product->with('user', 'category', 'userViewContact', 'productViews')->paginate(50);
             return ProductResourceCollection::collection($retrieved_product);
         }
         
-        return ProductResource::collection($product->with('productViews', 'userViewContact')->jsonPaginate());
+        return ProductResource::collection($product->with('productViews', 'userViewContact')->paginate(50));
     }
 
     public function getSingleProduct($product) {

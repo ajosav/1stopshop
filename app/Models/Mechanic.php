@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Appointment\OffDaySchedule;
 use Exception;
 use App\Traits\AddUUID;
 use Intervention\Image\Facades\Image;
@@ -44,6 +45,10 @@ class Mechanic extends Model implements ReviewRateable
 
     public function workingHours() {
         return $this->hasMany(WorkingHour::class, 'user_id', 'encodedKey');
+    }
+
+    public function offDaySchedule() {
+        return $this->hasMany(OffDaySchedule::class, 'user_id', 'encodedKey');
     }
 
     public function viewedByContact() {

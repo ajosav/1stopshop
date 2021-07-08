@@ -32,9 +32,10 @@ class MailRequest extends FormRequest
             'bcc'           => 'nullable|array',
             'bcc.*'         => 'email',
             'content'       => 'required|string',
-            'attachment'    => 'nullable',
             'category'      => 'nullable',
-            'pattern'       => 'nullable|in:all,individual'
+            'pattern'       => 'nullable|in:all,individual',
+            'attachment'    => 'nullable|array',
+            // 'attachment.*'  => 'array',
         ];
     }
 }

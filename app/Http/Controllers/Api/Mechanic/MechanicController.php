@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Traits\GetRequestType;
 use App\Services\MechanicService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Appointment\OffDayRequest;
 use App\Http\Requests\Auth\CreateMechanicRequest;
 use App\Http\Requests\Auth\UpdateMechanicDetails;
 use App\Http\Resources\User\UserResourceCollection;
@@ -141,6 +142,10 @@ class MechanicController extends Controller
 
 
 
+    }
+
+    public function updateOffDaySchedule(OffDayRequest $request) {
+        return $this->mechanicService->updateOffDaySchedule($request->validated());
     }
 
     /**
