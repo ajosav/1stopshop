@@ -16,7 +16,8 @@ class ProductReviewResource extends JsonResource
      */
     public function toArray($request)
     {
-        $review = ReviewExt::where('imageable_id', $this->id)->first();
+        // $review = ReviewExt::where('imageable_id', $this->id)->first();
+        $review = $this->reviewExt;
 
         if($review->review_photo) {
             

@@ -9,11 +9,12 @@ use App\Models\ReviewExt;
 use Illuminate\Http\Request;
 use App\Helpers\ShopDataHelper;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
 use Codebyray\ReviewRateable\Models\Rating;
 use App\Http\Requests\Review\RateProductRequest;
 use App\Http\Requests\Review\RateMechanicRequest;
-use App\Http\Resources\Review\ProductReviewResource;
 use App\Http\Resources\Review\UserReviewResource;
+use App\Http\Resources\Review\ProductReviewResource;
 
 class ReviewController extends Controller
 {
@@ -59,7 +60,7 @@ class ReviewController extends Controller
                 $review_photos[] = uploadImage('images/reviews/', $photo);
             }
         }
-        ReviewExt::updateOrCreate([
+        $rating->reviewExt()->updateOrCreate([
             'imageable_id' => $rating->id,
         ],
         [
@@ -132,15 +133,25 @@ class ReviewController extends Controller
             }
         }
 
-        ReviewExt::updateOrCreate([
-            'imageable_id' => $rating->id,
-        ],
-        [
-            'display_name' => $request->display_name,
-            'review_photo' => json_encode($review_photos),
-            'owner_photo' => $this->user->profile_image,
-            'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
-        ]);
+        $rating->reviewExt()->updateOrCreate([
+                'imageable_id' => $rating->id,
+            ],
+            [
+                'display_name' => $request->display_name,
+                'review_photo' => json_encode($review_photos),
+                'owner_photo' => $this->user->profile_image,
+                'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
+            ]);
+
+        // ReviewExt::updateOrCreate([
+        //     'imageable_id' => $rating->id,
+        // ],
+        // [
+        //     'display_name' => $request->display_name,
+        //     'review_photo' => json_encode($review_photos),
+        //     'owner_photo' => $this->user->profile_image,
+        //     'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
+        // ]);
         
         return (new ProductReviewResource($rating))->additional([
             'message' => 'Your ratings has been submitted successfully',
@@ -156,6 +167,32 @@ class ReviewController extends Controller
             'message' => 'Product reviews retrieved successfully',
             'status' => 'success'
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportAbuse(Request $request, Rating $rating)
+    {
+        // return $rating;
+        $abuse = $request->validate([
+            'full_name' => 'required|string|max:155',
+            'email' => 'required|email',
+            'message' => 'required|string|min:3|max:300'
+        ]);
+
+        try {
+            $rating->abuses()->create($abuse); 
+        } catch(QueryException $e) {
+            return response()->errorResponse('Failed to create abuse', ['errorSource' => $e->getMessage()]);
+        }
+
+
+        return response()->success('Abuse successfully submitted');
+        
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Abuse;
 use App\Models\Mechanic;
 use App\Models\ReviewExt;
 use Spatie\Macroable\Macroable;
@@ -45,7 +46,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Model::preventLazyLoading(! app()->isProduction());
-
+        Rating::resolveRelationUsing('abuses', function ($abuseModel) {
+            return $abuseModel->morphMany(Abuse::class, 'abusable');
+        });
+        Rating::resolveRelationUsing('reviewExt', function ($reviewExtModel) {
+            return $reviewExtModel->morphOne(ReviewExt::class, 'imageable');
+        });
         Schema::defaultStringLength(191);
         Mechanic::observe(MechanicObserver::class);
         

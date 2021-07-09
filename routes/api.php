@@ -78,6 +78,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('user-review/{mechanic}', [ReviewController::class, 'userReview']);
         // Route::get('rate-mehanic/{mechanic}', [ReviewController::class, 'reviewMechanicStore']);
         Route::post('rate-product/{adService}', [ReviewController::class, 'rateProduct']);
+        Route::post('{rating}/report-abuse', [ReviewController::class, 'reportAbuse']);
         Route::get('get-product-reviews/{adService}', [ReviewController::class, 'productReviews']);
     });
 
@@ -94,6 +95,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::patch('deactivate/{adservice}', [ProductAdController::class, 'deactivateProduct']);
         Route::patch('activate/{adservice}', [ProductAdController::class, 'activateProduct']);
         Route::post('view-contact', [ProductAdController::class, 'viewContact']);
+        Route::post('{adservice}/report-abuse', [ProductAdController::class, 'reportAbuse']);
     });
 
     

@@ -54,6 +54,14 @@ class AdService extends Model implements Searchable, ReviewRateable
         return $this->belongsTo(Category::class, 'category_name', 'name');
     }
 
+    /**
+     * Get all of the product's abuses.
+     */
+    public function abuses()
+    {
+        return $this->morphMany(Abuse::class, 'abusable');
+    }
+    
     public function skuOptions() : SkuOptions
     {
         return SkuOptions::make()

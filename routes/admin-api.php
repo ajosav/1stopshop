@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AbuseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\Mail\MailController;
@@ -20,4 +21,6 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::get('count-registered-users', [AdminDashBoardController::class, 'getUsersByRoleCount'])->name('count-registered-users');
         Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
     });
+
+    Route::resource('abuse', AbuseController::class);
 });

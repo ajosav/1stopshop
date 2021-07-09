@@ -16,7 +16,9 @@ class UserReviewResource extends JsonResource
      */
     public function toArray($request)
     {
-        $review = ReviewExt::where('imageable_id', $this->id)->first();
+        // $review = ReviewExt::where('imageable_id', $this->id)->first();
+
+        $review = $this->reviewExt;
 
         if($review->review_photo) {
             
@@ -31,6 +33,7 @@ class UserReviewResource extends JsonResource
         }
 
         return [
+            "id" => $this->id,
             "overall_rating" => $this->rating,
             "professionalism" => $this->customer_service_rating,
             "experience" => $this->quality_rating,

@@ -11,6 +11,7 @@ use App\Facades\ProductAdServiceFacade;
 use App\Http\Requests\Ad\CreateAdProductRequest;
 use App\Models\Category;
 use App\Models\RecordViewContact;
+use Illuminate\Database\QueryException;
 
 class ProductAdController extends Controller
 {
@@ -153,9 +154,23 @@ class ProductAdController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function reportAbuse(Request $request, AdService $adservice)
     {
-        //
+        $abuse = $request->validate([
+            'full_name' => 'required|string|max:155',
+            'email' => 'required|email',
+            'message' => 'required|string|min:3|max:300'
+        ]);
+
+        try {
+            $adservice->abuses()->create($abuse); 
+        } catch(QueryException $e) {
+            return response()->errorResponse('Failed to create abuse', ['errorSource' => $e->getMessage()]);
+        }
+
+
+        return response()->success('Abuse successfully submitted');
+        
     }
 
 
