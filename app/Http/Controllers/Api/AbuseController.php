@@ -16,7 +16,7 @@ class AbuseController extends Controller
      */
     public function index()
     {
-        $abuse = Abuse::orderBy('created_at', 'desc')->get();
+        $abuse = Abuse::orderBy('created_at', 'desc')->paginate(10);
 
         return AbusesReource::collection($abuse)->additional([
             'message' => 'Reported abuses successfully retrieved',

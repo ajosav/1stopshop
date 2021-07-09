@@ -170,7 +170,9 @@ class MechanicService {
             $appointment_hours = $this->hoursBookedByDays($appointments, $days['day']);
             $scheduled_hours = $this->hoursBookedByDays($custom_schedule, $days['day']);
 
-            $booked_hours = array_merge($appointment_hours, $scheduled_hours);
+            info($appointment_hours);
+
+            $booked_hours = $appointment_hours->merge($scheduled_hours);
 
             return [
                 'day' => $days['day'],
