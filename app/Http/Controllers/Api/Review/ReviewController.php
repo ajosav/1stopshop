@@ -22,7 +22,7 @@ class ReviewController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth.jwt')->except(['mechanicReviews']);   
+        $this->middleware('auth.jwt')->except(['mechanicReviews', 'productReviews']);   
         $this->user = auth('api')->user();
     }
 
