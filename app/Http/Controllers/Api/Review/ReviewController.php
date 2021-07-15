@@ -79,6 +79,10 @@ class ReviewController extends Controller
 
     public function mechanicReviews(User $mechanic) {
         $mechanic = $mechanic->mechanic;
+
+        if(!$mechanic) {
+            return response()->errorResponse('Could not find mechanic shop');
+        }
         $ratings = $mechanic->getAllRatings($mechanic->id, 'desc');
         
         return (UserReviewResource::collection($ratings))->additional([
@@ -197,5 +201,12 @@ class ReviewController extends Controller
 
 
 
-    // public function 
+    public function foundHelpul(Rating $rating) {
+
+        $rating->helpful()->updateOrCreate([
+            "user_id" => auth('api')->user()->encodedKey
+        ]);
+
+        return response()->success('Review successfully marked helpful');
+    } 
 }

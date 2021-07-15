@@ -42,6 +42,7 @@ class ProductReviewResource extends JsonResource
             "display_name"          =>  $review->display_name,
             "display_photo"         =>  is_null($review->owner_photo) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
             "review_photo"          =>  $photos,
+            "found_helpful"         =>  $this->helpful()->select('user_id')->get()
         ];
     }
 }

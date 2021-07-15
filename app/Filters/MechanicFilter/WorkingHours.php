@@ -9,7 +9,7 @@ class WorkingHours extends BaseFilter {
     {
         return $builder->whereHas('mechanic', function($mechanic) {
             return $mechanic->whereHas('workingHours', function($working_hour){
-                $time_of_avail = request($this->filterName());
+                $time_of_avail = strtolower(request($this->filterName()));
                 if($time_of_avail == 'morning') {
                     return $working_hour->where('day', date("l"))
                     ->where(function($time) {

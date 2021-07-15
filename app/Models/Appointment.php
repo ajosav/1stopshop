@@ -11,6 +11,9 @@ class Appointment extends Model
 
     protected $guarded = [];
 
+    protected $dates = [
+        'date'
+    ];
 
     public function mechanic() {
         return $this->belongsTo(Mechanic::class, 'mechanic_id', 'encodedKey');

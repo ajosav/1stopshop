@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Validator;
 use Illuminate\Database\QueryException;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OtpValidationRequest extends FormRequest
@@ -64,6 +65,9 @@ class OtpValidationRequest extends FormRequest
         try {
             $this->user->email_verified_at = now();
             $this->user->save();
+
+            $this->user->notify(new WelcomeNotification());
+            
             return response()->success("User account successfully activated");
         } catch(QueryException $e) {
             return response()->errorResponse('Error acctivating user account', ['account' => 'user account could not be activated']);

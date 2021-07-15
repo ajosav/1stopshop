@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Admin\Mail\MailController;
 use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
 use App\Http\Controllers\Api\Appointment\AppointmentController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
 
 /*
@@ -79,6 +80,7 @@ Route::group(['prefix' => 'v1'], function () {
         // Route::get('rate-mehanic/{mechanic}', [ReviewController::class, 'reviewMechanicStore']);
         Route::post('rate-product/{adService}', [ReviewController::class, 'rateProduct']);
         Route::post('{rating}/report-abuse', [ReviewController::class, 'reportAbuse']);
+        Route::post('{rating}/helpful', [ReviewController::class, 'foundHelpul']);
         Route::get('get-product-reviews/{adService}', [ReviewController::class, 'productReviews']);
     });
 
@@ -110,6 +112,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('create', [CategoryController::class, 'createCategory']);
         Route::get('fetch-sub-categories/{category}', [CategoryController::class, 'fetchSubCategories']);
         Route::get('all-categories', [CategoryController::class, 'fetchCatWithSubs']);
+    });
+
+    Route::name('feedback.')->prefix('feedback')->group(function() {
+        Route::get('/', [FeedbackController::class, 'index']);
+        Route::post('create', [FeedbackController::class, 'create']);
     });
 
     // Route::post('send-email', MailController::class);

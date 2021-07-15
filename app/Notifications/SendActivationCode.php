@@ -40,11 +40,11 @@ class SendActivationCode extends Notification
      */
     public function toMail($notifiable)
     {
+        $code = $notifiable->gererateOTP()->digit;
+        $first_name =$notifiable->first_name;
         return (new MailMessage)
-                    ->subject('1StopShop User Activation Code')
-                    ->line('Your activation code is '. $notifiable->gererateOTP()->digit)
-                    ->line('The code will expire in 10 minutes')
-                    ->line('if you have not signed up with us, ignore this message');
+                ->subject('1StopShop User Activation Code')
+                ->view('email/activation', ['code' => $code, 'first_name' => $first_name]);
     }
 
     /**

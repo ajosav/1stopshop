@@ -3,25 +3,22 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class ResetPasswordNotification extends Notification
+class WelcomeNotification extends Notification
 {
     use Queueable;
-
-    public $token;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct()
     {
-        $this->token = $token;
+        //
     }
 
     /**
@@ -43,17 +40,10 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $duration = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
         $first_name = $notifiable->first_name;
-        $token = $this->token;
-
         return (new MailMessage)
-                ->subject('Password Reset')
-                ->view('email/password_reset', [
-                    'duration' => $duration, 
-                    'first_name' => $first_name, 
-                    'token' => $token
-                ]);
+                ->subject('Welcome to 1automech')
+                ->view('email/welcome', ['first_name' => $first_name]);
     }
 
     /**

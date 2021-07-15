@@ -85,7 +85,12 @@ class AuthController extends Controller
     }
 
     public function verifyAccount(OtpValidationRequest $request) {
-       return $request->activateUserAccount();        
+        $user = auth('api')->user();
+        
+        if($user->email_verified_at) {
+            return response()->errorResponse('User account is active');
+        }
+        return $request->activateUserAccount();        
     }
 
     public function forgotPassword(Request $request) {

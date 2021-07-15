@@ -4,8 +4,10 @@ namespace App\Services;
 
 use Exception;
 use App\Models\User;
+use Tymon\JWTAuth\JWT;
 use Illuminate\Support\Str;
 use App\Helpers\AuthDataHelper;
+use App\Helpers\ResourceHelpers;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
@@ -13,9 +15,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Password;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Notifications\WelcomeNotification;
 use App\DataTransferObjects\UserDataTransferObject;
-use App\Helpers\ResourceHelpers;
-use Tymon\JWTAuth\JWT;
 
 class UserService {
 
@@ -38,6 +39,7 @@ class UserService {
 
     public function createUserWith($data) {
         try {
+            $user_exist = User::firstWhere('email', $data['email']);
             $create_user = DB::transaction(function() use ($data) {
                 $user = User::firstOrCreate(['email' => $data['email']],
                     $data
@@ -51,6 +53,9 @@ class UserService {
             return response()->errorResponse("User authentication failed", ["user_registration" => $e->getMessage()]);
         }
         auth('api')->login($create_user);
+        if(!$user_exist) {
+            $create_user->notify(new WelcomeNotification());
+        }
         return ResourceHelpers::returnAuthenticatedUser($create_user, "User authenticated successfully");
     }
 

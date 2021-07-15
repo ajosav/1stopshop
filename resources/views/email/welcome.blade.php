@@ -100,6 +100,29 @@
             display: none !important;
         }
         
+        .button-link {
+            font-size: 16px;
+            display: inline-block;
+            letter-spacing: 0.5px;
+            -webkit-text-size-adjust: none;
+            text-decoration: none;
+            border-radius: 6px;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            width: auto;
+            width: auto;
+            padding-top: 9px;
+            padding-bottom: 9px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-family: 'Montserrat', Montserrat, Helvetica Neue, Helvetica, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            mso-border-alt: none;
+            word-break: keep-all;
+            width: 80%;
+        }
+        
         @media screen and (min-width: 701px) {
             .pc-email-container {
                 width: 700px !important;
@@ -153,6 +176,14 @@
             .pc-sm-p-31-20-39 {
                 padding: 31px 20px 39px !important
             }
+            .button-link {
+                font-size: 14px;
+                padding-top: 7px;
+                padding-bottom: 7px;
+                padding-left: 16px;
+                padding-right: 16px;
+                width: 80%;
+            }
         }
     </style>
     <style type="text/css">
@@ -204,6 +235,14 @@
             }
             .pc-fb-font {
                 font-size: 14px !important;
+            }
+            .button-link {
+                font-size: 12px !important;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 80%;
             }
         }
     </style>
@@ -318,24 +357,25 @@
                                                                         </tbody>
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td class="pc-fb-font " style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; " valign="top ">
-                                                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Booking Reservation</h3>
-                                                                                    <span style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; ">Hello {{$first_name}},</span><br><br>
-                                                                                    <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
-                                                                                        <p>A reservation was made for a vehicle check. <b>{{$request['description']}}</b></p>
-                                                                                        <span style="line-height: 24px; ">&nbsp;</span>
-                                                                                    <p>If you have any question, just give us a call at (234)8065732572 and we will be glad to help!</p>
-                                                                                    </span>
-                                                                                    <div class="pc-fb-font " bgcolor="#DBDEE7 " style=" background: #DBDEE7; line-height: 15px; padding: 13px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif;
-                                                                    letter-spacing: 0.5px; margin-top: 14px; margin-bottom: 24px; font-weight: 400; font-size: 13px; ">
-                                                                                        <p style="font-weight: 600; font-size: 14px; "><b>Schedule</b></p>
-                                                                                        <span style="line-height: 16px; ">&nbsp;</span>
-                                                                                        <p><strong>Appointment Date:</strong> {{$request['date']->format('jS F, Y')}}</p>
-                                                                                        <span style="line-height: 16px; ">&nbsp;</span>
-                                                                                        <p><strong>Appointment Time:</strong> {{$request['time']}}{{$request['meridian']}}</p>
-                                                                                    </div>
+                                                                                <td class="pc-fb-font " style="line-height: 16px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; " valign="top ">
+                                                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Welcome to 1automech</h3>
+                                                                                    <p style="line-height: 16px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; margin-bottom: 16px; font-weight:
+                                                                    normal; ">Hi {{$first_name}},</p>
+                                                                                    <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000; line-height: 24px; ">
+                                                                                        <p style="margin-bottom: 16px; ">
+                                                                                            We are so excited to have you on board, as we go on this journey to transform Nigeria’s Mechanical system. We could not have asked for a better companion.
+                                                                                        </p>
+                                                                                        <p style="margin-bottom: 16px; ">
+                                                                                            You can reach us on: <br>
+                                                                                            <span style="margin-bottom: 16px; color: #3A89F8; ">
+                                                                                                <a href="mailto:contact@1automech.com " style="text-decoration: none; color: #3A89F8; ">contact@1automech.com</a>
+                                                                                            </span>
+                                                                                    </p>
 
-                                                                                    <p style="line-height: 26px; font-size: 14px; ">Regards,</p>
+                                                                                    </span>
+
+
+                                                                                    <p style="line-height: 26px; font-size: 14px; margin-top: 32px; ">Regards,</p>
                                                                                     <p style="line-height: 26px; font-size: 14px; margin-bottom: 27px; ">1automech</p>
 
                                                                                 </td>

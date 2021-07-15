@@ -9,6 +9,9 @@ use App\Models\Appointment\WorkingHour;
 use App\Mail\Appointment\BookAppointmentMail;
 use Illuminate\Contracts\Encryption\DecryptException;
 use App\Http\Resources\Appintment\AppointmentResource;
+use App\Notifications\AppointmentConfirmation;
+use App\Notifications\BookAppointmentNotification;
+use Carbon\Carbon;
 
 class AppointmentService {
     public function createAppointment($request) {
@@ -55,7 +58,12 @@ class AppointmentService {
 
         $new_appointment->save();
 
-        Mail::to($user->email)->send(new BookAppointmentMail(auth('api')->user(), $mechanic, $request));
+        $request['date'] = Carbon::parse($request['date']);
+
+        $user->notify(new BookAppointmentNotification($request));
+        auth('api')->user()->notify(new AppointmentConfirmation($request, $mechanic));
+
+        // Mail::to($user->email)->send(new BookAppointmentMail(auth('api')->user(), $mechanic, $request));
 
         return response()->success('Appointment successfully submitted; You will be notified when the mechanic accepts your booking');
 

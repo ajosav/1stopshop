@@ -100,6 +100,29 @@
             display: none !important;
         }
         
+        .button-link {
+            font-size: 16px;
+            display: inline-block;
+            letter-spacing: 0.5px;
+            -webkit-text-size-adjust: none;
+            text-decoration: none;
+            border-radius: 6px;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            width: auto;
+            width: auto;
+            padding-top: 9px;
+            padding-bottom: 9px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-family: 'Montserrat', Montserrat, Helvetica Neue, Helvetica, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            mso-border-alt: none;
+            word-break: keep-all;
+            width: 80%;
+        }
+        
         @media screen and (min-width: 701px) {
             .pc-email-container {
                 width: 700px !important;
@@ -153,6 +176,14 @@
             .pc-sm-p-31-20-39 {
                 padding: 31px 20px 39px !important
             }
+            .button-link {
+                font-size: 14px;
+                padding-top: 7px;
+                padding-bottom: 7px;
+                padding-left: 16px;
+                padding-right: 16px;
+                width: 80%;
+            }
         }
     </style>
     <style type="text/css">
@@ -205,6 +236,14 @@
             .pc-fb-font {
                 font-size: 14px !important;
             }
+            .button-link {
+                font-size: 12px !important;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 80%;
+            }
         }
     </style>
     <!--[if mso]>
@@ -253,6 +292,7 @@
                                                                                 <td class="pc-sm-p-30 pc-xs-p-25-20" align="center" valign="top" style="padding: 6px 20px 28px 20px;">
                                                                                     <a href="https://1automech.com" style="text-decoration: none;">
                                                                                         <img id="image0" width="130" height="" alt="" style="max-width: 100%; height: auto; border: 0; line-height: 100%; outline: 0; -ms-interpolation-mode: bicubic; color: #1B1B1B;" src="https://broker.1stopshop.aftjdigital.com/1automech_logo.png" />
+
                                                                                     </a>
                                                                                 </td>
                                                                             </tr>
@@ -306,7 +346,7 @@
                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
                                                         <tbody>
                                                             <tr>
-                                                                <td class="" width="100%" valign="top" bgcolor="#ffffff" style="background-color: #ffffff" pc-default-class="pc-sm-p-25-30-35 pc-xs-p-15-20-25 " pc-default-padding="30px 40px 40px ">
+                                                                <td width="100%" valign="top" bgcolor="#ffffff" style="background-color: #ffffff" pc-default-class="pc-sm-p-25-30-35 pc-xs-p-15-20-25 " pc-default-padding="30px 40px 40px ">
                                                                     <table border="0 " cellpadding="0 " cellspacing="0 " width="100% " role="presentation ">
                                                                         <tbody>
                                                                         </tbody>
@@ -318,24 +358,29 @@
                                                                         </tbody>
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td class="pc-fb-font " style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; " valign="top ">
-                                                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Booking Reservation</h3>
-                                                                                    <span style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; ">Hello {{$first_name}},</span><br><br>
+                                                                                <td class="pc-fb-font " style="line-height: 16px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; " valign="top ">
+                                                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Password Reset</h3>
+                                                                                    <p style="line-height: 16px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; margin-bottom: 12px; font-weight:
+                                                                    normal; ">Hi {{$first_name}},</p>
                                                                                     <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
-                                                                                        <p>A reservation was made for a vehicle check. <b>{{$request['description']}}</b></p>
+                                                                                        <p>
+                                                                                            You are receiving this email because we received a password reset request for your account. <br>
+                                                                                        </p>
                                                                                         <span style="line-height: 24px; ">&nbsp;</span>
-                                                                                    <p>If you have any question, just give us a call at (234)8065732572 and we will be glad to help!</p>
+                                                                                        <p>
+                                                                                            Your password reset token is <b>{{$token}}</b>
+                                                                                        </p>
+                                                                                        <span style="line-height: 24px; ">&nbsp;</span>
+                                                                                        <p>
+                                                                                            This password reset token will expire in {{$duration}} minutes.
+                                                                                        </p>
+                                                                                        <span style="line-height: 24px; ">&nbsp;</span>
+                                                                                    <p style="line-height: 26px; ">If you did not initiate this request, please contact us immediately at <a href="https://1automech.com " style="text-decoration: none;
+                                                                    color: #3A89F8; ">1automech.com</a> or call us on (234)8065732572 and we will be happy to help!</p>
                                                                                     </span>
-                                                                                    <div class="pc-fb-font " bgcolor="#DBDEE7 " style=" background: #DBDEE7; line-height: 15px; padding: 13px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif;
-                                                                    letter-spacing: 0.5px; margin-top: 14px; margin-bottom: 24px; font-weight: 400; font-size: 13px; ">
-                                                                                        <p style="font-weight: 600; font-size: 14px; "><b>Schedule</b></p>
-                                                                                        <span style="line-height: 16px; ">&nbsp;</span>
-                                                                                        <p><strong>Appointment Date:</strong> {{$request['date']->format('jS F, Y')}}</p>
-                                                                                        <span style="line-height: 16px; ">&nbsp;</span>
-                                                                                        <p><strong>Appointment Time:</strong> {{$request['time']}}{{$request['meridian']}}</p>
-                                                                                    </div>
 
-                                                                                    <p style="line-height: 26px; font-size: 14px; ">Regards,</p>
+
+                                                                                    <p style="line-height: 26px; font-size: 14px; margin-top: 32px; ">Regards,</p>
                                                                                     <p style="line-height: 26px; font-size: 14px; margin-bottom: 27px; ">1automech</p>
 
                                                                                 </td>
@@ -428,7 +473,7 @@
                                                             <tr>
                                                                 <td class="pc-fb-font " valign="top " style="text-align: center " pc-default-class="pc-sm-p-18-30 pc-xs-p-18-20 pc-fb-font " pc-default-padding="14px 30px ">
                                                                     <p style="font-family: Roboto, Roboto, Helvetica, Arial, sans-serif; line-height: 20px; font-size: 12px; font-weight: 400; color: #738EAD; ">
-                                                                        1automech, Inc. is not responsible for content on external Web sites. © 2021 1automech, Inc, a 1automech Group Company. All rights reserved.
+                                                                        1automech, Inc. is not responsible for content on external Web sites. © 2021 1automech, Inc, a 1automech Group Company. All rights reserved..
                                                                     </p>
                                                                 </td>
                                                             </tr>
