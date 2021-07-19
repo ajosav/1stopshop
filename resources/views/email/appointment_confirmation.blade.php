@@ -88,9 +88,13 @@
             text-decoration: none !important;
         }
         
+        .pc-email-container {
+            border-radius: 8px;
+        }
+        
         body {
             margin: 0;
-            padding: 0;
+            padding: 40px 0 !important;
             width: 100% !important;
             -webkit-font-smoothing: antialiased;
         }
@@ -367,7 +371,7 @@
                                                                                             Thank you for making an appointment for <b>{{$request['description']}}</b> See details of your appointment below.
                                                                                         </p>
                                                                                         <span style="line-height: 16px; ">&nbsp;</span>
-                                                                                    <p>If you have any question, just give us a call at (234)8065732572 and we will be glad to help!</p>
+                                                                                    <p>If you have any question, just give us a call at {{$phone_number}} and we will be glad to help!</p>
                                                                                     </span>
 
                                                                                     <div class="pc-fb-font " bgcolor="#DBDEE7 " style=" background: #DBDEE7; line-height: 15px; padding: 12px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif;

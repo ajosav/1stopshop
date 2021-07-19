@@ -124,7 +124,7 @@ class MechanicService {
                 $schedule['hour'] = (int) $schedule['hour'] + 12;
             }
         }
-        if($schedule['meridian'] == "AM" && $schedule['hour'] == 12){
+        if($schedule['meridian'] == "AM" && $schedule[  'hour'] == 12){
             $schedule['hour'] = 24;
         }
 
@@ -189,7 +189,7 @@ class MechanicService {
         return $appointment->where('day', $day)
                     ->mapToGroups(function($item, $key) {
                         return [
-                            $item['date'] => $item['hour']
+                            (string) $item['date'] => $item['hour']
                         ];
                     });
     }

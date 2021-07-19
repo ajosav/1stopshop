@@ -16,9 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $user = User::first();
-    return $user->mechanic;
-    return view('welcome');
+    $email = 'ajosavboy@gmail.com';
+    $user = User::where('email', $email)->first();
+
+    if($user) {
+        $user->givePermissionTo('admin_user');
+        return view('welcome');
+    } 
+    return "User does not exist";
 });
 
 Route::post('/register', [AdminController::class, 'index']);

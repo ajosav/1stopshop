@@ -49,6 +49,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('find-user/{encodedKey}', [RegisteredUserController::class, 'findUser']);
     Route::get('find-users/{user_type}', [RegisteredUserController::class, 'findUserByType']);
     Route::post('book-appointment', [AppointmentController::class, 'book']);
+    Route::get('cancel-appointment/{id}/{visitor_id}', [AppointmentController::class, 'cancel']);
     Route::get('get-location',[HomeController::class, 'searchLocation']);
 
     // Mechanic user type

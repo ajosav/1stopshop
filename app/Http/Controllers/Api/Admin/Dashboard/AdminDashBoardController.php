@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResourceCollection;
+use App\Models\AdService;
+use App\Models\Mechanic;
+use App\Models\ProductView;
 use App\Services\UserService;
 use App\Traits\GetRequestType;
 use Illuminate\Support\Facades\Cache;
@@ -60,6 +63,19 @@ class AdminDashBoardController extends Controller
         return $all_users->additional([
             'message' => 'All registered users retrieved successfully',
             'status' => "success"
+        ]);
+    }
+
+
+    public function salesAnalytics() {
+        $mechanics_count = Mechanic::count();
+        $products_count = AdService::count();
+        $product_views = ProductView::groupBy('ad_id')->count();
+
+        return response()->success('Sales analytics returned successfully', [
+            'totalMechanics'    =>  $mechanics_count,
+            'totalProducts'     =>  $products_count,
+            'productsViewed'    =>  $product_views
         ]);
     }
 }

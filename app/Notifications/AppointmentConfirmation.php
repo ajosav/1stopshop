@@ -45,9 +45,15 @@ class AppointmentConfirmation extends Notification
     {
         $first_name = $notifiable->first_name;
         $mechanic_address = $this->mechanic->office_address;
+        $phone_number = $this->mechanic->phone_number;
         return (new MailMessage)
                 ->subject('Appointment Confirmation')
-                ->view('email/appointment_confirmation', ['request' => $this->request, 'first_name' => $first_name, 'mechanic_address' => $mechanic_address]);
+                ->view('email/appointment_confirmation', [
+                    'request' => $this->request, 
+                    'first_name' => $first_name, 
+                    'phone_number' => $phone_number, 
+                    'mechanic_address' => $mechanic_address
+                ]);
     }
 
     /**

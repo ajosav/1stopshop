@@ -18,11 +18,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "infureal/artisan-gui": "^2.0",
         "intervention/image": "^2.5",
-        "jenssegers/agent": "^2.6",
         "laravel/framework": "^8.48",
         "laravel/tinker": "^2.5",
-        "spatie/data-transfer-object": "^2.8",
-        "spatie/laravel-json-api-paginate": "^1.10",
+        "spatie/laravel-google-calendar": "^3.3",
         "spatie/laravel-permission": "^4.0",
         "spatie/laravel-searchable": "^1.9",
         "tymon/jwt-auth": "^1.0"

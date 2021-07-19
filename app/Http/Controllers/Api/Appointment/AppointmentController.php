@@ -17,17 +17,34 @@ use App\Http\Resources\Appintment\AppointmentResource;
 
 class AppointmentController extends Controller
 {
-    public $user;
+    public $user, $appointment;
 
-    public function __construct()
+    public function __construct(AppointmentService $appointment)
     {
         $this->middleware('auth.jwt');
+        $this->appointment = $appointment;
         $this->user = auth('api')->user();
     }
 
-    public function book(AppointmentRequest $request, AppointmentService $appointment) {
+    public function book(AppointmentRequest $request) {
         $data = $request->validated();
-        return $appointment->createAppointment($data);
+        return $this->appointment->createAppointment($data);
+    }
+    public function cancel(AppointmentRequest $request, $id, $visitor_id) {
+        $appointment_id = decrypt($id);
+        $today = date('Y-m-d');
+
+        $appointment = Appointment::where('id', $appointment_id)->where('visitor_id', $visitor_id)->firstOrFail();
+
+        if($appointment->date < $today ) {
+            return response()->errorResponse('Cannot cancel appointment in the past');
+        }
+
+        if(!$appointment->delete()) {
+            return  response()->errorResponse('Appoinment cancellation failed');
+        }
+        
+        return  response()->errorResponse('Appointment successfully cancelled');
     }
 
     public function myAppointment() {
@@ -38,7 +55,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function update(Request $request, AppointmentService $appointment, $id) {
+    public function update(Request $request, $id) {
         $validated = $request->validate([
             'status' => 'required|in:accept,reject'
         ]);
@@ -51,7 +68,7 @@ class AppointmentController extends Controller
 
         abort_if(! Gate::allows('mechanic', $this->user), 403, "Only mechanics are allowed to view appointments");
         
-        return $appointment->updateAppointment($validated, $id);
+        return $this->appointment->updateAppointment($validated, $id);
     }
 
     // public function createAppointment() {
