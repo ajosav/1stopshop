@@ -33,6 +33,8 @@ class AdService extends Model implements Searchable, ReviewRateable
         'created_at' => 'datetime',
     ];
 
+    protected $with = 'ratings';
+
     public function getRouteKeyName()
     {
         return 'encodedKey';

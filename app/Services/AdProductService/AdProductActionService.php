@@ -69,15 +69,30 @@ class AdProductActionService {
     }
 
     public function findProductByUser($userEncodedKey) {
-        return $this->viewAllAds()->whereHas('user', function($query) use ($userEncodedKey) {
-            $query->where('encodedKey', $userEncodedKey);
-        })->with('user');
+        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+            ->leftJoin('reviews', function($join) {
+                $join->on('reviews.reviewrateable_id', 'ad_services.id')
+                ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
+            })
+            ->join('users', function($join)  {
+                $join->on('users.id', 'ad_services.user_id');
+            })
+            ->where('users.encodedKey', $userEncodedKey)
+            ->groupBy('ad_services.id');
+            
+        return $product;
     }
 
     public function findProductByEncodedKey($productEncodedKey) {
-        $product = $this->viewAllAds()->where('encodedKey', $productEncodedKey);
-
-        if($product->first()) {
+        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+            ->leftJoin('reviews', function($join) {
+                $join->on('reviews.reviewrateable_id', 'ad_services.id')
+                ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
+            })
+            ->where('encodedKey', $productEncodedKey)
+            ->groupBy('ad_services.id');
+            
+        if($product) {
             $this->incrementProductView($productEncodedKey);
         }
 
@@ -101,8 +116,17 @@ class AdProductActionService {
 
     public function filterProduct() {
         // return AdService::where('status', 'active');
+
+        $products = AdService::select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+            ->leftJoin('reviews', function($join) {
+                $join->on('reviews.reviewrateable_id', 'ad_services.id')
+                ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
+            })
+            ->where('status', 'active')
+            ->groupBy('ad_services.id');
+
         $filter_products = app(Pipeline::class)
-                        ->send(AdService::query())
+                        ->send($products)
                         ->through([
                             Condition::class,
                             Make::class,
@@ -112,8 +136,7 @@ class AdProductActionService {
                             DBSearch::class,
                             Location::class
                         ])
-                        ->thenReturn()
-                        ->where('status', 'active');
+                        ->thenReturn();
                         // ->jsonPaginate();
 
         return $filter_products;

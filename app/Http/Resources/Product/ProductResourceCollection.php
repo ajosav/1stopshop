@@ -34,14 +34,16 @@ class ProductResourceCollection extends JsonResource
             'product_type'      =>          $this->product_type,
             'status'            =>          $this->status,
             'date_created'      =>          $this->created_at->format('Y-m-d H:i:s'),
-            'created_by'        =>          new UserResourceCollection($this->user),
             'category'          =>          $this->category_name,
             'sub_category'      =>          $this->sub_category_name,
             'views'             =>          $total_views->groupBy('request_ip')->count(),
             'mobile_views'      =>          $total_views->where('mobile_view', 1)->groupBy('request_ip')->count(),
             'desktop_views'     =>          $total_views->where('desktop_view', 1)->groupBy('request_ip')->count(),
             'viewed_contact'    =>          $this->userViewContact->count(),
-            "customer_reviews"  =>          $this->customerReviews()
+            "customer_reviews"  =>          [
+                "average_overall_rating" => $this->averageReviewRateable,
+                "total_rating" => $this->countReviewRateable,
+            ]
         ];
     }
 }

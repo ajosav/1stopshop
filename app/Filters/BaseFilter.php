@@ -9,7 +9,8 @@ abstract class BaseFilter {
 
     public function handle($request, Closure $next) {
         $process = $next($request);
-        if(!request()->has($this->filterName())) {
+        if(!request()->has($this->filterName())
+            || request($this->filterName()) == "") {
             return $process;
         }
 

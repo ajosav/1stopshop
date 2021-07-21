@@ -8,9 +8,7 @@ class YearOfExperience extends BaseFilter {
 
     protected function applyFilter($builder)
     {
-        return $builder->whereHas('mechanic', function($mechanic) {
-            $experience = request($this->filterName());
-            $mechanic->where('experience_years', $experience);
-        });
+        $experience = request($this->filterName());
+        return $builder->where('experience_years', $experience);
     }
 }

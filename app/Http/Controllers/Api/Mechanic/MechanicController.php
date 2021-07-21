@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api\Mechanic;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Mechanic;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Traits\GetRequestType;
 use App\Services\MechanicService;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Appointment\OffDayRequest;
 use App\Http\Requests\Auth\CreateMechanicRequest;
 use App\Http\Requests\Auth\UpdateMechanicDetails;
 use App\Http\Resources\User\UserResourceCollection;
 use App\Http\Resources\WorkHours\WorkHoursResource;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MechanicController extends Controller
@@ -105,8 +106,18 @@ class MechanicController extends Controller
     public function filterService()
     {
         $user = $this->mechanicService->filterMechanicServices();
-
-        $all_mechanics =  $user->with('mechanic', 'partDealer')->jsonPaginate();
+        $all_mechanics =  $user->with(['mechanic' => function($query) {
+            return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+            ->leftJoin('reviews', function($join) {
+                $join->on('reviews.reviewrateable_id', 'mechanics.id')
+                ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+            })
+            ->join('users', function($join)  {
+                $join->on('users.id', 'mechanics.user_id');
+            })
+            ->groupBy('mechanics.id');
+        }, 'partDealer', 'permissions'])->paginate(20);
+        
         return UserResourceCollection::collection($all_mechanics)->additional([
             'message' => 'Mechanic Details filtered successfully',
             'status' => "success"

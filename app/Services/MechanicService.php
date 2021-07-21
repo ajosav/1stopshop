@@ -18,12 +18,16 @@ use App\Filters\MechanicFilter\YearOfExperience;
 use App\Filters\MechanicFilter\ProfessionalSkill;
 use App\Http\Resources\WorkHours\OffDaysResource;
 use App\Http\Resources\WorkHours\WorkHoursResource;
+use App\Models\Mechanic;
 
 class MechanicService {
     public function getVerifiedMechanics() {
-        return User::whereHas('permissions', function($query) {
-                return $query->whereName('mechanic');
-            })->whereHas('mechanic');
+        return User::with(['mechanic', 'partDealer', 'permissions'])->select('users.*')
+            ->join('mechanics', 'users.id', 'mechanics.user_id')
+            ->whereNull('mechanics.deleted_at');
+        // return User::whereHas('permissions', function($query) {
+        //         return $query->whereName('mechanic');
+        //     })->whereHas('mechanic');
     }
 
     public function createNewMechanic($data, $user) {
@@ -82,8 +86,24 @@ class MechanicService {
     }
 
     public function filterMechanicServices() {
+        // $mechanics = Mechanic::select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+        //     ->leftJoin('reviews', function($join) {
+        //         $join->on('reviews.reviewrateable_id', 'mechanics.id')
+        //         ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+        //     })
+        //     ->join('users', function($join)  {
+        //         $join->on('users.id', 'mechanics.user_id');
+        //     })
+        //     ->groupBy('mechanics.id');
+
+
+
+        $mechanics = User::select('users.*')->join('mechanics', 'users.id', 'mechanics.user_id')
+            ->whereNull('mechanics.deleted_at')
+            ->leftJoin('part_dealers', 'users.id', 'part_dealers.user_id');
+            
         $filter_mechanics = app(Pipeline::class)
-                        ->send(User::has('mechanic'))
+                        ->send($mechanics)
                         ->through([
                             Location::class,
                             ProfessionalSkill::class,

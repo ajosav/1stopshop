@@ -7,9 +7,10 @@ class VehicleType extends BaseFilter {
 
     protected function applyFilter($builder)
     {
-        return $builder->whereHas('mechanic', function($mechanic) { 
+        return $builder->where(function($query) {
             $vehcile_type = request($this->filterName());
-            return $mechanic->where($this->filterName(), 'like', '%' . $vehcile_type . '%');
+            return $query->where($this->filterName(), 'like', '%' . $vehcile_type . '%');
         });
+        
     }
 }

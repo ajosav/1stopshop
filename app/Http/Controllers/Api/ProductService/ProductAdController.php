@@ -29,17 +29,6 @@ class ProductAdController extends Controller
      */
     public function index()
     {
-        // $searchResults = (new Search())
-        //     ->registerModel(AdService::class, function(ModelSearchAspect $modelSearchAspect) {
-        //         $modelSearchAspect
-        //         ->addSearchableAttribute('product_title') // return results for partial matches on product title
-        //         ->addExactSearchableAttribute('keyword') // only return results that exactly match the keyword
-        //         ;
-        // })->perform('durolast');
-
-        // return $searchResults;
-        // $ads = ProductAdServiceFacade::viewAllAds();
-        // return ProductAdServiceFacade::filterProduct()->toSql();
         $ads = ProductAdServiceFacade::filterProduct();
         return $this->getFullProductDetails($ads)->additional([
             'message' => 'Ad services retrieved successfully',

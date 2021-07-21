@@ -30,6 +30,10 @@ class Mechanic extends Model implements ReviewRateable
         'verified_at'
     ];
 
+    protected $with = [
+        'ratings'
+    ];
+
     public function getRouteKeyName()
     {
         return 'encodedKey';
@@ -108,17 +112,17 @@ class Mechanic extends Model implements ReviewRateable
     public function customerReviews() {
         return [
             "average_overall_rating" => $this->averageRating(2),
-            "average_professionalism" => $this->averageCustomerServiceRating(2),
-            "average_experience" =>  $this->averageQualityRating(2),
-            "average_response_to_time" => $this->averageFriendlyRating(2),
+            // "average_professionalism" => $this->averageCustomerServiceRating(2),
+            // "average_experience" =>  $this->averageQualityRating(2),
+            // "average_response_to_time" => $this->averageFriendlyRating(2),
             "total_rating" => $this->countRating(),
-            "percentageRatings" => (object) [
-                "5" => $this->starRatingPercent(),
-                "4" => $this->starRatingPercent(4),
-                "3" => $this->starRatingPercent(3),
-                "2" => $this->starRatingPercent(2),
-                "1" => $this->starRatingPercent(1),
-            ]
+            // "percentageRatings" => (object) [
+            //     "5" => $this->starRatingPercent(),
+            //     "4" => $this->starRatingPercent(4),
+            //     "3" => $this->starRatingPercent(3),
+            //     "2" => $this->starRatingPercent(2),
+            //     "1" => $this->starRatingPercent(1),
+            // ]
 
         ];
     }

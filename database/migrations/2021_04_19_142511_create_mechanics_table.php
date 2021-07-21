@@ -26,7 +26,7 @@ class CreateMechanicsTable extends Migration
             $table->longText('vehicle_type')->nullable();
             // $table->longText('specialization')->nullable();
             $table->integer('experience_years')->nullable();
-            // $table->text('service_area')->nullable();
+            $table->text('professional_skill_data')->nullable();
             $table->text('office_address')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();

@@ -2,26 +2,37 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\User\UserResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\User\UserResourceCollection;
 use App\Http\Resources\Product\ProductResourceCollection;
 use App\Http\Resources\Product\RelatedProductResorceCollection;
-use App\Http\Resources\User\UserResource;
-use App\Http\Resources\User\UserResourceCollection;
 
 
 trait GetRequestType {
     public function getUserDetail($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_user = $user->with('mechanic', 'partDealer')->paginate(50);
+            $retrieved_user = $user->with('mechanic', 'partDealer', 'permissions')->paginate(20);
             return UserResourceCollection::collection($retrieved_user);
         }
         
-        return UserResource::collection($user->paginate(50));
+        return UserResource::collection($user->paginate(20));
     }
     
     public function getSingleUser($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $new_user = $user->with('mechanic', 'partDealer')->firstOrFail();
+            $new_user = $user->with(['mechanic' => function($query) {
+                return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+                ->leftJoin('reviews', function($join) {
+                    $join->on('reviews.reviewrateable_id', 'mechanics.id')
+                    ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+                })
+                ->join('users', function($join)  {
+                    $join->on('users.id', 'mechanics.user_id');
+                })
+                ->groupBy('mechanics.id');
+            },  'partDealer', 'permissions'])->firstOrFail();
             return new UserResourceCollection($new_user);
         }
         
@@ -30,11 +41,11 @@ trait GetRequestType {
 
     public function getFullProductDetails($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with('user', 'category', 'userViewContact', 'productViews')->paginate(50);
+            $retrieved_product = $product->with('user', 'category', 'userViewContact', 'productViews', 'ratings')->paginate(20);
             return ProductResourceCollection::collection($retrieved_product);
         }
         
-        return ProductResource::collection($product->with('productViews', 'userViewContact')->paginate(50));
+        return ProductResource::collection($product->with('user', 'productViews', 'userViewContact', 'ratings')->paginate(20));
     }
 
     public function getSingleProduct($product) {
@@ -47,11 +58,10 @@ trait GetRequestType {
     }
     public function getSingleRelatedProduct($product) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $retrieved_product = $product->with(['user', 'category', 'productViews'])->firstOrFail();
-            return new RelatedProductResorceCollection($retrieved_product);
+            return new RelatedProductResorceCollection($product->firstOrFail());
         }
         
-        return new ProductResource($product->with('productViews')->firstOrFail());
+        return new ProductResource($product->firstOrFail());
     }
     
 }
