@@ -18,7 +18,8 @@ class FeedbackResource extends JsonResource
             "satisfaction" => $this->satisfaction,
             "recommendation" => $this->recommendation,
             "comment" => $this->comment,
-            "email" => $this->email
+            "email" => $this->email,
+            "created_at" => $this->created_at->format('Y-m-d H:i:s')
         ];
     }
 }

@@ -28,6 +28,6 @@ class FeedbackController extends Controller
     }
 
     public function index() {
-        return FeedbackResource::collection(Feedback::paginate(50));
+        return FeedbackResource::collection(Feedback::orderBy('created_at', 'desc')->paginate(50));
     }
 }
