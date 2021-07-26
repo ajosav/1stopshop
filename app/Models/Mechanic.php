@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Appointment\OffDaySchedule;
 use Exception;
 use App\Traits\AddUUID;
+use App\Traits\ExtendReview;
 use Intervention\Image\Facades\Image;
 use App\Models\Appointment\WorkingHour;
-use App\Traits\ExtendReview;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Appointment\OffDaySchedule;
+use Codebyray\ReviewRateable\Models\Rating;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Intervention\Image\Exception\ImageException;
 use Codebyray\ReviewRateable\Contracts\ReviewRateable;
@@ -79,7 +81,6 @@ class Mechanic extends Model implements ReviewRateable
            $this->attributes['working_hours'] = json_encode($input);
        }
     }
-
     public function getProfessionalSkillAttribute($value) {
         if(!$value) {
             return $value;

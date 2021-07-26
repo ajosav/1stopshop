@@ -32,6 +32,7 @@ class ProductReviewResource extends JsonResource
         }
 
         return [
+            "id"                    =>  $this->id,
             "overall_rating"        =>  $this->rating,
             "durability"            =>  $this->customer_service_rating,
             "quality"               =>  $this->quality_rating,

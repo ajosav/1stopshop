@@ -18,12 +18,12 @@
                                         <tbody>
                                             <tr>
                                                 <td class="pc-fb-font " style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; " valign="top ">
-                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Booking Reservation</h3>
+                                                    <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Booking Cancellation</h3>
                                                     <span style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; ">Hello {{$first_name}},</span><br><br>
                                                     <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
-                                                        <p>A reservation was made for a vehicle check. <b>{{$request['description']}}</b></p>
+                                                        <p>A reservation was made for a vehicle check. <b>{{$request['description']}}</b> for <b> {{$request['date']->format('jS F, Y')}} has been cancelled.</b> </p>
                                                         <span style="line-height: 24px; ">&nbsp;</span>
-                                                        <p>If you have any question, just email us at  <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be glad to help!</p>
+                                                        <p>If you have any question, just email us at <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be glad to help!</p>
                                                     </span>
                                                     <div class="pc-fb-font " bgcolor="#DBDEE7 " style=" background: #DBDEE7; line-height: 15px; padding: 13px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif;
                                     letter-spacing: 0.5px; margin-top: 14px; margin-bottom: 24px; font-weight: 400; font-size: 13px; ">
@@ -32,6 +32,13 @@
                                                         <p><strong>Appointment Date:</strong> {{$request['date']->format('jS F, Y')}}</p>
                                                         <span style="line-height: 16px; ">&nbsp;</span>
                                                         <p><strong>Appointment Time:</strong> {{$request['time']}}{{$request['meridian']}}</p>
+                                                        <span style="line-height: 16px; ">&nbsp;</span>
+                                                        <span style="line-height: 16px; ">&nbsp;</span>
+                                                        <p style="font-weight: 600; font-size: 14px; "><b>Schedule</b></p>
+                                                        <span style="line-height: 16px; ">&nbsp;</span>
+                                                        <p><strong>Name: </strong> {{$user_firstname}} {{$user_lastname}}</p>
+                                                        <span style="line-height: 16px; ">&nbsp;</span>
+                                                        <p><strong>Phone Number: </strong> {{$customer_phone}}</p>
                                                     </div>
 
                                                     <p style="line-height: 26px; font-size: 14px; ">Regards,</p>

@@ -35,11 +35,14 @@ class MechanicResource extends JsonResource
             'schedule_data'                 =>          json_decode($this->schedule_data),
             'professional_skill_data'       =>          $this->professional_skill_data,
             'vehicle_type_data'             =>          $this->vehicle_type_data,
-            'customer_reviews'              =>          $this->customerReviews(),
-            // 'customer_reviews'              =>          [
-            //     "average_overall_rating" => $this->averageReviewRateable,
-            //     "total_rating" => $this->countReviewRateable,
-            // ]
+            "customer_reviews"  =>          [
+                "average_overall_rating" => $this->averageReviewRateable,
+                "average_durability" => $this->averageCustomerServiceReviewRateable,
+                "average_quality" =>  $this->averageQualityReviewRateable,
+                "average_value_for_money" => $this->averageFriendlyReviewRateable,
+                "total_rating" => $this->countReviewRateable,
+                // "percentageRatings" => (object) $this->customerReviews()
+            ]
         ];
     }
 }

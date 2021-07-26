@@ -84,8 +84,10 @@ class User extends Authenticatable implements JWTSubject
     public function userAppointment() {
         return $this->hasMany(Appointment::class, 'visitor_id', 'encodedKey');
     }
-
-    
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'owner');
+    }
 
     // Define JWT auth methods
     public function getJWTIdentifier()
@@ -125,29 +127,6 @@ class User extends Authenticatable implements JWTSubject
         if($this->otp) {
             return $this->otp->delete();
         }
-    }
-
-    public function getFullUserDetail() {
-        if(!$this->userProfile) {
-            return [
-                'user_info' => UserDataTransferObject::create($this)
-            ];
-        }
-        return [
-            'user_info' => UserDataTransferObject::create($this), 
-            'profile' => optional($this->userProfile, function ($profile) {
-                return ProfileDataTransferObject::create($profile);
-            }), 
-            'company' =>  optional($this->company, function ($company) {
-                return  CompanyDataTransferObject::create($company);
-            }),
-        ];
-    }
-
-    public function getUserOnly() {
-        return [
-            'user_info' => UserDataTransferObject::create($this)
-        ];
     }
 
     public function sendPasswordResetNotification($token) {

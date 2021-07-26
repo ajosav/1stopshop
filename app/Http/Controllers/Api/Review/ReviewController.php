@@ -146,16 +146,6 @@ class ReviewController extends Controller
                 'owner_photo' => $this->user->profile_image,
                 'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
             ]);
-
-        // ReviewExt::updateOrCreate([
-        //     'imageable_id' => $rating->id,
-        // ],
-        // [
-        //     'display_name' => $request->display_name,
-        //     'review_photo' => json_encode($review_photos),
-        //     'owner_photo' => $this->user->profile_image,
-        //     'imageable_type' => 'Codebyray\ReviewRateable\Models\Rating'
-        // ]);
         
         return (new ProductReviewResource($rating))->additional([
             'message' => 'Your ratings has been submitted successfully',
@@ -198,8 +188,6 @@ class ReviewController extends Controller
         return response()->success('Abuse successfully submitted');
         
     }
-
-
 
     public function foundHelpul(Rating $rating) {
 

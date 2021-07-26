@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Models\Abuse;
 use App\Models\FoundHelpful;
 use App\Models\Mechanic;
+use App\Models\Notification;
 use App\Models\ReviewExt;
 use Spatie\Macroable\Macroable;
 use App\Observers\MechanicObserver;
+use App\Observers\RatingObserver;
 use App\Repositories\OTP\OTPInterface;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\OTP\SendOTPViaSMS;
@@ -50,6 +52,9 @@ class AppServiceProvider extends ServiceProvider
         Rating::resolveRelationUsing('abuses', function ($abuseModel) {
             return $abuseModel->morphMany(Abuse::class, 'abusable');
         });
+        Rating::resolveRelationUsing('notification', function ($abuseModel) {
+            return $abuseModel->morphMany(Notification::class, 'notifiable');
+        });
         Rating::resolveRelationUsing('reviewExt', function ($reviewExtModel) {
             return $reviewExtModel->morphOne(ReviewExt::class, 'imageable');
         });
@@ -58,6 +63,6 @@ class AppServiceProvider extends ServiceProvider
         });
         Schema::defaultStringLength(191);
         Mechanic::observe(MechanicObserver::class);
-        
+        Rating::observe(RatingObserver::class);
     }
 }

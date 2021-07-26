@@ -99,8 +99,8 @@ class MechanicService {
 
 
         $mechanics = User::select('users.*')->join('mechanics', 'users.id', 'mechanics.user_id')
-            ->whereNull('mechanics.deleted_at')
-            ->leftJoin('part_dealers', 'users.id', 'part_dealers.user_id');
+                        ->whereNull('mechanics.deleted_at')
+                        ->leftJoin('part_dealers', 'users.id', 'part_dealers.user_id');
             
         $filter_mechanics = app(Pipeline::class)
                         ->send($mechanics)

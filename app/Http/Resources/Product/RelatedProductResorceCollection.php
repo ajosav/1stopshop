@@ -42,10 +42,15 @@ class RelatedProductResorceCollection extends JsonResource
             'views'             =>          $total_views->groupBy('request_ip')->count(),
             'mobile_views'      =>          $total_views->where('mobile_view', 1)->groupBy('request_ip')->count(),
             'desktop_views'     =>          $total_views->where('desktop_view', 1)->groupBy('request_ip')->count(),
+            'new_reviews'       =>          $this->countNewUnreadRating,
             "customer_reviews"  =>          [
                 "average_overall_rating" => $this->averageReviewRateable,
+                "average_durability" => $this->averageCustomerServiceReviewRateable,
+                "average_quality" =>  $this->averageQualityReviewRateable,
+                "average_value_for_money" => $this->averageFriendlyReviewRateable,
                 "total_rating" => $this->countReviewRateable,
-            ],
+                "percentageRatings" => (object) $this->customerReviews()
+            ]
         ];
     }
 }

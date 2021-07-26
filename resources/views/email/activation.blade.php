@@ -27,7 +27,7 @@
                                                         </p>
                                                         <span style="line-height: 24px; ">&nbsp;</span>
                                                         <p style="line-height: 26px; ">If you did not initiate this request, please contact us at <a href="https://1automech.com " style="text-decoration: none;
-                                                            color: #3A89F8; ">1automech.com</a> or email us on <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be happy to help!</p>
+                                                            color: #3A89F8; ">1automech.com</a> or email us at <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be happy to help!</p>
                                                     </span>
 
 

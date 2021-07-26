@@ -11,6 +11,7 @@ use App\Traits\GetRequestType;
 use App\Services\MechanicService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Http\Requests\Appointment\OffDayRequest;
 use App\Http\Requests\Auth\CreateMechanicRequest;
 use App\Http\Requests\Auth\UpdateMechanicDetails;
@@ -37,10 +38,33 @@ class MechanicController extends Controller
      */
     public function index()
     {
-        $all_mechanics = $this->getUserDetail(
-            $this->mechanicService->getVerifiedMechanics()
-        );
-        return $all_mechanics->additional([
+        $mechanic = $this->mechanicService->getVerifiedMechanics();
+
+        $verified_mechs = $mechanic->with(['mechanic' => function($query) {
+                return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable,count(rating) as countReviewRateable,ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            ))
+            ->leftJoin('reviews', function($join) {
+                $join->on('reviews.reviewrateable_id', 'mechanics.id')
+                ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+            })
+            ->leftJoin('notifications', function($join) {
+                $join->on('notifications.author_id', 'mechanics.id')
+                ->on('notifications.author_type', DB::raw("'App\\\Models\\\Mechanic'"))
+                ->on('notifications.status',  DB::raw("'unread'"));
+            })
+            ->join('users', function($join)  {
+                $join->on('users.id', 'mechanics.user_id');
+            })
+            ->groupBy('mechanics.id');
+        }, 'partDealer', 'permissions']);
+
+        if(request()->has('fullDetails') && request('fullDetails') === 'true') {
+            $response = UserResourceCollection::collection($verified_mechs->paginate(20));
+        } else {
+            $response = UserResource::collection($verified_mechs->paginate(20));
+        }
+        
+        return $response->additional([
             'message' => 'All verified mechanics retrieved successfully',
             'status' => "success"
         ]);
@@ -107,10 +131,16 @@ class MechanicController extends Controller
     {
         $user = $this->mechanicService->filterMechanicServices();
         $all_mechanics =  $user->with(['mechanic' => function($query) {
-            return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+            return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable,count(rating) as countReviewRateable,ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'mechanics.id')
                 ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+            })
+            ->leftJoin('notifications', function($join) {
+                $join->on('notifications.author_id', 'mechanics.id')
+                ->on('notifications.author_type', DB::raw("'App\\\Models\\\Mechanic'"))
+                ->on('notifications.status',  DB::raw("'unread'"));
             })
             ->join('users', function($join)  {
                 $join->on('users.id', 'mechanics.user_id');
@@ -149,10 +179,6 @@ class MechanicController extends Controller
             "schedule_data"                         =>  "required|array"
         ]);
         return $this->mechanicService->editMechanicSchedule($schedule);
-
-
-
-
     }
 
     public function updateOffDaySchedule(OffDayRequest $request) {

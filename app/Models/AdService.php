@@ -11,7 +11,9 @@ use Spatie\Searchable\SearchResult;
 use Intervention\Image\Facades\Image;
 use BinaryCats\Sku\Concerns\SkuOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Codebyray\ReviewRateable\Models\Rating;
 use Intervention\Image\Exception\ImageException;
 use Codebyray\ReviewRateable\Contracts\ReviewRateable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,6 +65,11 @@ class AdService extends Model implements Searchable, ReviewRateable
     {
         return $this->morphMany(Abuse::class, 'abusable');
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'author');
+    }
     
     public function skuOptions() : SkuOptions
     {
@@ -107,20 +114,12 @@ class AdService extends Model implements Searchable, ReviewRateable
 
     
     public function customerReviews() {
-        return [
-            "average_overall_rating" => $this->averageRating(2),
-            "average_durability" => $this->averageCustomerServiceRating(2),
-            "average_quality" =>  $this->averageQualityRating(2),
-            "average_value_for_money" => $this->averageFriendlyRating(2),
-            "total_rating" => $this->countRating(),
-            "percentageRatings" => (object) [
+        return  [
                 "5" => $this->starRatingPercent(),
                 "4" => $this->starRatingPercent(4),
                 "3" => $this->starRatingPercent(3),
                 "2" => $this->starRatingPercent(2),
                 "1" => $this->starRatingPercent(1),
-            ]
-
         ];
     }
 }

@@ -17,10 +17,13 @@ use App\Filters\ProductAdFilter\Year;
 use App\Filters\ProductAdFilter\Model;
 use Illuminate\Database\QueryException;
 use Spatie\Searchable\ModelSearchAspect;
+use App\Filters\ProductAdFilter\Category;
 use App\Filters\ProductAdFilter\Location;
 use App\Filters\ProductAdFilter\Condition;
+use App\Filters\ProductAdFilter\Negotiable;
 use App\Http\Resources\Product\ProductResource;
 use App\Filters\ProductAdFilter\Search as DBSearch;
+use App\Filters\ProductAdFilter\Warranty;
 use App\Http\Resources\Product\ProductResourceCollection;
 
 class AdProductActionService {
@@ -69,7 +72,14 @@ class AdProductActionService {
     }
 
     public function findProductByUser($userEncodedKey) {
-        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw(
+                    'ROUND(AVG(rating), 2) as averageReviewRateable, 
+                    count(rating) as countReviewRateable, 
+                    count(rating) as countNewUnreadRating, 
+                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable
+                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable
+                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'ad_services.id')
                 ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
@@ -77,18 +87,37 @@ class AdProductActionService {
             ->join('users', function($join)  {
                 $join->on('users.id', 'ad_services.user_id');
             })
+            ->leftJoin('notifications', function($join) {
+                $join->on('notifications.author_id', 'ad_services.id')
+                ->on('notifications.author_type', DB::raw("'App\\\Models\\\AdService'"))
+                ->on('notifications.status',  DB::raw("'unread'"));
+            })
             ->where('users.encodedKey', $userEncodedKey)
+            ->orderBy('created_at', 'desc')
             ->groupBy('ad_services.id');
             
         return $product;
     }
 
     public function findProductByEncodedKey($productEncodedKey) {
-        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+        $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw(
+                    'ROUND(AVG(rating), 2) as averageReviewRateable, 
+                    count(rating) as countReviewRateable, 
+                    count(rating) as countNewUnreadRating, 
+                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,
+                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'ad_services.id')
                 ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
             })
+            ->leftJoin('notifications', function($join) {
+                $join->on('notifications.author_id', 'ad_services.id')
+                ->on('notifications.author_type', DB::raw("'App\\\Models\\\AdService'"))
+                ->on('notifications.status',  DB::raw("'unread'"));
+            })
+            ->where('ad_services.status', 'active')
             ->where('encodedKey', $productEncodedKey)
             ->groupBy('ad_services.id');
             
@@ -117,24 +146,40 @@ class AdProductActionService {
     public function filterProduct() {
         // return AdService::where('status', 'active');
 
-        $products = AdService::select('ad_services.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, count(rating) as countReviewRateable'))
+        $products = AdService::select('ad_services.*', DB::raw(
+                    'ROUND(AVG(rating), 2) as averageReviewRateable,
+                    count(rating) as countReviewRateable,count(rating) as countNewUnreadRating,
+                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
+                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'ad_services.id')
                 ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
             })
-            ->where('status', 'active')
+            ->leftJoin('notifications', function($join) {
+                $join->on('notifications.author_id', 'ad_services.id')
+                ->on('notifications.author_type', DB::raw("'App\\\Models\\\AdService'"))
+                ->on('notifications.status',  DB::raw("'unread'"));
+            })
+            ->where('ad_services.status', 'active')
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->groupBy('ad_services.id');
 
         $filter_products = app(Pipeline::class)
                         ->send($products)
                         ->through([
+                            Category::class,
                             Condition::class,
+                            DBSearch::class,
+                            Location::class,
                             Make::class,
                             Model::class,
+                            Negotiable::class,
                             Type::class,
+                            Warranty::class,
                             Year::class,
-                            DBSearch::class,
-                            Location::class
                         ])
                         ->thenReturn();
                         // ->jsonPaginate();

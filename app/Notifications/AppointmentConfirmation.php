@@ -45,6 +45,7 @@ class AppointmentConfirmation extends Notification
     {
         $first_name = $notifiable->first_name;
         $mechanic_address = $this->mechanic->office_address;
+        $mechanic_shop_name = $this->mechanic->shop_name;
         $phone_number = $this->mechanic->phone_number;
         return (new MailMessage)
                 ->subject('Appointment Confirmation')
