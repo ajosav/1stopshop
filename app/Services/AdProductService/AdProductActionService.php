@@ -73,12 +73,12 @@ class AdProductActionService {
 
     public function findProductByUser($userEncodedKey) {
         $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw(
-                    'ROUND(AVG(rating), 2) as averageReviewRateable, 
-                    count(rating) as countReviewRateable, 
-                    count(rating) as countNewUnreadRating, 
-                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
-                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,
-                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+                'ROUND(AVG(rating), 2) as averageReviewRateable,
+                count(rating) as countReviewRateable,
+                count(action) as countNewUnreadRating,
+                ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
+                ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
             ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'ad_services.id')
@@ -101,12 +101,12 @@ class AdProductActionService {
 
     public function findProductByEncodedKey($productEncodedKey) {
         $product = AdService::with(['user', 'category', 'productViews'])->select('ad_services.*', DB::raw(
-                    'ROUND(AVG(rating), 2) as averageReviewRateable, 
-                    count(rating) as countReviewRateable, 
-                    count(rating) as countNewUnreadRating, 
-                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
-                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,
-                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+                'ROUND(AVG(rating), 2) as averageReviewRateable,
+                count(rating) as countReviewRateable,
+                count(action) as countNewUnreadRating,
+                ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
+                ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
             ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'ad_services.id')
@@ -148,7 +148,8 @@ class AdProductActionService {
 
         $products = AdService::select('ad_services.*', DB::raw(
                     'ROUND(AVG(rating), 2) as averageReviewRateable,
-                    count(rating) as countReviewRateable,count(rating) as countNewUnreadRating,
+                    count(rating) as countReviewRateable,
+                    count(action) as countNewUnreadRating,
                     ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
                     ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
                     ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'

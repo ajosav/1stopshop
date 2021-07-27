@@ -131,7 +131,12 @@ class MechanicController extends Controller
     {
         $user = $this->mechanicService->filterMechanicServices();
         $all_mechanics =  $user->with(['mechanic' => function($query) {
-            return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable,count(rating) as countReviewRateable,ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+            return $query->select('mechanics.*', DB::raw('
+                ROUND(AVG(rating), 2) as averageReviewRateable,
+                count(rating) as countReviewRateable,
+                ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,
+                ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
             ))
             ->leftJoin('reviews', function($join) {
                 $join->on('reviews.reviewrateable_id', 'mechanics.id')
