@@ -22,22 +22,7 @@ trait GetRequestType {
     
     public function getSingleUser($user) {
         if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $new_user = $user->with(['mechanic' => function($query) {
-                return $query->select('mechanics.*', DB::raw('ROUND(AVG(rating), 2) as averageReviewRateable, 
-                    count(rating) as countReviewRateable,
-                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
-                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
-                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
-                ))
-                ->leftJoin('reviews', function($join) {
-                    $join->on('reviews.reviewrateable_id', 'mechanics.id')
-                    ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
-                })
-                ->join('users', function($join)  {
-                    $join->on('users.id', 'mechanics.user_id');
-                })
-                ->groupBy('mechanics.id');
-            },  'partDealer', 'permissions'])->firstOrFail();
+            $new_user = $user->with(['mechanic', 'partDealer', 'permissions'])->firstOrFail();
             return new UserResourceCollection($new_user);
         }
         

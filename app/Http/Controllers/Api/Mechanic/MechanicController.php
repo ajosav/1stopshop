@@ -100,12 +100,32 @@ class MechanicController extends Controller
      */
     public function show($encodedKey)
     {
-        $user  = User::where('encodedKey', $encodedKey)->whereHas('permissions', function($query) {
-            return $query->whereName('mechanic');
-        });
-        $all_mechanics = $this->getSingleUser($user);
+        $user  = User::select('users.*')
+                    ->join('mechanics', 'mechanics.user_id', 'users.id')
+                    ->where('users.encodedKey', $encodedKey);
 
-        return response()->success("User information retrieved successfully", $all_mechanics);
+        if(request()->has('fullDetails') && request('fullDetails') === 'true') {
+            $new_user = $user->with(['mechanic' => function($query) {
+                return $query->select('mechanics.*', DB::raw('
+                    ROUND(AVG(rating), 2) as averageReviewRateable, 
+                    count(rating) as countReviewRateable,
+                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
+                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
+                ))
+                ->leftJoin('reviews', function($join) {
+                    $join->on('reviews.reviewrateable_id', 'mechanics.id')
+                    ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\Mechanic'"));
+                })
+                ->groupBy('mechanics.id');
+            }, 'partDealer', 'permissions'])->firstOrFail();
+            $found_user = new UserResourceCollection($new_user);
+        } else {
+            $found_user = new UserResource($user->firstOrFail());
+        }
+        
+
+        return response()->success("User information retrieved successfully", $found_user);
     }
 
     /**
