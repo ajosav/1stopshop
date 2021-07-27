@@ -72,7 +72,7 @@ class ProfileUpdateRequest extends FormRequest
 
     public function messages() {
         return [
-            "required_unless" => "The :attribute field is rquired"
+            "required_unless" => "The :attribute field is required"
         ];
     }
 
