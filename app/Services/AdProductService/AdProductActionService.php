@@ -76,8 +76,8 @@ class AdProductActionService {
                     'ROUND(AVG(rating), 2) as averageReviewRateable, 
                     count(rating) as countReviewRateable, 
                     count(rating) as countNewUnreadRating, 
-                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable
-                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable
+                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
+                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable,
                     ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
             ))
             ->leftJoin('reviews', function($join) {
