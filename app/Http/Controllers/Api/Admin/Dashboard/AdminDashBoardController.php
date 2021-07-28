@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api\Admin\Dashboard;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\User\UserResourceCollection;
-use App\Models\AdService;
 use App\Models\Mechanic;
+use App\Models\AdService;
 use App\Models\ProductView;
+use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Traits\GetRequestType;
+use Illuminate\Pipeline\Pipeline;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Resources\User\UserResourceCollection;
+use App\UserFilter\Search;
 
 class AdminDashBoardController extends Controller
 {
@@ -54,10 +56,14 @@ class AdminDashBoardController extends Controller
     }
 
     public function getAllUsers(UserService $userService) {
-        // $user =
-
+        $filter_users = app(Pipeline::class)
+                        ->send($userService->getAllUsers())
+                        ->through([
+                            Search::class
+                        ])
+                        ->thenReturn();
         $all_users = $this->getUserDetail(
-            $userService->getAllUsers()
+            $filter_users
         );
        
         return $all_users->additional([
