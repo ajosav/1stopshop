@@ -8,6 +8,6 @@ class ProductNo extends BaseFilter {
     protected function applyFilter($builder)
     {
         $filter = request($this->filterName());
-        return $builder->where($this->filterName(), $filter);
+        return $builder->where($this->filterName(), 'like', '%' . $filter . '%');
     }
 }
