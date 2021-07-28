@@ -42,7 +42,8 @@ class MechanicResource extends JsonResource
                 "average_value_for_money" => $this->averageFriendlyReviewRateable,
                 "total_rating" => $this->countReviewRateable,
                 "percentageRatings" => (object) $this->customerReviews()
-            ]
+            ],
+            'created_at' => $this->created_at
         ];
     }
 }

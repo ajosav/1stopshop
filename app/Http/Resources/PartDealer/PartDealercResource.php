@@ -26,6 +26,7 @@ class PartDealercResource extends JsonResource
             'state'                         =>          $this->state,
             'city'                          =>          $this->city,
             'company_photo'                 =>          encodePhoto($this->company_photo),
+            'created_at'                    =>          $this->created_at
         ];
     }
 }

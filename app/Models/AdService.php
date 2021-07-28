@@ -97,7 +97,7 @@ class AdService extends Model implements Searchable, ReviewRateable
         return $query->where(function($category) {
             return $category->where('sub_category_name', $this->sub_category_name)
                     ->orWhere('category_name', $this->category_name);
-        })->where('id', '!=', $this->id)->take(5);
+        })->where('id', '!=', $this->id)->where('status', 'active')->take(5);
         // return $query->whereHas('category', function($category){
         //     return $category->orWhereHas('subCategories');
         // })->where('id', '!=', $this->id)->take(5);
