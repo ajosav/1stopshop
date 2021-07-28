@@ -23,7 +23,7 @@ class Search extends BaseFilter {
                         ->where('city', 'like', '%' . $this->search . '%')
                         ->orWhere('state', 'like', '%' . $this->search . '%')
                         ->orWhere('office_address', 'like', '%' . $this->search . '%');
-                });
+                })->orWhere('product_no', 'like', '%' . $this->search . '%');
             });
     }
 }
