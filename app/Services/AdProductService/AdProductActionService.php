@@ -21,6 +21,7 @@ use App\Filters\ProductAdFilter\Category;
 use App\Filters\ProductAdFilter\Location;
 use App\Filters\ProductAdFilter\Condition;
 use App\Filters\ProductAdFilter\Negotiable;
+use App\Filters\ProductAdFilter\ProductNo;
 use App\Http\Resources\Product\ProductResource;
 use App\Filters\ProductAdFilter\Search as DBSearch;
 use App\Filters\ProductAdFilter\Warranty;
@@ -178,6 +179,7 @@ class AdProductActionService {
                             Make::class,
                             Model::class,
                             Negotiable::class,
+                            ProductNo::class,
                             Type::class,
                             Warranty::class,
                             Year::class,
