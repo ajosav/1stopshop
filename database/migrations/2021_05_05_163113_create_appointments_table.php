@@ -17,6 +17,9 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->string('mechanic_id');
             $table->string('visitor_id');
+            $table->string('category')->nullable();
+            $table->string('sub_category')->nullable();
+            $table->string('vehicle_type')->nullable();
             $table->date('date');
             $table->string('hour');
             $table->string('meridian');

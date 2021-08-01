@@ -28,7 +28,10 @@ class AppointmentRequest extends FormRequest
             "description" => "nullable",
             "date" => "required|date:format,Y-m-d|after_or_equal:today",
             "time" => "required|numeric",
-            'meridian' => 'required|in:AM,PM'
+            'meridian' => 'required|in:AM,PM',
+            'category' => 'nullable|string',
+            'sub_category' => 'nullable|string',
+            'vehicle_type' => 'nullable|string',
         ];
     }
 }

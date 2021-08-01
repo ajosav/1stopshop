@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserFilter;
+namespace App\Filters\UserFilter;
 
 use App\Filters\BaseFilter;
 

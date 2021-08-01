@@ -55,6 +55,9 @@ class AppointmentService {
         $new_appointment->hour = $appointment_time;
         $new_appointment->meridian = $request['meridian'];
         $new_appointment->description = isset($request['description']) ? $request['description'] : null;
+        $new_appointment->category = isset($request['category']) ? $request['category'] : null;
+        $new_appointment->sub_category = isset($request['sub_category']) ? $request['sub_category'] : null;
+        $new_appointment->vehicle_type = isset($request['vehicle_type']) ? $request['vehicle_type'] : null;
 
         $new_appointment->save();
 

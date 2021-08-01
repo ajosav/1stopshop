@@ -16,6 +16,7 @@ use App\Filters\MechanicFilter\VehicleType;
 use App\Filters\MechanicFilter\WorkingHours;
 use App\Filters\MechanicFilter\YearOfExperience;
 use App\Filters\MechanicFilter\ProfessionalSkill;
+use App\Filters\MechanicFilter\Specialization;
 use App\Http\Resources\WorkHours\OffDaysResource;
 use App\Http\Resources\WorkHours\WorkHoursResource;
 use App\Models\Mechanic;
@@ -107,6 +108,7 @@ class MechanicService {
                         ->through([
                             Location::class,
                             ProfessionalSkill::class,
+                            Specialization::class,
                             VehicleType::class,
                             WorkingHours::class,
                             YearOfExperience::class

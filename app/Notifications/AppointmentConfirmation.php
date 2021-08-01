@@ -53,7 +53,8 @@ class AppointmentConfirmation extends Notification
                     'request' => $this->request, 
                     'first_name' => $first_name, 
                     'phone_number' => $phone_number, 
-                    'mechanic_address' => $mechanic_address
+                    'mechanic_address' => $mechanic_address,
+                    'mechanic_shop_name' => $mechanic_shop_name
                 ]);
     }
 

@@ -23,7 +23,7 @@
                                                     <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
                                                         <p>
                                                             We are looking forward to seeing you! <br>
-                                                            Thank you for making an appointment for your <b>{{$request['description']}}</b> on <b>{{$request['date']->format('l')}}</b> at <b>{{$mechanic_shop_name}}.</b> See details of your appointment below.
+                                                            Thank you for making an appointment for your <b>{{$request['vehicle_type']}}</b> on <b>{{$request['date']->format('l')}}</b> at <b>{{$mechanic_shop_name}}.</b> See details of your appointment below.
                                                         </p>
                                                         <span style="line-height: 16px; ">&nbsp;</span>
                                                     <p>If you have any question, just email us at  <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be glad to help!</p>
