@@ -57,38 +57,16 @@ class PartDealerController extends Controller
     public function show($encodedKey)
     {
         $user  = User::select('users.*')
-                    ->join('ad_services', 'ad_services.user_id', 'users.id')
+                    ->join('part_dealers', 'part_dealers.user_id', 'users.id')
                     ->where('users.encodedKey', $encodedKey);
 
-        if(request()->has('fullDetails') && request('fullDetails') === 'true') {
-            $new_user = $user->with(['mechanic', 'partDealer' => function($query) {
-                return $query->select('ad_services.*', DB::raw('
-                    ROUND(AVG(rating), 2) as averageReviewRateable, 
-                    count(rating) as countReviewRateable,
-                    ROUND(AVG(customer_service_rating), 2) as averageCustomerServiceReviewRateable,
-                    ROUND(AVG(quality_rating), 2) as averageQualityReviewRateable, 
-                    ROUND(AVG(friendly_rating), 2) as averageFriendlyReviewRateable'
-                ))
-                ->leftJoin('reviews', function($join) {
-                    $join->on('reviews.reviewrateable_id', 'mechanics.id')
-                    ->on('reviews.reviewrateable_type', DB::raw("'App\\\Models\\\AdService'"));
-                })
-                ->groupBy('mechanics.id');
-            }, 'permissions'])->firstOrFail();
-            $found_user = new UserResourceCollection($new_user);
-        } else {
-            $found_user = new UserResource($user->firstOrFail());
-        }
-        
-
-        return response()->success("User information retrieved successfully", $found_user);
         
         // $user  = User::where('encodedKey', $encodedKey)->whereHas('permissions', function($query) {
         //     return $query->whereName('part_dealer');
         // });
-        // $all_mechanics = $this->getSingleUser($user);
+        $part_dealer = $this->getSingleUser($user);
 
-        // return response()->success("User information retrieved successfully", $all_mechanics);
+        return response()->success("User information retrieved successfully", $part_dealer);
     }
 
     /**

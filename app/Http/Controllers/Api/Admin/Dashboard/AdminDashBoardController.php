@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Traits\GetRequestType;
 use Illuminate\Pipeline\Pipeline;
+use App\Filters\UserFilter\Search;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\User\UserResourceCollection;
-use App\UserFilter\Search;
 
 class AdminDashBoardController extends Controller
 {

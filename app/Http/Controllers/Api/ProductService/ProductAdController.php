@@ -156,12 +156,8 @@ class ProductAdController extends Controller
         } catch(QueryException $e) {
             return response()->errorResponse('Failed to create abuse', ['errorSource' => $e->getMessage()]);
         }
-
-
-        return response()->success('Abuse successfully submitted');
-        
+        return response()->success('Abuse successfully submitted'); 
     }
-
 
     public function find($encodedKey) {
         $ads = ProductAdServiceFacade::findProductByUser($encodedKey);
