@@ -31,6 +31,10 @@ class ProductReviewResource extends JsonResource
             $photos = "";
         }
 
+        $helpful = $this->helpful()->select('user_id')->get()->map(function($key) {
+            return $key['user_id'];
+        });
+
         return [
             "id"                    =>  $this->id,
             "overall_rating"        =>  $this->rating,
@@ -43,7 +47,7 @@ class ProductReviewResource extends JsonResource
             "display_name"          =>  $review->display_name,
             "display_photo"         =>  is_null($review->owner_photo) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
             "review_photo"          =>  $photos,
-            "found_helpful"         =>  $this->helpful()->select('user_id')->get()
+            "found_helpful"         =>  $helpful
         ];
     }
 }

@@ -31,7 +31,7 @@ class AppointmentRequest extends FormRequest
             'meridian' => 'required|in:AM,PM',
             'category' => 'nullable|string',
             'sub_category' => 'nullable|string',
-            'vehicle_type' => 'nullable|string',
+            'vehicle_type' => 'required|string',
         ];
     }
 }
