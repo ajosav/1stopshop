@@ -44,7 +44,7 @@ class UserReviewResource extends JsonResource
             "headline" => $this->title,
             "written_review" => $this->body,
             "date_created" => $this->created_at->format('Y-m-d H:i:s a'),
-            "display_name" => is_null($review) ?? $review->display_name,
+            "display_name" => is_null($review) ? "" : $review->display_name,
             "display_photo" => is_null($review) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
             "review_photo" =>  $photos,
             "found_helpful"         =>  $helpful
