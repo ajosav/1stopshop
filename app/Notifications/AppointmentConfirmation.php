@@ -11,17 +11,18 @@ class AppointmentConfirmation extends Notification
 {
     use Queueable;
 
-    public $request, $mechanic;
+    public $request, $mechanic, $appointment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($request, $mechanic)
+    public function __construct($request, $mechanic, $appointment)
     {
         $this->request = $request;
         $this->mechanic = $mechanic;
+        $this->appointment = $appointment;
     }
 
     /**
@@ -54,7 +55,8 @@ class AppointmentConfirmation extends Notification
                     'first_name' => $first_name, 
                     'phone_number' => $phone_number, 
                     'mechanic_address' => $mechanic_address,
-                    'mechanic_shop_name' => $mechanic_shop_name
+                    'mechanic_shop_name' => $mechanic_shop_name,
+                    'appointment'       => $this->appointment
                 ]);
     }
 

@@ -36,11 +36,12 @@ class AppointmentService {
         if($request['meridian'] == "AM" && $request['time'] == 12) {
             $appointment_time = '00';
         }
-
+        
         $working_hours = WorkingHour::where('user_id', $mechanic->encodedKey)
                         ->where('day', '=', date("l", strtotime($appointment_date)))
                         ->where('from_hour', '<=', $appointment_time)
-                        ->where('to_hour', '>=', $appointment_time)->get();
+                        ->where('to_hour', '>=', $appointment_time)
+                        ->get();
 
         if($working_hours->isEmpty()) return response()->errorResponse("This Mechanic isn't working at your selected time");
 
@@ -59,12 +60,12 @@ class AppointmentService {
         $new_appointment->sub_category = isset($request['sub_category']) ? $request['sub_category'] : null;
         $new_appointment->vehicle_type = isset($request['vehicle_type']) ? $request['vehicle_type'] : null;
 
-        $new_appointment->save();
+        $appointment = $new_appointment->save();
 
         $request['date'] = Carbon::parse($request['date']);
 
         $user->notify(new BookAppointmentNotification($request));
-        auth('api')->user()->notify(new AppointmentConfirmation($request, $mechanic));
+        auth('api')->user()->notify(new AppointmentConfirmation($request, $mechanic, $new_appointment));
 
         // Mail::to($user->email)->send(new BookAppointmentMail(auth('api')->user(), $mechanic, $request));
 

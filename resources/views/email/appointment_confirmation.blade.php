@@ -23,7 +23,7 @@
                                                     <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
                                                         <p>
                                                             We are looking forward to seeing you! <br>
-                                                            Thank you for making an appointment for your <b>{{$request['vehicle_type']}}</b> on <b>{{$request['date']->format('l')}}</b> at <b>{{$mechanic_shop_name}}.</b> See details of your appointment below.
+                                                            Thank you for making an appointment for your <b>{{$request['vehicle_type']}} ({{$request['category']}} - {{$request['sub_category']}})</b> on <b>{{$request['date']->format('l')}}</b> at <b>{{$mechanic_shop_name}}.</b> See details of your appointment below.
                                                         </p>
                                                         <span style="line-height: 16px; ">&nbsp;</span>
                                                     <p>If you have any question, just email us at  <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be glad to help!</p>
@@ -56,7 +56,7 @@
                                                     <table width="100% " style="margin-bottom: 20px; ">
                                                         <tr>
                                                             <td width="50% ">
-                                                                <a href="# " class="button-link " style="color: #ffffff; background-color: #3A89F8; border-top: 0.5px solid #000000; border-right: 0.5px solid #000000; border-bottom:
+                                                                <a href="https://www.1automech.com/home/cancel-appointment/{{encrypt($appointment->id)}}/{{$appointment->vistor}}" class="button-link " style="color: #ffffff; background-color: #3A89F8; border-top: 0.5px solid #000000; border-right: 0.5px solid #000000; border-bottom:
                                     0.5px solid #000000; border-left: 0.5px solid #000000; " target="_blank ">
                                                                     <span style=" ">
                                                                         <span>Cancel Appointment</span>
