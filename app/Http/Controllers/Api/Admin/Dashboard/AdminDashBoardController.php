@@ -61,9 +61,9 @@ class AdminDashBoardController extends Controller
         ]);
         $creation_date = request()->query('date');
         $mechanics      = User::join('mechanics', 'users.id', '=', 'mechanics.user_id')->whereDate('users.created_at', $creation_date)->get();
-        $part_dealers   = User::join('part_dealers', 'users.id', '=', 'part_dealers.user_id')->where('users.created_at', $creation_date)->get();
-        $users_count    = User::where('created_at', $creation_date)->get();
-        $regular_user   = User::doesntHave('mechanic')->doesntHave('partDealer')->where('created_at', $creation_date)->get();
+        $part_dealers   = User::join('part_dealers', 'users.id', '=', 'part_dealers.user_id')->whereDate('users.created_at', $creation_date)->get();
+        $users_count    = User::whereDate('created_at', $creation_date)->get();
+        $regular_user   = User::doesntHave('mechanic')->doesntHave('partDealer')->whereDate('created_at', $creation_date)->get();
 
         return response()->success("Successfully returned users count", [
             'mechanics' => $mechanics,
