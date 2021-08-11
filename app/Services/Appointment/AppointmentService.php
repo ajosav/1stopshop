@@ -64,7 +64,7 @@ class AppointmentService {
 
         $request['date'] = Carbon::parse($request['date']);
 
-        $user->notify(new BookAppointmentNotification($request));
+        $user->notify(new BookAppointmentNotification($request, $appointment));
         auth('api')->user()->notify(new AppointmentConfirmation($request, $mechanic, $new_appointment));
 
         // Mail::to($user->email)->send(new BookAppointmentMail(auth('api')->user(), $mechanic, $request));
