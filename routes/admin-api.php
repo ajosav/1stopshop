@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Api\AbuseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -18,9 +19,11 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::post('send-email', MailController::class);
         Route::get('registered', [AdminDashBoardController::class, 'analytics'])->name('registered');
         Route::get('daily-registered-users', [AdminDashBoardController::class, 'registeredUsers'])->name('daily-registered-users');
+        Route::get('fetch-users-by-date', [AdminDashBoardController::class, 'fetchUsersWithDate'])->name('fetch-users-with-date');
         Route::get('count-registered-users', [AdminDashBoardController::class, 'getUsersByRoleCount'])->name('count-registered-users');
         Route::get('sales-analytics', [AdminDashBoardController::class, 'salesAnalytics'])->name('sales-analytics');
         Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
+        Route::resource('note', NoteController::class);
     });
 
     Route::resource('abuse', AbuseController::class);

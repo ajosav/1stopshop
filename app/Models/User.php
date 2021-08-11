@@ -88,6 +88,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Notification::class, 'owner');
     }
+    public function notes() {
+        return $this->hasMany(Note::class);
+    }
 
     // Define JWT auth methods
     public function getJWTIdentifier()

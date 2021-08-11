@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,14 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $email = 'ajosavboy@gmail.com';
-    $user = User::where('email', $email)->first();
-
-    if($user) {
-        $user->givePermissionTo('admin_user');
-        return view('welcome');
-    } 
-    return "User does not exist";
+    Artisan::call('telescope:install');
 });
 
 Route::post('/register', [AdminController::class, 'index']);

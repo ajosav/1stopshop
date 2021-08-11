@@ -36,6 +36,9 @@ class AppointmentController extends Controller
 
         $appointment = Appointment::where('id', $appointment_id)->where('visitor_id', $visitor_id)->firstOrFail();
 
+        $user = $appointment->visitor;
+        $mechanic = $appointment->mechanic->user;
+
         if($appointment->date < $today ) {
             return response()->errorResponse('Cannot cancel appointment in the past');
         }

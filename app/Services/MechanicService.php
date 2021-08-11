@@ -175,14 +175,24 @@ class MechanicService {
         $updated_schedule = $mechanic->offDaySchedule()->whereDate('date', '>', now())->where('isActive', 'true')->select('date', 'hour')->get();
 
         $appointments = $appointments->map(function($data){
-			$data['day'] = DateTime::createFromFormat('Y-m-d', $data['date'])->format('l');
-			// $data['day'] = date_format(date_create($data['day']), 'l');
+            if($appointment_date = DateTime::createFromFormat('Y-m-d', $data['date'])) {
+                $data['day'] = $appointment_date->format('l');
+                // $data['day'] = date_format(date_create($data['day']), 'l');
+            } else {
+                info($data['date']);
+                $data['day'] = '';
+            }
             return $data;
         });
 
         $custom_schedule = $updated_schedule->map(function($data){
-			$data['day'] = DateTime::createFromFormat('Y-m-d', $data['date'])->format('l');
+            if($appointment_date = DateTime::createFromFormat('Y-m-d', $data['date'])) {
+			    $data['day'] = $appointment_date->format('l');
 			// $data['day'] = date_format(date_create($data['day']), 'l');
+            } else {
+                info($data['date']);
+                $data['day'] = '';
+            }
             return $data;
         });
 

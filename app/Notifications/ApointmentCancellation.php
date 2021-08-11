@@ -7,20 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BookAppointmentNotification extends Notification
+class ApointmentCancellation extends Notification
 {
     use Queueable;
 
-    public $request, $appointment;
+    public $request, $user, $appointment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($request, $appointment)
+    public function __construct($request, $user, $appointment)
     {
-        $this->request = $request;
+        $this->request     = $request;
+        $this->request     = $user;
         $this->appointment = $appointment;
     }
 
@@ -43,13 +44,17 @@ class BookAppointmentNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $first_name = $notifiable->first_name;
+        $user_firstname = $this->user->first_name;
+        $user_lastname  = $this->user->last_name;
+        $phone_number   = $this->user->phone_number;
         return (new MailMessage)
-                ->subject('Booking Reservation')
-                ->view('email/book_appointment', [
-                    'request' => $this->request, 
-                    'first_name' => $first_name,
-                    'appointment' => $this->appointment
+                ->subject('Appointment Cancellation')
+                ->view('email/appointment_cancellation', [
+                    'user_firstname'    => $user_firstname,
+                    'first_name'        => $notifiable->first_name,
+                    'user_lastname'     => $user_lastname,
+                    'phone_number'      => $phone_number,
+                    'appointment'       => $this->appointment
                 ]);
     }
 

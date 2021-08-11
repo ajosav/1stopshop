@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NoteResource;
 use App\Models\Note;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -16,7 +17,11 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = request()->user()->notes()->paginate(20);
+        return NoteResource::collection($notes)->additional([
+            'message' => "Notes retrieved successfully",
+            'status' => "success"
+        ]);
     }
 
     /**
@@ -34,9 +39,11 @@ class NoteController extends Controller
         ]);
 
         try {
-            $request->user()->create($new_note);
+            $created_note = $request->user()->notes()->create($new_note);
+            return response()->success('Note successfully created', $created_note);
         } catch (QueryException $e) {
-            return response()->erroResponse("");
+            report($e);
+            return response()->errorResponse("Failed to create");
         }
     }
 
@@ -48,7 +55,7 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        //
+        return response()->succees('Note successfully retrieved', $note);
     }
 
     /**
@@ -60,7 +67,19 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        $new_note = $request->validate([
+            "body"     => "required|string|max:150"
+        ]);
+
+        $note->body = $new_note['body'];
+        $note->save();
+
+        if(!$note->wasChanged()) {
+            response()->errorResponse('Failed to update note');
+        }
+
+        return response()->success('Note successfully updated', $note);
+
     }
 
     /**
@@ -71,6 +90,10 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        if(!$note->delete()) {
+            return response()->errorResponse('Error deleting note');
+        }
+
+        return response()->success('Note Deleted Successfully');
     }
 }

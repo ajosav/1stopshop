@@ -21,7 +21,7 @@
                                                     <h3 style="text-align: center; margin-bottom: 40px; font-weight: 600; font-size: 18px; ">Booking Reservation</h3>
                                                     <span style="line-height: 22px; font-family: 'Montserrat', Montserrat, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; font-size: 14px; ">Hello {{$first_name}},</span><br><br>
                                                     <span style="font-size: 14px; font-weight: normal; font-style: normal; color: #000000 ">
-                                                        <p>A reservation was made for a vehicle check. <b>{{$request['description']}}</b></p>
+                                                        <p>A reservation was made for a vehicle check. <b>{{$request['vehicle_type']}} ({{$request['category']}} - {{$request['sub_category']}})</b></p>
                                                         <span style="line-height: 24px; ">&nbsp;</span>
                                                         <p>If you have any question, just email us at  <a href="mailto:hello@1automech.com">hello@1automech.com</a> and we will be glad to help!</p>
                                                     </span>
