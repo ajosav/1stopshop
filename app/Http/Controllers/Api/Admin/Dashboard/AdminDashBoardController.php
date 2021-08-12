@@ -11,6 +11,7 @@ use App\Services\UserService;
 use App\Traits\GetRequestType;
 use Illuminate\Pipeline\Pipeline;
 use App\Filters\UserFilter\Search;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\User\UserResourceCollection;
@@ -101,5 +102,13 @@ class AdminDashBoardController extends Controller
             'totalProducts'     =>  $products_count,
             'productsViewed'    =>  $product_views
         ]);
+    }
+
+    public function getPermissions() {
+        $permissions = DB::table('permissions')->select('name')->where('guard_name', 'api')->get();
+
+        return response()->success('All available permissions retrieved successfully', $permissions->map(function($data) {
+            return $data->name;
+        }));
     }
 }

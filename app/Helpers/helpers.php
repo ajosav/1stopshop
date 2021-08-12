@@ -13,7 +13,7 @@ use Intervention\Image\Exception\ImageException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-
+use Spatie\Permission\Models\Role;
 
 function getAuthenticatedUser()
 {
@@ -143,6 +143,13 @@ function isValidAmount($amount) {
 
 function isPermissionExist($permission_name){
     if(Permission::whereName($permission_name)->first()) {
+        return true;
+    }
+
+    return false;
+}
+function roleExist($role_name){
+    if(Role::whereName($role_name)->first()) {
         return true;
     }
 
