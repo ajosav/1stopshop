@@ -15,7 +15,7 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
+            $table->string('completed', 10)->nullable()->default('false');
             $table->foreignId('user_id')->onDelete()->cascade();
             $table->string('priority')->nullable();
             $table->text('body');

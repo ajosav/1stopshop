@@ -33,7 +33,7 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $new_note = $request->validate([
-            "title"     => "nullable|string|max:150",
+            "completed"     => "nullable|string|in:true,false",
             "priority"  => "nullable|string|max:100",
             "body"      => "required|string"
         ]);
@@ -68,10 +68,12 @@ class NoteController extends Controller
     public function update(Request $request, Note $note)
     {
         $new_note = $request->validate([
-            "body"     => "required|string|max:150"
+            "body"              => "required|string|max:150",
+            "completed"         => "required|string|in:true,false"
         ]);
 
         $note->body = $new_note['body'];
+        $note->completed = $new_note['completed'];
         $note->save();
 
         if(!$note->wasChanged()) {

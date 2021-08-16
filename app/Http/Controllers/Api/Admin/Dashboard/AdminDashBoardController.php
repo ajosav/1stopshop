@@ -91,6 +91,29 @@ class AdminDashBoardController extends Controller
         ]);
     }
 
+    public function admins() {
+        $admin_users = User::whereHas('permissions', function($query) {
+            return $query->whereIn('name', [
+                'admin_user',
+                'super_admin',
+                'admin_user_2'
+            ]);
+        });
+
+        $filter_users = app(Pipeline::class)
+                    ->send($admin_users)
+                    ->through([
+                        Search::class
+                    ])
+                    ->thenReturn();
+
+        return $this->getUserDetail(
+                    $filter_users
+                )->additional([
+                    'message' => 'All registered users retrieved successfully',
+                    'status' => "success"
+                ]);
+    }
 
     public function salesAnalytics() {
         $mechanics_count = Mechanic::count();

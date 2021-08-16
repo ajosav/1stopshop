@@ -9,7 +9,8 @@ class Search extends BaseFilter {
     public function applyFilter($builder) {
         return $builder->where(function($query) {
             $search = request($this->filterName());
-            return $query->where('name', 'like', '%'.$search.'%')
+            return $query->where('first_name', 'like', '%'.$search.'%')
+                        ->orWhere('last_name', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%');
         });
     }

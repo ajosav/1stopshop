@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    Artisan::call('telescope:install');
+    // Artisan::call('telescope:install');
 });
 
 Route::post('/register', [AdminController::class, 'index']);

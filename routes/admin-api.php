@@ -23,6 +23,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::get('count-registered-users', [AdminDashBoardController::class, 'getUsersByRoleCount'])->name('count-registered-users');
         Route::get('sales-analytics', [AdminDashBoardController::class, 'salesAnalytics'])->name('sales-analytics');
         Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
+        Route::get('users', [AdminDashBoardController::class, 'admins'])->name('registered-admins');
         Route::get('all-permissions', [AdminDashBoardController::class, 'getPermissions']);
         Route::post('give-permission/{user}', [AdminAuthController::class, 'grantPermission']);
         Route::post('revoke-permission/{user}', [AdminAuthController::class, 'revokePermission']);

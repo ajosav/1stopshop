@@ -23,7 +23,9 @@ class PermissionSeeder extends Seeder
             }
         }
         foreach($roles as $role) {
-            $roles = Role::create(['name' => $role]);
+            if(!roleExist($permission)) {
+                $roles = Role::create(['name' => $role]);
+            }
             // if($role = 'admin') {
             //     $roles->giverPermissionTo(['admin_user', 'admin_user_2']);
             // }
