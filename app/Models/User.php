@@ -91,7 +91,9 @@ class User extends Authenticatable implements JWTSubject
     public function notes() {
         return $this->hasMany(Note::class);
     }
-
+    public function income() {
+        return $this->hasMany(Income::class);
+    }
     // Define JWT auth methods
     public function getJWTIdentifier()
     {

@@ -11,6 +11,7 @@ class Search extends BaseFilter {
             $search = request($this->filterName());
             return $query->where('first_name', 'like', '%'.$search.'%')
                         ->orWhere('last_name', 'like', '%'.$search.'%')
+                        ->orWhere('phone_number', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%');
         });
     }

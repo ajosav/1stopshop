@@ -91,6 +91,18 @@ class AdminDashBoardController extends Controller
         ]);
     }
 
+    public function getUsersByDate(UserService $userService, $date) {
+        $filter_users = $userService->getAllUsers()->whereDate('created_at', $date);
+        $all_users = $this->getUserDetail(
+            $filter_users
+        );
+       
+        return $all_users->additional([
+            "message" => "All registered users on {$date} retrieved successfully",
+            "status" => "success"
+        ]);
+    }
+
     public function admins() {
         $admin_users = User::whereHas('permissions', function($query) {
             return $query->whereIn('name', [

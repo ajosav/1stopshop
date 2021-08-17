@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Api\AbuseController;
 use Illuminate\Support\Facades\Route;
@@ -24,12 +25,17 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::get('sales-analytics', [AdminDashBoardController::class, 'salesAnalytics'])->name('sales-analytics');
         Route::get('all-users', [AdminDashBoardController::class, 'getAllUsers'])->name('registered-users');
         Route::get('users', [AdminDashBoardController::class, 'admins'])->name('registered-admins');
+        Route::get('all-users/{date}', [AdminDashBoardController::class, 'getUsersByDate'])
+                ->name('create-on-date-users')
+                ->where(['date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}']);
         Route::get('all-permissions', [AdminDashBoardController::class, 'getPermissions']);
         Route::post('give-permission/{user}', [AdminAuthController::class, 'grantPermission']);
         Route::post('revoke-permission/{user}', [AdminAuthController::class, 'revokePermission']);
         Route::resource('note', NoteController::class);
 
         Route::post('add-user', [AdminAuthController::class, 'createUser'])->name('register');
+
+        Route::apiResource('income', AccountController::class);
 
     });
 

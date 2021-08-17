@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx:stable-alpine                      # Get this image from docker hub. Note we can use build if file exists locally
+        container_name: 1automech-server                    # This name will override the container default name
+        ports:                                          # Nginx port mapping with host port
+            - "80:80"
+        volumes:
+            - "./:/var/www/html"
+            - "./components/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"
+        depends_on:                                     # Tell docker to spin up these services first before running nginx
+            - 1automech
+            - mysql
+        networks:
+            - laravel-api
+    mysql:
+        image: mysql:5.7.22
+        container_name: 1automech-mysql
+        restart: unless-stopped
+        tty: true
+        ports: 
+            - "4306:3306"
+        volumes:
+            - "./components/mysql:/var/lib/mysql" 
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - laravel-api
+    1automech:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        container_name: 1automech
+        ports:
+            - "9000:9000"
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - laravel-api
+
+    composer:
+        build:
+            context: .
+            dockerfile: composer.dockerfile
+        container_name: 1automech-composer
+        volumes:
+            - ./:/var/www/html
+        working_dir: /var/www/html
+        depends_on:
+            - 1automech
+        entrypoint: ['composer', '--ignore-platform-reqs']
+        networks:
+            - laravel-api
+        
+    artisan:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: 1automech-artisan
+        volumes:
+            - ./:/var/www/html:delegated
+        depends_on:
+            - mysql
+        working_dir: /var/www/html
+        entrypoint: ['php', '/var/www/html/artisan']
+        networks:
+            - laravel-api
+        
+        
+networks: 
+    laravel-api:
+        driver: bridge
