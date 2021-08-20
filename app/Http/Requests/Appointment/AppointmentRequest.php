@@ -26,7 +26,7 @@ class AppointmentRequest extends FormRequest
         return [
             "mechanic_id" => "required",
             "description" => "nullable",
-            "date" => "required|date:format,Y-m-d|after_or_equal:today",
+            "date" => ['required', 'date', 'date_format:Y-m-d'],
             "time" => "required|numeric",
             'meridian' => 'required|in:AM,PM',
             'category' => 'nullable|string',

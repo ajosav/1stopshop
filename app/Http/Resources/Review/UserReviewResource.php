@@ -35,7 +35,7 @@ class UserReviewResource extends JsonResource
         $helpful = $this->helpful()->select('user_id')->get()->map(function($key) {
             return $key['user_id'];
         });
-        return [
+        $resources = [
             "id" => $this->id,
             "overall_rating" => $this->rating,
             "professionalism" => $this->customer_service_rating,
@@ -49,5 +49,12 @@ class UserReviewResource extends JsonResource
             "review_photo" =>  $photos,
             "found_helpful"         =>  $helpful
         ];
+
+        if(request()->fullUrl() === route('admin.services-reviews')) {
+
+            $resources["mechanic_link"] = is_null($this->reviewrateable) ? '' : route('mechanic.show', $this->reviewrateable->user->encodedKey)."?fullDetails=true";
+        }
+
+        return $resources;
     }
 }

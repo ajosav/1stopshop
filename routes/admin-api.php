@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\Admin\Mail\MailController;
 use App\Http\Controllers\Api\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Admin\Dashboard\AdminDashBoardController;
 
-Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AdminAuthController::class, 'login'])->name('login');
     Route::get('refresh-token', [AuthController::class, 'refreshToken'])->name('refresh');
     Route::get('current-user', [AuthController::class, 'authenticatedUser'])->name('current');
@@ -32,10 +32,15 @@ Route::group(['prefix' => 'admin', 'name' => 'admin'], function () {
         Route::post('give-permission/{user}', [AdminAuthController::class, 'grantPermission']);
         Route::post('revoke-permission/{user}', [AdminAuthController::class, 'revokePermission']);
         Route::resource('note', NoteController::class);
+        Route::get('get-product-abuses/{adservice}', [AdminDashBoardController::class, 'productAbuses']);
 
         Route::post('add-user', [AdminAuthController::class, 'createUser'])->name('register');
 
         Route::apiResource('income', AccountController::class);
+        
+        Route::get('products-reviews', [AdminDashBoardController::class, 'allProductReviews'])->name('products-reviews');
+        Route::get('services-reviews', [AdminDashBoardController::class, 'allMechanicReviews'])->name('services-reviews');
+        
 
     });
 

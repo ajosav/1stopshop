@@ -46,7 +46,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     // users data retrival
     Route::get('users', [RegisteredUserController::class, 'index']);
-    Route::get('find-user/{encodedKey}', [RegisteredUserController::class, 'findUser']);
+    Route::get('find-user/{encodedKey}', [RegisteredUserController::class, 'findUser'])->name('find-user');
     Route::get('find-users/{user_type}', [RegisteredUserController::class, 'findUserByType']);
     Route::post('book-appointment', [AppointmentController::class, 'book']);
     Route::get('cancel-appointment/{id}/{visitor_id}', [AppointmentController::class, 'cancel']);
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::patch('update-off-days', [MechanicController::class, 'updateOffDaySchedule']);
         Route::patch('/edit-schedule', [MechanicController::class, 'editSchedule']);
         Route::get('/get-work-schedule/{mechanic}', [MechanicController::class, 'getWorkingHours']);
-        Route::get('/{encodedKey}', [MechanicController::class, 'show']);
+        Route::get('/{encodedKey}', [MechanicController::class, 'show'])->name('show');
     });
 
     // Part Dealer user type goes here

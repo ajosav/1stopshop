@@ -18,4 +18,16 @@ class Abuse extends Model
     {
         return $this->morphTo();
     }
+
+    public function format()
+    {
+        return [
+            'id'            => $this->id,
+            'full_name'     => $this->full_name,
+            'email'         => $this->email,
+            'message'       => $this->message,
+            'created_at'    => $this->created_at,
+            'updated_at'    => $this->updated_at
+        ];
+    }
 }

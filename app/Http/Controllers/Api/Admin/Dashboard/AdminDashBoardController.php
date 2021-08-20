@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\User\UserResourceCollection;
+use Codebyray\ReviewRateable\Models\Rating;
+use App\Http\Resources\Review\UserReviewResource;
+use App\Http\Resources\Review\ProductReviewResource;
 
 class AdminDashBoardController extends Controller
 {
@@ -145,5 +148,25 @@ class AdminDashBoardController extends Controller
         return response()->success('All available permissions retrieved successfully', $permissions->map(function($data) {
             return $data->name;
         }));
+    }
+
+    public function productAbuses(AdService $adservice) {
+        return $adservice->abuses->map->format();
+    }
+
+    public function allProductReviews() {
+        $reviews = Rating::where('reviewrateable_type', 'App\Models\AdService')->latest()->paginate(20);
+        return (ProductReviewResource::collection($reviews))->additional([
+            'message' => 'Products reviews retrieved successfully',
+            'status' => 'success'
+        ]);
+    }
+
+    public function allMechanicReviews() {
+        $reviews = Rating::where('reviewrateable_type', 'App\Models\Mechanic')->latest()->paginate(20);
+        return (UserReviewResource::collection($reviews))->additional([
+            'message' => 'Services reviews retrieved successfully',
+            'status' => 'success'
+        ]);
     }
 }

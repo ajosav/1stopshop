@@ -35,7 +35,7 @@ class ProductReviewResource extends JsonResource
             return $key['user_id'];
         });
 
-        return [
+        $resources = [
             "id"                    =>  $this->id,
             "overall_rating"        =>  $this->rating,
             "durability"            =>  $this->customer_service_rating,
@@ -47,7 +47,13 @@ class ProductReviewResource extends JsonResource
             "display_name"          =>  is_null($review) ? "" : $review->display_name,
             "display_photo"         =>  is_null($review) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
             "review_photo"          =>  $photos,
-            "found_helpful"         =>  $helpful
+            "found_helpful"         =>  $helpful,
         ];
+
+        if(request()->fullUrl() === route('admin.products-reviews')) {
+            $resources["product_link"] = is_null($this->reviewrateable) ? '' : route('product.find', $this->reviewrateable->encodedKey);
+        }
+
+        return $resources;
     }
 }
