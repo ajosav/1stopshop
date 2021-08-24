@@ -34,11 +34,10 @@ class JWTAuthMiddleware
         }
 
         if($auth === 'admin') {
-            if(!$user->can('admin_user') && !$user->can('admin_user_2') && !$user->can('super_admin')) {
+            if(!$user->hasAnyPermission(['super_admin', 'admin_user_2', 'admin_user'])) {
                 return response()->errorResponse('Access Denied',  ["account" => "You are not allowed to access this resource"], 403);
             }
         }
-
         return $next($request);
     }
 }

@@ -36,18 +36,18 @@ class UserReviewResource extends JsonResource
             return $key['user_id'];
         });
         $resources = [
-            "id" => $this->id,
-            "overall_rating" => $this->rating,
-            "professionalism" => $this->customer_service_rating,
-            "experience" => $this->quality_rating,
-            "response_to_time" => $this->friendly_rating,
-            "headline" => $this->title,
-            "written_review" => $this->body,
-            "date_created" => $this->created_at->format('Y-m-d H:i:s a'),
-            "display_name" => is_null($review) ? "" : $review->display_name,
-            "display_photo" => is_null($review) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
-            "review_photo" =>  $photos,
-            "found_helpful"         =>  $helpful
+            "id"                    => $this->id,
+            "overall_rating"        => $this->rating,
+            "professionalism"       => $this->customer_service_rating,
+            "experience"            => $this->quality_rating,
+            "response_to_time"      => $this->friendly_rating,
+            "headline"              => $this->title,
+            "written_review"        => $this->body,
+            "date_created"          => $this->created_at->format('Y-m-d H:i:s a'),
+            "display_name"          => is_null($review) ? "" : $review->display_name,
+            "display_photo"         => is_null($review) || $review->owner_photo == "" ? "" : asset(Storage::url($review->owner_photo)),
+            "review_photo"          => $photos,
+            "found_helpful"         => $helpful
         ];
 
         if(request()->fullUrl() === route('admin.services-reviews')) {

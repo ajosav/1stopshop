@@ -18,6 +18,7 @@ use App\Http\Resources\User\UserResourceCollection;
 use Codebyray\ReviewRateable\Models\Rating;
 use App\Http\Resources\Review\UserReviewResource;
 use App\Http\Resources\Review\ProductReviewResource;
+use App\Models\Abuse;
 
 class AdminDashBoardController extends Controller
 {
@@ -153,9 +154,13 @@ class AdminDashBoardController extends Controller
     public function productAbuses(AdService $adservice) {
         return $adservice->abuses->map->format();
     }
+    public function allProductAbuses() {
+        return Abuse::where('abusable_type', 'App\Models\AdService')->orderBy('created_at', 'desc')->get()->map->format();
+    }
 
     public function allProductReviews() {
-        $reviews = Rating::where('reviewrateable_type', 'App\Models\AdService')->latest()->paginate(20);
+        // from the request
+        $reviews = Rating::where('reviewrateable_type', 'App\Models\AdService')->with(['reviewrateable', 'helpful'])->latest()->paginate(20);
         return (ProductReviewResource::collection($reviews))->additional([
             'message' => 'Products reviews retrieved successfully',
             'status' => 'success'
@@ -163,7 +168,7 @@ class AdminDashBoardController extends Controller
     }
 
     public function allMechanicReviews() {
-        $reviews = Rating::where('reviewrateable_type', 'App\Models\Mechanic')->latest()->paginate(20);
+        $reviews = Rating::where('reviewrateable_type', 'App\Models\Mechanic')->with('reviewrateable')->latest()->paginate(20);
         return (UserReviewResource::collection($reviews))->additional([
             'message' => 'Services reviews retrieved successfully',
             'status' => 'success'

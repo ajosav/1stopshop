@@ -32,12 +32,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('give-permission/{user}', [AdminAuthController::class, 'grantPermission']);
         Route::post('revoke-permission/{user}', [AdminAuthController::class, 'revokePermission']);
         Route::resource('note', NoteController::class);
-        Route::get('get-product-abuses/{adservice}', [AdminDashBoardController::class, 'productAbuses']);
-
         Route::post('add-user', [AdminAuthController::class, 'createUser'])->name('register');
-
         Route::apiResource('income', AccountController::class);
         
+        Route::get('get-product-abuses/{adservice}', [AdminDashBoardController::class, 'productAbuses']);
+        Route::get('get-product-abuses', [AdminDashBoardController::class, 'allProductAbuses']);
         Route::get('products-reviews', [AdminDashBoardController::class, 'allProductReviews'])->name('products-reviews');
         Route::get('services-reviews', [AdminDashBoardController::class, 'allMechanicReviews'])->name('services-reviews');
         
