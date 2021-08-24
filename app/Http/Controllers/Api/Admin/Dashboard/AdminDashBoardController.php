@@ -168,7 +168,7 @@ class AdminDashBoardController extends Controller
     }
 
     public function allMechanicReviews() {
-        $reviews = Rating::where('reviewrateable_type', 'App\Models\Mechanic')->with('reviewrateable')->latest()->paginate(20);
+        $reviews = Abuse::where('abusable_type', 'App\Models\AdService')->with('reviewrateable')->latest()->paginate(20);
         return (UserReviewResource::collection($reviews))->additional([
             'message' => 'Services reviews retrieved successfully',
             'status' => 'success'
