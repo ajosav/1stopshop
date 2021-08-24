@@ -155,7 +155,9 @@ class AdminDashBoardController extends Controller
         return $adservice->abuses->map->format();
     }
     public function allProductAbuses() {
-        return Abuse::where('abusable_type', 'App\Models\AdService')->orderBy('created_at', 'desc')->get()->map->format();
+        $abuses = Abuse::where('abusable_type', 'App\Models\AdService')->orderBy('created_at', 'desc')->get()->map->format();
+
+        return response()->success('All reported abuses retrieved successfully', $abuses);
     }
 
     public function allProductReviews() {
@@ -168,7 +170,7 @@ class AdminDashBoardController extends Controller
     }
 
     public function allMechanicReviews() {
-        $reviews = Abuse::where('abusable_type', 'App\Models\AdService')->with('reviewrateable')->latest()->paginate(20);
+        $reviews = Rating::where('reviewrateable_type', 'App\Models\Mechanic')->with('reviewrateable')->latest()->paginate(20);
         return (UserReviewResource::collection($reviews))->additional([
             'message' => 'Services reviews retrieved successfully',
             'status' => 'success'
