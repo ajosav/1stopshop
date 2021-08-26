@@ -152,10 +152,10 @@ class AdminDashBoardController extends Controller
     }
 
     public function productAbuses(AdService $adservice) {
-        return $adservice->abuses->map->format();
+        return response()->success('Product reported abuses return successfully', $adservice->abuses->map->format());
     }
     public function allProductAbuses() {
-        $abuses = Abuse::where('abusable_type', 'App\Models\AdService')->orderBy('created_at', 'desc')->get()->map->format();
+        $abuses = Abuse::where('abusable_type', 'App\Models\AdService')->with('abusable')->orderBy('created_at', 'desc')->get()->map->format();
 
         return response()->success('All reported abuses retrieved successfully', $abuses);
     }

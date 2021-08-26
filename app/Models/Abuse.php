@@ -26,6 +26,7 @@ class Abuse extends Model
             'full_name'     => $this->full_name,
             'email'         => $this->email,
             'message'       => $this->message,
+            "product_id"    => $this->abusable->encodedKey,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at
         ];

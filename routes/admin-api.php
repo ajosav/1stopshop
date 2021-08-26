@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\Mail\MailController;
 use App\Http\Controllers\Api\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Admin\Dashboard\AdminDashBoardController;
+use App\Http\Controllers\Api\Admin\EventController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AdminAuthController::class, 'login'])->name('login');
@@ -39,7 +40,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('get-product-abuses', [AdminDashBoardController::class, 'allProductAbuses']);
         Route::get('products-reviews', [AdminDashBoardController::class, 'allProductReviews'])->name('products-reviews');
         Route::get('services-reviews', [AdminDashBoardController::class, 'allMechanicReviews'])->name('services-reviews');
-        
+
+        Route::apiResource('event', EventController::class);
+        Route::get('event/find-by-date/{date}', [EventController::class, 'findByDate']);
 
     });
 
