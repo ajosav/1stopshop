@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Abuse;
+use App\Models\AdService;
 use App\Models\FoundHelpful;
 use App\Models\Mechanic;
 use App\Models\Notification;
 use App\Models\ReviewExt;
+use App\Observers\AdServiceObserver;
 use Spatie\Macroable\Macroable;
 use App\Observers\MechanicObserver;
 use App\Observers\RatingObserver;
@@ -63,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         });
         Schema::defaultStringLength(191);
         Mechanic::observe(MechanicObserver::class);
+        AdService::observe(AdServiceObserver::class);
         Rating::observe(RatingObserver::class);
     }
 }

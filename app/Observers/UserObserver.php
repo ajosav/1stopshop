@@ -58,6 +58,11 @@ class UserObserver
      */
     public function forceDeleted(User $user)
     {
-        //
+        $user->partDealer()->forceDelete();
+        $user->mechanic()->forceDelete();        
+        $user->adService()->delete();
+        $user->ratings()->delete();
+        $user->userAppointment()->delete();
+        $user->notifications()->delete();
     }
 }

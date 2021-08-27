@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\Mail\MailController;
 use App\Http\Controllers\Api\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Admin\Dashboard\AdminDashBoardController;
 use App\Http\Controllers\Api\Admin\EventController;
+use App\Http\Controllers\Api\RegisteredUserController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AdminAuthController::class, 'login'])->name('login');
@@ -44,6 +45,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::apiResource('event', EventController::class);
         Route::get('event/find-by-date/{date}', [EventController::class, 'findByDate']);
 
+        Route::delete('delete-product/{adService}', [AdminDashBoardController::class, 'deleteProduct']);
+        Route::delete('delete-user/{user}', [AdminDashBoardController::class, 'deleteUser']);
+
+        Route::name('users')->prefix('users')->group(function () {
+            Route::get('soft-deleted', [RegisteredUserController::class, 'getDeletedUsers']);
+            Route::get('soft-deleted/{encodedKey}', [RegisteredUserController::class, 'findDeletedUser']);
+            Route::get('restore/{encodedKey}', [RegisteredUserController::class, 'restoreUser']);
+            Route::delete('permant-delete/{encodedKey}', [RegisteredUserController::class, 'deletePermanently']);
+            Route::delete('soft-delete/{user}', [RegisteredUserController::class, 'deleteUser']);
+        });
     });
 
     Route::resource('abuse', AbuseController::class);

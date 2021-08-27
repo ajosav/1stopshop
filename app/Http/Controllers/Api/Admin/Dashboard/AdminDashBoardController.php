@@ -176,4 +176,14 @@ class AdminDashBoardController extends Controller
             'status' => 'success'
         ]);
     }
+
+    public function deleteProduct(AdService $adService) {
+        abort_if(!request()->user()->can('super_admin'), 403, "Permission Denied");
+        
+        if(!$adService->delete()) {
+            return response()->errorResponse("Error Deleting Product");
+        }
+
+        return response()->success('Product successfully deleted');
+    }
 }

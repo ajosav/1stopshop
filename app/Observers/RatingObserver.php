@@ -48,7 +48,10 @@ class RatingObserver
      */
     public function deleted(Rating $rating)
     {
-        //
+        $rating->notification()->delete();
+        $rating->abuses()->delete();
+        $rating->reviewExt()->delete();
+        $rating->helpful()->delete();
     }
 
     /**
