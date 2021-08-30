@@ -132,7 +132,6 @@ class RegisteredUserController extends Controller
             "Permission Denied"
         );
 
-        return $user;
         if(!$user->delete()) {
             return response()->errorResponse("Error Deleting User");
         }

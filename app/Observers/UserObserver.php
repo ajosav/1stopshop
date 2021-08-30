@@ -36,7 +36,8 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        //
+        $user->partDealer()->delete();
+        $user->mechanic()->delete(); 
     }
 
     /**
@@ -47,7 +48,8 @@ class UserObserver
      */
     public function restored(User $user)
     {
-        //
+        $user->partDealer()->withThrashed()->restore();
+        $user->mechanic()->withThrashed()->restore(); 
     }
 
     /**
