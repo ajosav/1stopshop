@@ -48,12 +48,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('delete-product/{adService}', [AdminDashBoardController::class, 'deleteProduct']);
         Route::delete('delete-user/{user}', [AdminDashBoardController::class, 'deleteUser']);
 
-        Route::name('users')->prefix('users')->group(function () {
-            Route::get('soft-deleted', [RegisteredUserController::class, 'getDeletedUsers']);
-            Route::get('soft-deleted/{encodedKey}', [RegisteredUserController::class, 'findDeletedUser']);
-            Route::get('restore/{encodedKey}', [RegisteredUserController::class, 'restoreUser']);
-            Route::delete('permant-delete/{encodedKey}', [RegisteredUserController::class, 'deletePermanently']);
-            Route::delete('soft-delete/{user}', [RegisteredUserController::class, 'deleteUser']);
+        Route::name('users.')->prefix('users')->group(function () {
+            Route::get('soft-deleted', [RegisteredUserController::class, 'getDeletedUsers'])->name('trash');
+            Route::get('soft-deleted/{encodedKey}', [RegisteredUserController::class, 'findDeletedUser'])->name('thrash-user');
+            Route::get('restore/{encodedKey}', [RegisteredUserController::class, 'restoreUser'])->name('restore');
+            Route::delete('permant-delete/{encodedKey}', [RegisteredUserController::class, 'deletePermanently'])->name('permanent-delete');
+            Route::delete('soft-delete/{user}', [RegisteredUserController::class, 'deleteUser'])->name('thrash-completely');
         });
     });
 
