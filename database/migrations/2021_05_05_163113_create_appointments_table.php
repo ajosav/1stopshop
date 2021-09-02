@@ -26,6 +26,8 @@ class CreateAppointmentsTable extends Migration
             $table->text('description')->nullable();
             $table->enum('status', ['Pending', 'Accepted', 'Rejected'])->default('Pending');
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

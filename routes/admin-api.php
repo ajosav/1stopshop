@@ -52,8 +52,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('soft-deleted', [RegisteredUserController::class, 'getDeletedUsers'])->name('trash');
             Route::get('soft-deleted/{encodedKey}', [RegisteredUserController::class, 'findDeletedUser'])->name('thrash-user');
             Route::get('restore/{encodedKey}', [RegisteredUserController::class, 'restoreUser'])->name('restore');
-            Route::delete('permant-delete/{encodedKey}', [RegisteredUserController::class, 'deletePermanently'])->name('permanent-delete');
+            Route::delete('permanent-delete/{encodedKey}', [RegisteredUserController::class, 'deletePermanently'])->name('permanent-delete');
             Route::delete('soft-delete/{user}', [RegisteredUserController::class, 'deleteUser'])->name('thrash-completely');
+        });
+
+        Route::prefix('appointment')->group(function () {
+            Route::get('completed', [AdminDashBoardController::class, 'completedAppointment']);
+            Route::get('cancelled', [AdminDashBoardController::class, 'cancelledAppointment']);
+            Route::get('pending', [AdminDashBoardController::class, 'pendingAppointments']);
         });
     });
 

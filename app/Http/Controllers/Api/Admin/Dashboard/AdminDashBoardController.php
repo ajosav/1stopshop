@@ -19,6 +19,7 @@ use Codebyray\ReviewRateable\Models\Rating;
 use App\Http\Resources\Review\UserReviewResource;
 use App\Http\Resources\Review\ProductReviewResource;
 use App\Models\Abuse;
+use App\Models\Appointment;
 
 class AdminDashBoardController extends Controller
 {
@@ -185,5 +186,24 @@ class AdminDashBoardController extends Controller
         }
 
         return response()->success('Product successfully deleted');
+    }
+
+    public function completedAppointments() {
+        $completed = Appointment::whereDate('date', '<', now())->get();
+
+        return response()->success("Completed appointments retrieved sucessfully", $completed);
+    }
+
+    public function pendingAppointments() {
+        $pending_appointment = Appointment::whereDate('date', '>', now())->orWhere('date', now())->get();
+
+        return response()->success("Pending appointments retrieved sucessfully", $pending_appointment);
+    }
+
+    public function cancelledAppointment() {
+        $pending_appointment = Appointment::onlyTrashed()->get();
+
+        return response()->success("Deleted appointments retrieved sucessfully", $pending_appointment);
+
     }
 }
