@@ -13,6 +13,7 @@ use Illuminate\Pipeline\Pipeline;
 use App\Filters\UserFilter\Search;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\User\UserResourceCollection;
 use Codebyray\ReviewRateable\Models\Rating;
@@ -20,6 +21,7 @@ use App\Http\Resources\Review\UserReviewResource;
 use App\Http\Resources\Review\ProductReviewResource;
 use App\Models\Abuse;
 use App\Models\Appointment;
+use App\Models\Message;
 
 class AdminDashBoardController extends Controller
 {
@@ -205,5 +207,14 @@ class AdminDashBoardController extends Controller
 
         return response()->success("Deleted appointments retrieved sucessfully", $pending_appointment);
 
+    }
+
+    public function getAllMessages() {
+        $messages = Message::latest()->get();
+        return (MessageResource::collection($messages))->additional([
+            'status' => 'success',
+            'message' => 'Messages retrieved successfully'
+        ]);
+        // return response()->success('Get all messages');
     }
 }

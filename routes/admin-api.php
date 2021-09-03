@@ -57,9 +57,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
 
         Route::prefix('appointment')->group(function () {
-            Route::get('completed', [AdminDashBoardController::class, 'completedAppointment']);
-            Route::get('cancelled', [AdminDashBoardController::class, 'cancelledAppointment']);
+            Route::get('completed', [AdminDashBoardController::class, 'completedAppointments']);
+            Route::get('cancelled', [AdminDashBoardController::class, 'cancelledAppointments']);
             Route::get('pending', [AdminDashBoardController::class, 'pendingAppointments']);
+        });
+        Route::prefix('messages')->group(function () {
+            Route::get('/', [AdminDashBoardController::class, 'getAllMessages']);
         });
     });
 

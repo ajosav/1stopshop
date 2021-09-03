@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Mechanic\MechanicController;
 use App\Http\Controllers\Api\PartDealer\PartDealerController;
 use App\Http\Controllers\Api\Appointment\AppointmentController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ProductService\ProductAdController;
 
 /*
@@ -119,6 +120,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/', [FeedbackController::class, 'index']);
         Route::post('create', [FeedbackController::class, 'create']);
     });
+
+    Route::post('send-message', [MessageController::class, 'storeMessage']);
 
     // Route::post('send-email', MailController::class);
 
