@@ -18,10 +18,10 @@ class MessageController extends Controller
 
         try {
             $new_message = Message::create($message);
-            response()->success('Message successfully sent', $new_message);
+            return response()->success('Message successfully sent', $new_message);
         } catch(Exception $e) {
             report($e);
-            response()->errorResponse("Error sending message");
+            return response()->errorResponse("Error sending message");
         }
     }
 }
